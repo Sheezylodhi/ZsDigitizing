@@ -1,6 +1,6 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import VisitorTracker from "@/components/VisitorTracker";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata = {
   title: "ZS Digitizing MD",
@@ -11,9 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="font-serif">
-        <Navbar />
+         <VisitorTracker />
         {children}
-        <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );

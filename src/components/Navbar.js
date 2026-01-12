@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -9,105 +10,105 @@ export default function Navbar() {
   const [servicesOpen, setServicesOpen] = useState(false);
 
   const menuItems = [
-    { name: "Home", href: "#home" },
+    { name: "Home", href: "/" },
     { name: "Prices", href: "#prices" },
-    { name: "Send Quote", href: "#quote" },
-    { name: "Stats", href: "#Stats" },
-    
-    
-
+    { name: "Send Quote", href: "/quote" },
+    { name: "Portfolio", href: "/portfolio" },
   ];
 
   const services = [
-    { name: "Logo Digitizing", href: "#ServicesSection" },
-    { name: "3D Puff Digitizing", href: "#ServicesSection" },
-    { name: "Applique Digitizing", href: "#ServicesSection" },
+    { name: "Logo Digitizing", href: "#services" },
+    { name: "3D Puff Digitizing", href: "#services" },
+    { name: "Applique Digitizing", href: "#services" },
   ];
 
   return (
-    <header className="w-full bg-[#0b3820] fixed top-0 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-3">
-          <div className="relative w-16 h-16">
-            <Image
-              src="/logo.png"
-              alt="ZS Digitizing MD Logo"
-              fill
-              style={{ objectFit: "contain" }}
-            />
-          </div>
-         
-        </Link>
+    <header className="w-full bg-[#0e2c1c] fixed top-9 z-50 shadow-md h-30">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
+        {/* Logo + Menu */}
+        <div className="flex items-center space-x-6 h-full">
+          {/* Logo */}
+          {/* Logo */}
+<Link href="/" className="flex items-center h-full">
+  <div className="relative h-full w-40"> {/* give it a fixed width */}
+    <Image
+      src="/logo.png"
+      alt="ZS Digitizing MD Logo"
+      fill
+      style={{ objectFit: "contain" }} // fills height without stretching
+    />
+  </div>
+</Link>
 
-        {/* Desktop Menu */}
-        
-        <nav className="hidden lg:flex items-center space-x-6 text-white text-sm font-medium">
-          {/* Services Dropdown */}
-          {menuItems.map((item) => (
-            <motion.a
-              key={item.href}
-              href={item.href}
-              className="hover:text-gray-200 relative"
-              whileHover={{ y: -2 }}
+
+          {/* Desktop Menu */}
+          <nav className="hidden lg:flex items-center space-x-6 text-white text-base font-medium h-full">
+            {menuItems.map((item) => (
+              <motion.a
+                key={item.href}
+                href={item.href}
+                className="hover:text-green-400 transition relative"
+                whileHover={{ y: -2 }}
+              >
+                {item.name}
+              </motion.a>
+            ))}
+
+            {/* Services Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setServicesOpen(true)}
+              onMouseLeave={() => setServicesOpen(false)}
             >
-              {item.name}
-            </motion.a>
-          ))}
-          <div
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
+              <motion.button
+                className="hover:text-green-400 relative"
+                whileHover={{ y: -2 }}
+              >
+                Services ▼
+              </motion.button>
+
+              <AnimatePresence>
+                {servicesOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute top-full left-0 mt-2 w-44 bg-white text-[#2A4E3B] rounded shadow-lg overflow-hidden z-50"
+                  >
+                    {services.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="block px-3 py-2 hover:bg-[#2A4E3B] hover:text-white transition text-sm"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </nav>
+        </div>
+
+        {/* Buttons on Right */}
+        <div className="hidden lg:flex space-x-2 h-full items-center">
+          <motion.button
+            className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:text-[#1E7A5B] transition text-sm font-medium"
+            whileHover={{ scale: 1.05 }}
           >
-            <motion.button
-              className="hover:text-gray-200 font-medium relative"
-              whileHover={{ y: -2 }}
-            >
-              Services ▼
-            </motion.button>
-            <AnimatePresence>
-              {servicesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full left-0 mt-2 w-48 bg-white text-[#2A4E3B] rounded shadow-lg overflow-hidden z-50"
-                >
-                  {services.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="block px-4 py-2 hover:bg-[#2A4E3B] hover:text-white transition"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          
-
-          {/* Buttons */}
-          <div className="flex space-x-3 ml-6">
-            <motion.button
-              className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:text-[#2A4E3B] transition duration-300 shadow-md hover:shadow-lg"
-              whileHover={{ scale: 1.05 }}
-            >
-              Login
-            </motion.button>
-            <motion.button
-              className="px-4 py-2 bg-white text-[#2A4E3B] rounded hover:bg-gradient-to-r hover:from-green-400 hover:to-green-600 hover:text-white transition duration-300 shadow-md hover:shadow-lg"
-              whileHover={{ scale: 1.05 }}
-            >
-              Register
-            </motion.button>
-          </div>
-        </nav>
+            Login
+          </motion.button>
+          <motion.button
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-gradient-to-r hover:from-green-400 hover:to-green-600 transition text-sm font-medium"
+            whileHover={{ scale: 1.05 }}
+          >
+            Register
+          </motion.button>
+        </div>
 
         {/* Mobile Hamburger */}
-        <div className="lg:hidden">
+        <div className="lg:hidden h-full flex items-center">
           <button
             className="text-white text-2xl focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
@@ -124,59 +125,45 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden bg-[#2A4E3B] overflow-hidden"
+            className="lg:hidden bg-[#1E7A5B] overflow-hidden"
           >
-            <div className="flex flex-col px-6 py-4 space-y-4">
-              {/* Mobile Services Dropdown */}
-              <div>
-                <button
-                  className="text-white font-medium w-full text-left"
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                >
-                  Services ▼
-                </button>
-                <AnimatePresence>
-                  {servicesOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="flex flex-col pl-4 mt-2 space-y-2"
-                    >
-                      {services.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="text-white hover:text-gray-200"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
+            <div className="flex flex-col px-4 py-3 space-y-2 text-white text-base font-medium">
               {menuItems.map((item) => (
                 <Link
-                  key={item.href}
+                  key={item.name}
                   href={item.href}
-                  className="text-white font-medium hover:text-gray-200"
-                  onClick={() => setIsOpen(false)}
+                  className="block hover:text-gray-200"
                 >
                   {item.name}
                 </Link>
               ))}
-
-              {/* Buttons */}
-              <div className="flex space-x-3 mt-2">
-                <button className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:text-[#2A4E3B] transition duration-300 shadow-md w-full">
+              <div>
+                <span className="font-semibold">Services ▼</span>
+                <div className="mt-1 ml-3 flex flex-col space-y-1">
+                  {services.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="block hover:text-gray-200 text-sm"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="flex space-x-2 mt-2">
+                <Link
+                  href="/admin/login"
+                  className="px-3 py-1 border border-white text-white rounded hover:bg-white hover:text-[#1E7A5B] transition text-sm"
+                >
                   Login
-                </button>
-                <button className="px-4 py-2 bg-white text-[#2A4E3B] rounded hover:bg-gradient-to-r hover:from-green-400 hover:to-green-600 hover:text-white transition duration-300 shadow-md w-full">
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-3 py-1 bg-green-500 text-white rounded hover:bg-gradient-to-r hover:from-green-400 hover:to-green-600 transition text-sm"
+                >
                   Register
-                </button>
+                </Link>
               </div>
             </div>
           </motion.div>

@@ -1,19 +1,39 @@
+import TopAnnouncementBar from "@/components/TopAnnouncementBar";
+import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import HomeExtras from "@/components/HomeExtras";
 import Stats from "@/components/Stats";
 import Services from "@/components/ServicesSection";
 import Pricing from "@/components/Pricing";
-import Portfolio from "@/components/Portfolio";
+import HowItWorksPage from "@/components/how-it-works";
 import Testimonials from "@/components/Testimonials";
+import FAQ from "@/components/FAQ";
+import Footer from "@/components/Footer";
+
+
+
+
 export default function Home() {
   return (
-    <main>
+    <main className="bg-gray-50">
+      {/* Top moving announcement bar */}
+      <TopAnnouncementBar />
+
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Sections */}
       <Hero />
+      <HomeExtras />
       <Stats />
-       <Services />
+      <Services />
       <Pricing />
-        <Portfolio />  
-      <Testimonials/>
-      
+      <HowItWorksPage />
+      <Testimonials />
+      <FAQ/>
+        <Footer />
+
+
     </main>
   );
 }
