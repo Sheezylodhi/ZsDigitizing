@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import { Quote } from "@/lib/models/Quote";
 import nodemailer from "nodemailer";
-import fs from "fs";
-import path from "path";
 
 export async function POST(req) {
   await connectDB();
@@ -12,24 +10,12 @@ export async function POST(req) {
     const formData = await req.formData();
     const data = Object.fromEntries(formData);
 
-    // Ensure uploads folder exists
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    let fileUrl = "";
+    // Handle file attachment in memory (Vercel compatible)
     let attachment = null;
     const file = formData.get("file");
 
     if (file && file.name) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      const filename = `${Date.now()}-${file.name}`;
-      const filePath = path.join(uploadDir, filename);
-
-      fs.writeFileSync(filePath, buffer);
-      fileUrl = `/uploads/${filename}`;
-
       attachment = {
         filename: file.name,
         content: buffer,
@@ -37,20 +23,20 @@ export async function POST(req) {
     }
 
     // Store in DB
-    const quote = await Quote.create({ ...data, fileUrl });
+    const quote = await Quote.create({ ...data });
 
     // SMTP Transport Config
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: true,
+      secure: process.env.SMTP_PORT == "465", // true for 465, false for 587
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
-    // File Type Detection
+    // File Type Detection for Email Preview
     const ext = file?.name?.split(".").pop()?.toLowerCase();
     const imageTypes = ["jpg", "jpeg", "png", "gif", "webp"];
     const embroideryTypes = ["dst", "pes", "jef"];
@@ -62,7 +48,7 @@ export async function POST(req) {
         <p><strong>Uploaded Design:</strong></p>
         <img src="cid:file-preview" style="max-width:250px;border-radius:6px;border:1px solid #ddd;margin-top:10px;" />
       `;
-      attachment.cid = "file-preview";
+      if (attachment) attachment.cid = "file-preview";
     } else if (file && embroideryTypes.includes(ext)) {
       filePreviewHTML = `
         <p><strong>Embroidery File Attached:</strong> .${ext}<br>
@@ -101,15 +87,6 @@ export async function POST(req) {
             </span></p>
 
             ${filePreviewHTML}
-
-            ${fileUrl ? `
-              <div style="margin-top:20px;">
-                <a href="${fileUrl}" download 
-                  style="background:#0e2c1c;color:white;padding:10px 16px;border-radius:6px;text-decoration:none;font-size:14px;">
-                  Download Attachment
-                </a>
-              </div>
-            ` : ""}
           </div>
 
           <div style="background:#f1f5f9;padding:12px;text-align:center;font-size:13px;color:#555;border-top:1px solid #e5e7eb;">
@@ -133,8 +110,4 @@ export async function POST(req) {
     console.error("❌ QUOTE API ERROR:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
-
-
-  
 }
-
