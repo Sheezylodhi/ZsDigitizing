@@ -4,7 +4,7 @@
 import { motion } from "framer-motion";
 
 export default function TopAnnouncementBar() {
-  const text = "Bulk Order? Get Max Discounts & Exclusive Deals – Contact Digit-It Now! ";
+  const text = "Bulk Order? Get Max Discounts & Exclusive Deals – Contact ZS-It Now! ";
   const repeatedText = Array(10).fill(text);
 
   return (

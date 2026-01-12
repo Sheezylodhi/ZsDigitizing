@@ -138,8 +138,3 @@ export async function POST(req) {
   
 }
 
-export async function GET() {
-  await connectDB();
-  const quotes = await Quote.find().sort({ createdAt: -1 }); // newest first
-  return NextResponse.json({ quotes });
-}
