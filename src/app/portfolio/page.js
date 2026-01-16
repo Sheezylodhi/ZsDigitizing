@@ -10,6 +10,56 @@ import Footer from "@/components/Footer";
 
 // Portfolio items with title, description, category
 const portfolioItems = [
+
+  {
+    title: "Vector",
+    img: "/portfolio/vector1.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector2.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector3.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector4.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector5.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector6.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector7.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+  {
+    title: "Vector",
+    img: "/portfolio/vector8.jpeg",
+    category: "Vector",
+    desc: "Premium Vector embroidery for caps and hats.",
+  },
+
   {
     title: "Logo Digitizing",
     img: "/portfolio/logo1.jpg",
@@ -52,6 +102,7 @@ const portfolioItems = [
     category: "3D Puff",
     desc: "Premium 3D puff embroidery for caps and hats.",
   },
+
   {
     title: "Apparel Design",
     img: "/portfolio/apparel1.jpg",
@@ -101,12 +152,12 @@ export default function PortfolioPage() {
 
   return (
 
-    
+
     <div className="min-h-screen bg-gray-50 pt-24">
-        <TopAnnouncementBar />
-      
-            {/* Navbar */}
-            <Navbar />
+      <TopAnnouncementBar />
+
+      {/* Navbar */}
+      <Navbar />
       <section className="max-w-7xl mx-auto px-6 py-16">
         <h1 className="text-4xl font-extrabold text-[#2A4E3B] mb-8 text-center">
           Our Portfolio
@@ -217,8 +268,8 @@ export default function PortfolioPage() {
           </div>
         </Modal>
       )}
-              <Footer />
-      
+      <Footer />
+
     </div>
   );
 }

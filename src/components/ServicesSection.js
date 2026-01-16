@@ -21,19 +21,9 @@ const services = [
     desc: "Cap, jacket & badge patches with premium finishing.",
   },
   {
-    id: "logo-digitizing",
-    title: "Logo Digitizing",
-    desc: "Professional logo digitizing for all embroidery machines.",
-  },
-  {
     id: "embroidery-fixes",
     title: "Embroidery Fixes",
     desc: "Editing, resizing & fixing old embroidery files.",
-  },
-  {
-    id: "3d-puff-embroidery",
-    title: "3D Puff Embroidery",
-    desc: "Premium 3D puff digitizing for caps & hats.",
   },
 ];
 

@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
-
-// This is a server route
-export async function GET(req) {
-  // Clear JWT token cookie
-  const response = NextResponse.redirect("/admin/login"); // redirect to login page
-  response.cookies.set({
-    name: "token",      // same cookie name used for login
-    value: "",
-    path: "/",
-    httpOnly: true,
-    maxAge: 0,          // delete cookie
-  });
-
-  return response;
+// pages/api/auth/logout.js
+export default async function handler(req, res) {
+  if (req.method === "POST") {
+    try {
+      // Agar JWT token use kar rahe ho, client side se cookie delete kar do
+      res.setHeader("Set-Cookie", `token=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Strict`);
+      return res.status(200).json({ message: "Logged out" });
+    } catch (err) {
+      return res.status(500).json({ error: "Logout failed" });
+    }
+  } else {
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 }

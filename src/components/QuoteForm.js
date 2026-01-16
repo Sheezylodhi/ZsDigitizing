@@ -23,70 +23,107 @@ export default function QuoteForm() {
       const result = await res.json();
 
       if (result.success) {
-        setStatus("✅ Quote sent successfully! We'll contact you soon.");
+        setStatus("Quote sent successfully!");
         e.target.reset();
       } else {
-        setStatus("❌ Failed to send quote. Try again.");
+        setStatus("Failed to send quote. Try again.");
       }
     } catch (err) {
-      console.error(err);
-      setStatus("❌ Server error. Please try again.");
+      setStatus("Server error. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 pt-36 lg:pt-40 pb-20">
+    <section className="min-h-screen pt-10 pb-24 flex items-start justify-center">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto bg-white shadow-2xl rounded-3xl p-12 border border-gray-200"
+        className="w-full max-w-2xl backdrop-blur-xl bg-white/70 border border-gray-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-3xl p-10"
       >
-        {/* Header */}
-        <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0e2c1c] mb-2 text-center drop-shadow-md">
-          Get a Free Quote
-        </h2>
-        <p className="text-gray-600 text-center mb-12 text-lg">
-          Fill out the form below to receive a detailed quote for your embroidery project.
-          Upload your design or describe your requirements.
-        </p>
+        <div className="mb-10 text-center space-y-2">
+          <h2 className="text-4xl font-semibold tracking-tight text-[#0e2c1c]">
+            Request a Quote
+          </h2>
+          <p className="text-[#0e2c1c] text-sm">
+            Share your requirements to receive an accurate quote.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-7">
 
-          {/* Name & Company */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <input name="name" type="text" placeholder="Full Name *" required className="input" />
-            <input name="company" type="text" placeholder="Company Name" className="input" />
+          {/* Full Name */}
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Full Name *</label>
+            <input
+              name="name"
+              required
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            />
           </div>
 
-          {/* Email & Phone */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <input name="email" type="email" placeholder="Email Address *" required className="input" />
-            <input name="phone" type="tel" placeholder="Phone Number *" required className="input" />
+          {/* Company */}
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Company</label>
+            <input
+              name="company"
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            />
+          </div>
+
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Email *</label>
+            <input
+              type="email"
+              name="email"
+              required
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Phone *</label>
+            <input
+              type="tel"
+              name="phone"
+              required
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            />
           </div>
 
           {/* Website */}
-          <input name="website" type="text" placeholder="Company Website" className="input" />
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Website</label>
+            <input
+              name="website"
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            />
+          </div>
 
           {/* Deadline */}
-          <div>
-            <label className="label">Delivery Deadline</label>
-            <select name="deadline" className="input">
-              <option value="">Select Deadline</option>
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Deadline</label>
+            <select
+              name="deadline"
+              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+            >
+              <option value="">Select...</option>
               <option value="24 Hours">24 Hours</option>
               <option value="2 Days">2 Days</option>
               <option value="3 Days">3 Days</option>
             </select>
           </div>
 
-          {/* Type of Work */}
-          <div>
-            <label className="label">Type of Work *</label>
-            <div className="flex flex-wrap gap-6 mt-3">
+          {/* Type */}
+          <div className="space-y-2">
+            <label className="text-sm text-[#0e2c1c] font-medium">Type of Work *</label>
+            <div className="flex gap-4 flex-wrap">
               {["Vector", "Digitizing", "Patches", "Other"].map((v) => (
-                <label key={v} className="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-[#1E7A5B] transition">
-                  <input type="radio" name="type" value={v} required className="accent-[#1E7A5B]" />
+                <label key={v} className="flex items-center gap-2 text-[#0e2c1c] text-sm cursor-pointer">
+                  <input type="radio" name="type" value={v} required />
                   {v}
                 </label>
               ))}
@@ -94,32 +131,37 @@ export default function QuoteForm() {
           </div>
 
           {/* Message */}
-          <div>
-            <label className="label">Project Details</label>
-            <textarea name="message" rows={5} placeholder="Describe your project..." className="input" />
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">Project Details</label>
+            <textarea
+              name="message"
+              rows={4}
+              className="w-full rounded-xl border border-[#0e2c1c]px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+              placeholder="Describe project requirements..."
+            />
           </div>
 
-          {/* FILE Upload */}
-          <input
-            name="file"
-            type="file"
-            accept=".jpg,.png,.jpeg,.dst,.pes,.jef"
-            className="input"
-          />
+          {/* File */}
+          <div className="space-y-1.5">
+            <label className="text-sm text-[#0e2c1c] font-medium">File (optional)</label>
+            <input
+              type="file"
+              name="file"
+              className="w-full rounded-xl border border-[#0e2c1c] px-4 py-2 bg-white"
+            />
+          </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="btn mx-auto bg-[#0e2c1c] text-white block w-48 mt-2 hover:scale-105 hover:shadow-xl transition transform"
+            className="w-full py-3 rounded-xl bg-[#0e2c1c] text-white font-medium tracking-wide hover:bg-black/90 transition"
           >
-            {loading ? "Sending..." : "Send Quote"}
+            {loading ? "Sending..." : "Send Request"}
           </button>
 
           {status && (
-            <p className="text-center mt-3 font-medium text-[#0e2c1c]">
-              {status}
-            </p>
+            <p className="text-center text-[#0e2c1c] font-medium">{status}</p>
           )}
         </form>
       </motion.div>
