@@ -8,10 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
   const path = usePathname();
 
-  // Smooth scroll when hash exists
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.location.hash) {
@@ -30,15 +28,13 @@ export default function Navbar() {
     { name: "Prices", href: "/#prices" },
     { name: "Portfolio", href: "/portfolio" },
     { name: "Quote", href: "/quote" },
-     { name: "Testimonials", href: "/#Testimonials" },
+    { name: "Testimonials", href: "/#Testimonials" },
   ];
 
- 
-
   return (
-<header className="w-full bg-[#0e2c1c] fixed top-0 md:top-9 z-50 shadow-md h-20">
+    <header className="w-full bg-[#0e2c1c] fixed top-0 md:top-9 z-50 shadow-md h-20">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
-        
+
         {/* Logo */}
         <Link href="/" className="flex items-center h-full">
           <div className="relative h-full w-40">
@@ -51,7 +47,7 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop menu */}
+        {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center space-x-6 text-white text-base font-medium h-full">
           {menuItems.map((item) => (
             <motion.a
@@ -63,12 +59,9 @@ export default function Navbar() {
               {item.name}
             </motion.a>
           ))}
-
-          {/* Services Dropdown */}
-          
         </nav>
 
-        {/* Right buttons */}
+        {/* Desktop Right */}
         <div className="hidden lg:flex space-x-2 h-full items-center">
           <Link href="/login">
             <motion.button
@@ -100,7 +93,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -111,25 +104,16 @@ export default function Navbar() {
           >
             <div className="flex flex-col px-4 py-3 space-y-2 text-white text-base font-medium">
               {menuItems.map((item) => (
-                <Link key={item.name} href={item.href} scroll={false} className="block">
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  scroll={false}
+                  onClick={() => setIsOpen(false)}
+                  className="block"
+                >
                   {item.name}
                 </Link>
               ))}
-              <div>
-                <span className="font-semibold">Services ▼</span>
-                <div className="mt-1 ml-3 flex flex-col space-y-1">
-                  {services.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      scroll={false}
-                      className="block text-sm"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
             </div>
           </motion.div>
         )}
