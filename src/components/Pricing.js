@@ -120,7 +120,7 @@ export default function Pricing() {
               </ul>
 
               <a
-                href="#quote"
+                href="/quote"
                 className={`block text-center px-6 py-3 rounded-lg font-semibold transition-all duration-300
                   ${
                     plan.popular

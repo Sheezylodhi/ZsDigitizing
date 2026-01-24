@@ -75,7 +75,7 @@ export default function HowItWorksPage() {
       {/* CTA at bottom */}
       <div className="text-center mt-20">
         <a
-          href="#quote"
+          href="/quote"
           className="bg-gradient-to-r from-green-500 to-green-700 text-white px-10 py-4 rounded-xl font-semibold hover:from-green-600 hover:to-green-800 transition transform hover:scale-105 shadow-xl"
         >
           Send Your Design Now

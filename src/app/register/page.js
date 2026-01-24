@@ -45,7 +45,7 @@ export default function RegisterPage() {
       <Navbar />
 
       <div
-        className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white font-sans px-4"
+        className="min-h-screen font-serif flex items-center justify-center bg-gradient-to-b from-green-50 to-white font-sans px-4"
         style={{ paddingTop: "140px", paddingBottom: "120px" }}
       >
         <motion.div

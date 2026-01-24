@@ -72,7 +72,7 @@ export default function Navbar() {
             </motion.button>
           </Link>
 
-          <Link href="/signup">
+          <Link href="/register">
             <motion.button
               className="px-4 py-2 bg-[#0e2c1c] text-white rounded hover:bg-gradient-to-r hover:from-green-400 hover:to-green-600 transition text-sm font-medium"
               whileHover={{ scale: 1.05 }}
