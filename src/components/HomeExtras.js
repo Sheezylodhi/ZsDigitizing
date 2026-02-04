@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Link from "next/link";
 
 // Sew-out images: before and after
 const sewouts = [
@@ -61,20 +62,34 @@ function FlipCard({ beforeImage, afterImage }) {
 
   return (
     <div
-      className="relative h-56 md:h-64 cursor-pointer rounded-xl overflow-hidden shadow-md"
+      className="relative h-56 md:h-64 cursor-pointer rounded-xl overflow-hidden shadow-md group"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {/* FRONT IMAGE */}
       {!hovered && (
-        <motion.img
-          src={beforeImage}
-          alt="Before Sew-Out"
-          className="w-full h-full object-cover"
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-        />
+          className="w-full h-full relative"
+        >
+          <img
+            src={beforeImage}
+            alt="Sew Out"
+            className="w-full h-full object-cover"
+          />
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/20 flex flex-col justify-end p-4">
+            <p className="text-white font-semibold text-lg">Sew Out</p>
+             <Link href="/quote">
+            <button className="mt-2 cursor-pointer w-fit bg-[#2A4E3B] text-white px-4 py-1.5 rounded-md text-sm hover:bg-[#1f3b2c] transition">
+              Get Quote
+            </button>
+             </Link>
+          </div>
+        </motion.div>
       )}
 
       {/* BACK IMAGE */}
@@ -87,9 +102,21 @@ function FlipCard({ beforeImage, afterImage }) {
         >
           <img
             src={afterImage}
-            alt="After Sew-Out"
+            alt="Customer Artwork"
             className="w-full h-full object-cover"
           />
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
+            <p className="text-white font-semibold text-lg">
+              Customer Artwork
+            </p>
+            <Link href="/quote">
+            <button className="mt-2 w-fit cursor-pointer bg-[#2A4E3B] text-white px-4 py-1.5 rounded-md text-sm hover:bg-[#1f3b2c] transition">
+              Get Quote 
+            </button>
+             </Link>
+          </div>
         </motion.div>
       )}
     </div>

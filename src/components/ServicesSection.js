@@ -29,7 +29,7 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="py-28 bg-gradient-to-b from-white to-gray-50">
+    <section id="services" className="py-28 bg-gradient-to-b from-white to-gray-50 scroll-mt-24 md:scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Heading */}

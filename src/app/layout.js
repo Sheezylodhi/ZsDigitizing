@@ -6,7 +6,9 @@ export const metadata = {
   title: "ZS Digitizing",
   description: "Professional Embroidery Digitizing Services",
   icons: {
-    icon: "/logo.png", 
+     icon: "/logo.png",       // 32x32 recommended
+  shortcut: "/logo.png",   // optional for older browsers
+  apple: "/logo.png", 
   },
 };
 

@@ -13,9 +13,9 @@ const words = [
 ];
 
 const images = [
-  "/images/embridorydigitizing1.jpeg", 
+  "/images/embridorydigitizing.jpeg",
   "/images/rastertovector.jpeg",
-  "/images/custompatches1.jpeg",
+  "/images/custompatches.jpeg",
   "/images/embridoryfixes1.jpeg",
 ];
 
@@ -57,17 +57,17 @@ export default function Hero() {
 
       if (!deleting && subIndex < currentWord.length) {
         setSubIndex((prev) => prev + 1);
-      } 
+      }
       else if (!deleting && subIndex === currentWord.length) {
         setHold(true);
         setTimeout(() => {
           setHold(false);
           setDeleting(true);
         }, 2000);
-      } 
+      }
       else if (deleting && subIndex > 0) {
         setSubIndex((prev) => prev - 1);
-      } 
+      }
       else if (deleting && subIndex === 0) {
         setDeleting(false);
         setIndex((prev) => (prev + 1) % words.length);
@@ -126,31 +126,31 @@ export default function Hero() {
         >
           <div className="absolute -top-10 -right-10 w-48 h-48 md:w-64 md:h-64 bg-green-200 rounded-full blur-3xl opacity-40 -z-10 pointer-events-none"></div>
 
-         <div className="relative w-full max-w-[1019px] aspect-[1019/859]">
-  <Image
-    src={images[index]}
-    alt={words[index]}
-    fill
-    className="shadow-2xl object-cover rounded-lg" // 'object-cover' se box poora fill hoga
-    priority
-  />
+          <div className="relative w-full max-w-[1019px] aspect-[1019/859]">
+            <Image
+              src={images[index]}
+              alt={words[index]}
+              fill
+              className="shadow-2xl object-cover" // 'object-cover' se box poora fill hoga
+              priority
+            />
 
-  {/* Left Button */}
-  <button 
-    onClick={prevSlide} 
-    className="absolute top-1/2 -left-2 md:-left-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
-  >
-    <ChevronLeft size={20} className="text-[#1e4030] md:w-6 md:h-6"/>
-  </button>
+            {/* Left Button */}
+            <button
+              onClick={prevSlide}
+              className="absolute top-1/2 -left-2 md:-left-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
+            >
+              <ChevronLeft size={20} className="text-[#1e4030] md:w-6 md:h-6" />
+            </button>
 
-  {/* Right Button */}
-  <button 
-    onClick={nextSlide} 
-    className="absolute top-1/2 -right-2 md:-right-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
-  >
-    <ChevronRight size={20} className="text-[#1e4030] md:w-6 md:h-6"/>
-  </button>
-</div>
+            {/* Right Button */}
+            <button
+              onClick={nextSlide}
+              className="absolute top-1/2 -right-2 md:-right-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
+            >
+              <ChevronRight size={20} className="text-[#1e4030] md:w-6 md:h-6" />
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

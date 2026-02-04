@@ -6,17 +6,17 @@ const steps = [
   {
     title: "Send Your Design",
     desc: "Upload your embroidery design details, images, or sketches. Our team will review your requirements carefully.",
-    icon: "/howitworks/upload.svg",
+   
   },
   {
     title: "We Digitize & Process",
     desc: "Our experts digitize your design with precision, ensuring clean stitches and high-quality output for embroidery machines.",
-    icon: "/howitworks/process.svg",
+   
   },
   {
     title: "Receive Your File",
     desc: "Once completed, you will receive the digitized embroidery file ready for production. Fast delivery guaranteed.",
-    icon: "/howitworks/delivery.svg",
+   
   },
 ];
 
@@ -43,9 +43,7 @@ export default function HowItWorksPage() {
             className="relative flex flex-col items-center text-center bg-white rounded-3xl shadow-lg p-10 max-w-xs hover:shadow-2xl transition-all duration-500"
           >
             {/* Icon Circle */}
-            <div className="w-24 h-24 flex items-center justify-center bg-gradient-to-tr from-green-500 to-green-700 rounded-full mb-6 shadow-lg">
-              <img src={step.icon} alt={step.title} className="w-12 h-12" />
-            </div>
+          
 
             {/* Step Title */}
             <h3 className="text-2xl font-bold text-[#2A4E3B] mb-3">{step.title}</h3>

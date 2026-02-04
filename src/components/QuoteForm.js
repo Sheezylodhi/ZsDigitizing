@@ -111,9 +111,11 @@ export default function QuoteForm() {
               className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
             >
               <option value="">Select...</option>
+              <option value="Rush">Rush</option>
+              <option value="12 Hours">12 Hours</option>
               <option value="24 Hours">24 Hours</option>
-              <option value="2 Days">2 Days</option>
-              <option value="3 Days">3 Days</option>
+              <option value="1 Days">1 Days</option>
+
             </select>
           </div>
 
