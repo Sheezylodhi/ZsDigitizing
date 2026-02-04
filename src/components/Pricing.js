@@ -62,8 +62,8 @@ const plans = [
   },
   {
     title: "CUSTOM PATCHES",
-    price: "$5.00",
-    sub: "/1K Stitches",
+    price: "Vary By Quantity",
+    sub: "Min Order: 50 Qty",
     note: "(Negotiable)",
     features: [
       "8 hours turnaround",
@@ -90,7 +90,7 @@ export default function Pricing() {
   };
 
   return (
-    <section id="prices" className="py-24 bg-gray-50">
+    <section id="prices" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
         <motion.div
@@ -100,7 +100,7 @@ export default function Pricing() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#2A4E3B] mb-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#0e2c1c] mb-4">
             Pricing Plans
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -139,22 +139,18 @@ export default function Pricing() {
               className={`relative min-w-[280px] snap-center bg-white border rounded-2xl p-8 text-center shadow-sm hover:shadow-xl transition
                 ${
                   plan.popular
-                    ? "border-blue-500"
+                    ? "border-[#0e2c1c]"
                     : "border-gray-200"
                 }
               `}
             >
-              {plan.popular && (
-                <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 text-xs font-semibold rounded-full">
-                  MOST POPULAR
-                </span>
-              )}
+              
 
               <h3 className="text-sm font-semibold text-gray-800 mb-4">
                 {plan.title}
               </h3>
 
-              <div className="text-4xl font-bold text-blue-500 mb-1">
+              <div className="text-4xl font-bold text-[#0e2c1c] mb-1">
                 {plan.price}
               </div>
 
@@ -169,7 +165,7 @@ export default function Pricing() {
               <ul className="space-y-3 text-sm text-gray-700 text-left mb-8">
                 {plan.features.map((item, i) => (
                   <li key={i} className="flex items-center">
-                    <span className="mr-2 text-green-600">✔</span>
+                    <span className="mr-2 text-[#0e2c1c]">✔</span>
                     {item}
                   </li>
                 ))}
@@ -177,7 +173,7 @@ export default function Pricing() {
 
               <a
                 href="/quote"
-                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md text-sm font-semibold hover:bg-blue-700 transition"
+                className="inline-block bg-[#0e2c1c] text-white px-6 py-3 rounded-md text-sm font-semibold hover:bg-[#0e2c1c] transition"
               >
                 ORDER NOW!
               </a>
