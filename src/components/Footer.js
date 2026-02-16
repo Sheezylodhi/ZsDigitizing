@@ -34,7 +34,7 @@ export default function Footer() {
               <Link href="#prices" className="hover:text-[#0f3c24] transition duration-300">Pricing</Link>
             </li>
             <li>
-              <Link href="#quote" className="hover:text-[#0f3c24] transition duration-300">Send Quote</Link>
+              <Link href="/quote" className="hover:text-[#0f3c24] transition duration-300">Send Quote</Link>
             </li>
             <li>
               <Link href="#testimonials" className="hover:text-[#0f3c24] transition duration-300">Testimonials</Link>

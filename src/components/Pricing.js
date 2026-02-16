@@ -90,7 +90,7 @@ export default function Pricing() {
   };
 
   return (
-    <section id="prices" className="py-24 bg-white">
+    <section id="prices" className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
         <motion.div
@@ -124,7 +124,23 @@ export default function Pricing() {
           </button>
         </div>
 
-        {/* SLIDER (Mobile + Desktop) */}
+        {/* MOBILE ARROWS */}
+        <div className="md:hidden flex justify-between items-center mb-4">
+          <button
+            onClick={() => scroll("left")}
+            className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
+          >
+            →
+          </button>
+        </div>
+
+        {/* SLIDER */}
         <div
           ref={sliderRef}
           className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
@@ -144,8 +160,6 @@ export default function Pricing() {
                 }
               `}
             >
-              
-
               <h3 className="text-sm font-semibold text-gray-800 mb-4">
                 {plan.title}
               </h3>
