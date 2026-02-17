@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="space-y-4">
           <h3 className="text-2xl md:text-3xl font-extrabold text-white">ZS Digitizing</h3>
           <p className="text-gray-200 leading-relaxed">
-            Professional's embroidery digitizing & design services for logos, patches, 3D puff embroidery and more. High-quality, fast delivery, and affordable pricing worldwide.
+            Professional embroidery digitizing & design services for logos, patches, 3D puff embroidery and more. High-quality, fast delivery, and affordable pricing worldwide.
           </p>
         </div>
 
