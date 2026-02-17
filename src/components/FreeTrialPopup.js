@@ -83,7 +83,7 @@ export default function FreeTrialPopup() {
                   Premium Embroidery Quality
                 </h3>
                 <p className="text-sm opacity-90">
-                  Trusted by global apparel brands & studios
+                  Trusted by global apparel brands & studio
                 </p>
               </div>
             </div>
