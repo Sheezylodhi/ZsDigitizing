@@ -1,87 +1,80 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { HiMenu, HiX } from "react-icons/hi";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  PlusCircle,
+  Users,
+  LogOut,
+} from "lucide-react";
 
 export default function AdminSidebar() {
+  const pathname = usePathname();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const menu = [
+    { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Quotes", href: "/admin/quotes", icon: ClipboardList },
+    { name: "Create Client", href: "/admin/create-client", icon: Users },
+    { name: "Create Order", href: "/admin/create-order", icon: PlusCircle },
+    { name: "Order List", href: "/admin/orders", icon: ClipboardList },
+    { name: "Client List", href: "/admin/clients", icon: Users },
+  ];
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("adminToken");
     router.replace("/login");
   };
 
   return (
-    <>
-      {/* Mobile Top Bar */}
-      {!isDesktop && (
-        <div className="fixed top-0 left-0 right-0 bg-[#0e2c1c] text-white flex justify-between items-center p-4 z-[60] md:hidden h-16">
-          <div className="font-bold text-xl">Admin Panel</div>
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
-          </button>
-        </div>
-      )}
+    <div className="hidden lg:flex w-72 bg-[#0e2c1c] text-white flex-col shadow-2xl min-h-screen">
+      {/* LOGO */}
+      <div className="p-6 text-2xl font-bold border-b border-white/20 flex-shrink-0">
+        Admin Panel
+      </div>
 
-      {/* Overlay for Mobile */}
-      {!isDesktop && isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-[40]"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {/* NAVIGATION */}
+      <nav className="flex-1 p-4 space-y-2">
+        {menu.map((item, i) => {
+          const Icon = item.icon;
+          const active = pathname === item.href;
 
-      {/* Sidebar */}
-      <motion.aside
-        initial={{ x: "-100%" }}
-        animate={{ x: isDesktop ? 0 : isOpen ? 0 : "-100%" }}
-        transition={{ type: "tween" }}
-        className={`${
-          isDesktop ? "relative" : "fixed"
-        } top-0 left-0 z-[50] w-64 bg-[#0e2c1c] text-white flex flex-col shadow-lg h-screen overflow-y-auto`}
-      >
-        {/* Logo/Title Section */}
-        <div className="p-6 font-bold text-2xl border-b border-gray-700 h-16 flex items-center">
-          Admin Panel
-        </div>
+          return (
+            <Link key={i} href={item.href}>
+              <motion.div
+                whileHover={{ x: 6 }}
+                className={`flex items-center gap-3 p-3 rounded-xl transition
+                ${
+                  active
+                    ? "bg-white text-[#0e2c1c] shadow font-semibold"
+                    : "hover:bg-white/10"
+                }`}
+              >
+                <Icon size={18} />
+                {item.name}
+              </motion.div>
+            </Link>
+          );
+        })}
 
-        <nav className="flex flex-col mt-4 gap-2 p-2 flex-1">
-          <Link
-            href="/admin/dashboard"
-            className="p-3 rounded hover:bg-green-700 transition"
-            onClick={() => setIsOpen(false)}
-          >
-            Overview
-          </Link>
-          <Link
-            href="/admin/quotes"
-            className="p-3 rounded hover:bg-green-700 transition"
-            onClick={() => setIsOpen(false)}
-          >
-            Quotes
-          </Link>
+        {/* LOGOUT */}
+        <motion.button
+          whileHover={{ x: 6 }}
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer "
+        >
+          <LogOut size={18} />
+          Logout
+        </motion.button>
+      </nav>
 
-          <button
-            onClick={handleLogout}
-            className="p-3 rounded hover:bg-red-600 transition text-red-400 text-left mt-auto mb-4"
-          >
-            Logout
-          </button>
-        </nav>
-      </motion.aside>
-    </>
+      {/* FOOTER */}
+      <div className="p-4 text-xs border-t border-white/20 opacity-70 flex-shrink-0">
+        Admin Portal
+      </div>
+    </div>
   );
 }

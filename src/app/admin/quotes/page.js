@@ -1,127 +1,178 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { User, Eye, Trash2 } from "lucide-react";
+import NotificationIcon from "@/components/NotificationIcon";
 import AdminGuard from "@/components/AdminGuard";
-import AdminSidebar from "@/components/AdminSidebar";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function QuotesPage() {
-  return (
-    <AdminGuard>
-      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-        <AdminSidebar />
-        <ProtectedQuotes />
-      </div>
-    </AdminGuard>
-  );
-}
-
-function ProtectedQuotes() {
   const [quotes, setQuotes] = useState([]);
+  const [adminId, setAdminId] = useState(null);
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const quotesPerPage = 10;
+  const [page, setPage] = useState(1);
+  const perPage = 6;
+  const router = useRouter();
 
+  // 🔹 FETCH QUOTES + ADMIN ID
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) return;
+
+    // Admin Decode
+    try {
+      const { userId } = JSON.parse(atob(token.split('.')[1]));
+      setAdminId(userId);
+    } catch {}
+
     fetch("/api/admin/quotes", { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => res.json())
-      .then(data => Array.isArray(data) ? setQuotes(data) : setQuotes([]))
+      .then((res) => res.json())
+      .then((data) => Array.isArray(data) ? setQuotes(data) : setQuotes([]))
       .catch(console.error);
   }, []);
 
-  const filteredQuotes = quotes.filter(q =>
-    (q.name?.toLowerCase() || "").includes(search.toLowerCase()) ||
-    (q.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
-    (q.company?.toLowerCase() || "").includes(search.toLowerCase()) ||
-    (q.message?.toLowerCase() || "").includes(search.toLowerCase())
-  );
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this quote?")) return;
 
-  const indexOfLast = currentPage * quotesPerPage;
-  const indexOfFirst = indexOfLast - quotesPerPage;
-  const currentQuotes = filteredQuotes.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filteredQuotes.length / quotesPerPage);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/admin/quotes/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Delete failed");
+      setQuotes(prev => prev.filter(q => q._id !== id));
+    } catch (err) {
+      alert("Delete failed: " + err.message);
+    }
+  };
+
+  const filtered = useMemo(() => {
+    return quotes.filter(q =>
+      q.name?.toLowerCase().includes(search.toLowerCase()) ||
+      q.email?.toLowerCase().includes(search.toLowerCase()) ||
+      q.company?.toLowerCase().includes(search.toLowerCase()) ||
+      q.message?.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [quotes, search]);
+
+  const totalPages = Math.ceil(filtered.length / perPage);
+  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
 
   return (
-    <div className="flex-1 p-4 md:p-8 space-y-6 overflow-x-auto min-w-0">
-      <h1 className="text-3xl font-bold text-gray-800">Quotes</h1>
+    <AdminGuard>
+      <div className="min-h-screen bg-[#f8fafc] p-10 flex flex-col gap-10">
 
-      <input
-        type="text"
-        placeholder="Search quotes..."
-        value={search}
-        onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
-        className="mb-4 p-3 border rounded-xl w-full max-w-lg shadow-sm"
-      />
+        {/* HEADER CARD */}
+        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <h1 className="text-3xl font-bold text-[#0e2c1c]">Quotes List</h1>
+            <p className="text-gray-500 text-sm mt-2">Manage all client quotes & track submissions</p>
+          </div>
 
-      <div className="overflow-x-auto rounded-xl border shadow-md bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr className="bg-green-600 text-white text-sm uppercase tracking-wide">
-              <th className="px-4 py-3 text-left font-medium">Name</th>
-              <th className="px-4 py-3 text-left font-medium">Company</th>
-              <th className="px-4 py-3 text-left font-medium">Email</th>
-              <th className="px-4 py-3 text-left font-medium">Message</th>
-              <th className="px-4 py-3 text-left font-medium">File</th>
-              <th className="px-4 py-3 text-left font-medium">Date</th>
-            </tr>
-          </thead>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
+              <User size={18} className="text-gray-600" />
+              <span className="font-semibold text-gray-700">Admin</span>
+            </div>
+            {adminId && <NotificationIcon userId={adminId} />}
+          </div>
+        </div>
 
-          <tbody className="divide-y divide-gray-100">
-            <AnimatePresence>
-              {currentQuotes.map((q, idx) => (
-                <motion.tr
-                  key={q._id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                >
-                  <td className="px-4 py-3 font-medium text-gray-900">{q.name}</td>
-                  <td className="px-4 py-3 text-gray-700">{q.company || "-"}</td>
-                  <td className="px-4 py-3 text-gray-700">{q.email}</td>
-                  <td className="px-4 py-3 text-gray-600 max-w-xs truncate" title={q.message}>
-                    {q.message}
+        {/* SEARCH */}
+        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8 flex flex-col gap-6">
+          <input
+            placeholder="Search by name, email, company or message..."
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full h-[70px] px-6 border border-gray-300 bg-white rounded-xl text-[15px] outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
+          />
+        </div>
+
+        {/* TABLE CARD */}
+        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#0e2c1c] text-left text-sm text-white">
+              <tr>
+                <th className="p-5">Name</th>
+                <th className="p-5">Company</th>
+                <th className="p-5">Email</th>
+                <th className="p-5">Message</th>
+                <th className="p-5">File</th>
+                <th className="p-5">Date</th>
+                <th className="p-5 text-right">View</th>
+                <th className="p-5 text-right">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginated.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="p-20 text-center text-gray-400">
+                    No quotes found
                   </td>
-                  <td className="px-4 py-3">
-                    {q.fileUrl ? (
-                      <a href={q.fileUrl} target="_blank" className="text-green-600 font-medium hover:underline">
-                        Download
+                </tr>
+              ) : (
+                paginated.map(q => (
+                  <motion.tr
+                    key={q._id}
+                    whileHover={{ scale: 1.002 }}
+                    className="border-t hover:bg-gray-50 transition"
+                  >
+                    <td className="p-5 font-medium">{q.name}</td>
+                    <td className="p-5">{q.company || "-"}</td>
+                    <td className="p-5">{q.email}</td>
+                    <td className="p-5 max-w-xs truncate" title={q.message}>{q.message}</td>
+                    <td className="p-5">
+                      {q.fileUrl ? (
+                        <a href={q.fileUrl} target="_blank" className="text-green-600 font-medium hover:underline">
+                          Download
+                        </a>
+                      ) : <span className="text-gray-400">-</span>}
+                    </td>
+                    <td className="p-5 text-gray-500">{new Date(q.createdAt).toLocaleDateString()}</td>
+                    <td className="p-5 text-right">
+                      <a
+                        href={`/admin/quotes/${q._id}`}
+                        className="w-10 h-9 flex items-center justify-center rounded-lg text-grey shadow hover:shadow-lg hover:scale-105 transition"
+                      >
+                        <Eye size={15} />
                       </a>
-                    ) : <span className="text-gray-400">-</span>}
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">
-                    {new Date(q.createdAt).toLocaleDateString()}
-                  </td>
-                </motion.tr>
-              ))}
-            </AnimatePresence>
-          </tbody>
-        </table>
+                    </td>
+                    <td className="p-5 text-right">
+                      <button
+                        onClick={() => handleDelete(q._id)}
+                        className="w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </td>
+                  </motion.tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-3 mt-10">
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i + 1)}
+                className={`px-4 py-2 rounded-lg transition ${
+                  page === i + 1
+                    ? "bg-[#0e2c1c] text-white shadow-lg"
+                    : "bg-white border border-gray-200 hover:bg-gray-50"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* Pagination */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mt-4 gap-2">
-        <button
-          onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 rounded-lg border bg-white shadow-sm disabled:opacity-40"
-        >
-          Prev
-        </button>
-
-        <span className="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
-          Page {currentPage} / {totalPages || 1}
-        </span>
-
-        <button
-          onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 rounded-lg border bg-white shadow-sm disabled:opacity-40"
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    </AdminGuard>
   );
 }

@@ -11,6 +11,7 @@ const QuoteSchema = new mongoose.Schema(
     type: String,
     message: String,
     fileUrl: String,
+     fileName: String
   },
   { timestamps: true }
 );

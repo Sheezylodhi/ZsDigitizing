@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import { Quote } from "@/lib/models/Quote";
+import Notification from "@/lib/models/Notification";
+import User from "@/lib/models/User";
 import nodemailer from "nodemailer";
+import fs from "fs";
+import path from "path";
 
 export async function POST(req) {
   await connectDB();
@@ -10,64 +14,76 @@ export async function POST(req) {
     const formData = await req.formData();
     const data = Object.fromEntries(formData);
 
-    // Handle file attachment in memory (Vercel compatible)
+    // Handle file attachment
     let attachment = null;
+    let fileUrl = null;
+    let fileName = null;
     const file = formData.get("file");
 
     if (file && file.name) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      attachment = {
-        filename: file.name,
-        content: buffer,
-      };
+      fileName = file.name;
+
+      // Save file in public/uploads folder
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+      const filePath = path.join(uploadsDir, fileName);
+      fs.writeFileSync(filePath, buffer);
+
+      // URL to access publicly
+      fileUrl = `/uploads/${fileName}`;
+
+      // For email attachment
+      attachment = { filename: fileName, path: filePath };
     }
 
-    // Store in DB
-    const quote = await Quote.create({ ...data });
+    // Save quote in DB
+    const quote = await Quote.create({ ...data, fileName, fileUrl });
 
-    // SMTP Transport Config
+    // Notify admin in DB
+    const admin = await User.findOne({ role: "admin" });
+    if (admin) {
+      await Notification.create({
+        userId: admin._id,
+        type: "quote_request",
+        title: "New Quote Request",
+        message: `${data.name} submitted a new quote request.`,
+        link: `/admin/quotes/${quote._id}`,
+      });
+    }
+
+    // Send Email
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: process.env.SMTP_PORT == "465", // true for 465, false for 587
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
+      secure: process.env.SMTP_PORT == "465",
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
     });
 
-    // File Type Detection for Email Preview
     const ext = file?.name?.split(".").pop()?.toLowerCase();
     const imageTypes = ["jpg", "jpeg", "png", "gif", "webp"];
     const embroideryTypes = ["dst", "pes", "jef"];
 
     let filePreviewHTML = "";
-
     if (file && imageTypes.includes(ext)) {
-      filePreviewHTML = `
-        <p><strong>Uploaded Design:</strong></p>
-        <img src="cid:file-preview" style="max-width:250px;border-radius:6px;border:1px solid #ddd;margin-top:10px;" />
-      `;
+      filePreviewHTML = `<p><strong>Uploaded Design:</strong></p>
+        <img src="cid:file-preview" style="max-width:250px;border-radius:6px;border:1px solid #ddd;margin-top:10px;" />`;
       if (attachment) attachment.cid = "file-preview";
     } else if (file && embroideryTypes.includes(ext)) {
-      filePreviewHTML = `
-        <p><strong>Embroidery File Attached:</strong> .${ext}<br>
-        <small>Open in embroidery software (Wilcom / PE Design)</small></p>
-      `;
+      filePreviewHTML = `<p><strong>Embroidery File Attached:</strong> .${ext}<br>
+        <small>Open in embroidery software</small></p>`;
     } else if (file) {
       filePreviewHTML = `<p><strong>File Attached:</strong> .${ext}</p>`;
     }
 
-    // Styled Email Template
     const emailHTML = `
       <div style="background:#f7fafc;padding:25px;font-family:Arial,Helvetica,sans-serif;">
         <div style="max-width:650px;margin:auto;background:white;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-          
           <div style="background:#0e2c1c;color:white;padding:18px 25px;">
             <h2 style="margin:0;font-size:20px;">New Quote Request</h2>
             <p style="margin:4px 0 0;font-size:13px;opacity:0.85;">Submitted by ${data.name}</p>
           </div>
-
           <div style="padding:25px;color:#333;font-size:15px;line-height:1.6;">
             <h3 style="margin-bottom:10px;color:#0e2c1c;">Client Details</h3>
             <p><strong>Name:</strong> ${data.name}</p>
@@ -75,9 +91,7 @@ export async function POST(req) {
             <p><strong>Phone:</strong> ${data.phone}</p>
             <p><strong>Company:</strong> ${data.company || "N/A"}</p>
             <p><strong>Website:</strong> ${data.website || "N/A"}</p>
-
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;">
-
             <h3 style="margin-bottom:10px;color:#0e2c1c;">Project Details</h3>
             <p><strong>Deadline:</strong> ${data.deadline}</p>
             <p><strong>Service Type:</strong> ${data.type}</p>
@@ -85,10 +99,8 @@ export async function POST(req) {
             <span style="background:#f9fafb;padding:10px;border-radius:6px;border:1px solid #e5e7eb;display:block;margin-top:5px;">
               ${data.message}
             </span></p>
-
             ${filePreviewHTML}
           </div>
-
           <div style="background:#f1f5f9;padding:12px;text-align:center;font-size:13px;color:#555;border-top:1px solid #e5e7eb;">
             Email generated by <strong>ZS Digitizing Quote System</strong>
           </div>
@@ -96,7 +108,6 @@ export async function POST(req) {
       </div>
     `;
 
-    // Send Email
     await transporter.sendMail({
       from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
       to: process.env.ADMIN_EMAIL,

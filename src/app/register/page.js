@@ -8,25 +8,30 @@ import { motion } from "framer-motion";
 import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    company: "",
+    phone: "",
+    email: ""
+  });
   const [error, setError] = useState("");
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+    setMsg("");
+    setLoading(true);
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("/api/admin/create-client", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify(form),
     });
 
     const data = await res.json();
@@ -34,9 +39,11 @@ export default function RegisterPage() {
     if (!res.ok) {
       setError(data.error || "Something went wrong");
     } else {
-      alert("Signup successful!");
-      window.location.href = "/login";
+      setMsg("Account created & email sent ✅");
+      setForm({ name: "", company: "", phone: "", email: "" });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -59,6 +66,7 @@ export default function RegisterPage() {
           </h2>
 
           {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+          {msg && <p className="text-green-600 text-sm mb-4 text-center">{msg}</p>}
 
           <form className="space-y-6" onSubmit={handleRegister}>
             {/* Name */}
@@ -66,10 +74,39 @@ export default function RegisterPage() {
               <label className="block text-gray-600 mb-2 font-medium">Name</label>
               <input
                 type="text"
+                name="name"
                 placeholder="Your Name"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.name}
+                onChange={handleChange}
+                className="w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0e2c1c] transition"
+              />
+            </motion.div>
+
+            {/* Company */}
+            <motion.div whileFocus={{ scale: 1.02 }} className="relative">
+              <label className="block text-gray-600 mb-2 font-medium">Company</label>
+              <input
+                type="text"
+                name="company"
+                placeholder="Company Name"
+                required
+                value={form.company}
+                onChange={handleChange}
+                className="w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0e2c1c] transition"
+              />
+            </motion.div>
+
+            {/* Phone */}
+            <motion.div whileFocus={{ scale: 1.02 }} className="relative">
+              <label className="block text-gray-600 mb-2 font-medium">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone Number"
+                required
+                value={form.phone}
+                onChange={handleChange}
                 className="w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0e2c1c] transition"
               />
             </motion.div>
@@ -79,41 +116,12 @@ export default function RegisterPage() {
               <label className="block text-gray-600 mb-2 font-medium">Email</label>
               <input
                 type="email"
+                name="email"
                 placeholder="you@example.com"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={form.email}
+                onChange={handleChange}
                 className="w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0e2c1c] transition"
-              />
-            </motion.div>
-
-            {/* Password */}
-            <motion.div whileFocus={{ scale: 1.02 }} className="relative">
-              <label className="block text-gray-600 mb-2 font-medium">Password</label>
-              <input
-                type="password"
-                placeholder="********"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0e2c1c] transition"
-              />
-            </motion.div>
-
-            {/* Confirm Password */}
-            <motion.div whileFocus={{ scale: 1.02 }} className="relative">
-              <label className="block text-gray-600 mb-2 font-medium">Confirm Password</label>
-              <input
-                type="password"
-                placeholder="********"
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`w-full px-5 py-4 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 shadow-inner focus:outline-none focus:ring-2 transition ${
-                  confirmPassword && confirmPassword !== password
-                    ? "focus:ring-red-500 border-red-500"
-                    : "focus:ring-[#0e2c1c]"
-                }`}
               />
             </motion.div>
 
@@ -122,13 +130,13 @@ export default function RegisterPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
+              disabled={loading}
               className="w-full py-4 rounded-xl bg-[#0e2c1c] text-white font-bold shadow-lg hover:shadow-2xl transition-all"
             >
-              Sign Up
+              {loading ? "Registering..." : "Register"}
             </motion.button>
           </form>
 
-          {/* Login link */}
           <p className="text-gray-600 mt-6 text-sm text-center">
             Already have an account?{" "}
             <Link href="/login" className="text-[#0e2c1c] hover:text-green-900 font-semibold transition">

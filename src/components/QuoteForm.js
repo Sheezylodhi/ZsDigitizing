@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 export default function QuoteForm() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
+  const [file, setFile] = useState(null);
+  const fileInputRef = useRef();
+
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length > 0) {
+      setFile(e.dataTransfer.files[0]);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,6 +28,7 @@ export default function QuoteForm() {
     setStatus("");
 
     const formData = new FormData(e.target);
+    if (file) formData.append("file", file);
 
     try {
       const res = await fetch("/api/quote", {
@@ -23,148 +39,164 @@ export default function QuoteForm() {
       const result = await res.json();
 
       if (result.success) {
-        setStatus("Quote sent successfully!");
+        setStatus("Quote sent successfully ✅");
         e.target.reset();
+        setFile(null);
       } else {
-        setStatus("Failed to send quote. Try again.");
+        setStatus("Failed to send quote. Try again ❌");
       }
     } catch (err) {
-      setStatus("Server error. Please try again.");
+      setStatus("Server error. Please try again ❌");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="min-h-screen pt-10 pb-24 flex items-start justify-center">
+    <section className="min-h-screen flex items-start justify-center bg-gray-50 py-5 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-2xl backdrop-blur-xl bg-white/70 border border-gray-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-3xl p-10"
+        className="w-full max-w-3xl bg-white border border-gray-200 shadow-lg rounded-3xl p-10"
       >
-        <div className="mb-10 text-center space-y-2">
-          <h2 className="text-4xl font-semibold tracking-tight text-[#0e2c1c]">
-            Request a Quote
-          </h2>
-          <p className="text-[#0e2c1c] text-sm">
-            Share your requirements to receive an accurate quote.
+        {/* HEADER */}
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold text-[#0e2c1c]">Request a Quote</h2>
+          <p className="text-gray-600 mt-2">
+            Share your requirements and get an accurate quote for your project.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-7">
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Full Name */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Full Name *</label>
-            <input
-              name="name"
-              required
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            />
+          {/* Name & Email */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Full Name *</label>
+              <input
+                name="name"
+                required
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Email *</label>
+              <input
+                type="email"
+                name="email"
+                required
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              />
+            </div>
           </div>
 
-          {/* Company */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Company</label>
-            <input
-              name="company"
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            />
+          {/* Company & Phone */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Company</label>
+              <input
+                name="company"
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Phone *</label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              />
+            </div>
           </div>
 
-          {/* Email */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Email *</label>
-            <input
-              type="email"
-              name="email"
-              required
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            />
+          {/* Website & Deadline */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Website</label>
+              <input
+                name="website"
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Deadline</label>
+              <select
+                name="deadline"
+                className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+              >
+                <option value="">Select...</option>
+                <option value="Rush">Rush</option>
+                <option value="12 Hours">12 Hours</option>
+                <option value="24 Hours">24 Hours</option>
+                <option value="1 Day">1 Day</option>
+              </select>
+            </div>
           </div>
 
-          {/* Phone */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Phone *</label>
-            <input
-              type="tel"
-              name="phone"
-              required
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            />
-          </div>
-
-          {/* Website */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Website</label>
-            <input
-              name="website"
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            />
-          </div>
-
-          {/* Deadline */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Deadline</label>
-            <select
-              name="deadline"
-              className="w-full rounded-xl border border-[#0e2c1c] bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-            >
-              <option value="">Select...</option>
-              <option value="Rush">Rush</option>
-              <option value="12 Hours">12 Hours</option>
-              <option value="24 Hours">24 Hours</option>
-              <option value="1 Days">1 Days</option>
-
-            </select>
-          </div>
-
-          {/* Type */}
-          <div className="space-y-2">
-            <label className="text-sm text-[#0e2c1c] font-medium">Type of Work *</label>
-            <div className="flex gap-4 flex-wrap">
-              {["Vector", "Digitizing", "Patches", "Other"].map((v) => (
-                <label key={v} className="flex items-center gap-2 text-[#0e2c1c] text-sm cursor-pointer">
-                  <input type="radio" name="type" value={v} required />
-                  {v}
+          {/* Type of Work */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-2">Type of Work *</label>
+            <div className="flex gap-6 flex-wrap">
+              {["Vector", "Digitizing", "Patches", "Other"].map((type) => (
+                <label key={type} className="flex items-center gap-2 text-gray-700 cursor-pointer">
+                  <input type="radio" name="type" value={type} required />
+                  {type}
                 </label>
               ))}
             </div>
           </div>
 
           {/* Message */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">Project Details</label>
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Project Details</label>
             <textarea
               name="message"
               rows={4}
-              className="w-full rounded-xl border border-[#0e2c1c]px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/80 transition"
-              placeholder="Describe project requirements..."
+              placeholder="Describe your project..."
+              className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 transition"
             />
           </div>
 
-          {/* File */}
-          <div className="space-y-1.5">
-            <label className="text-sm text-[#0e2c1c] font-medium">File (optional)</label>
+          {/* Drag & Drop File */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">File (optional)</label>
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current.click()}
+              className="cursor-pointer border-2 border-dashed border-gray-300 rounded-xl p-6 text-center text-gray-500 hover:border-green-500 transition"
+            >
+              {file ? (
+                <p>📄 {file.name}</p>
+              ) : (
+                <p>Drag & drop a file here, or click to select</p>
+              )}
+            </div>
             <input
               type="file"
               name="file"
-              className="w-full rounded-xl border border-[#0e2c1c] px-4 py-2 bg-white"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
             />
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-[#0e2c1c] text-white font-medium tracking-wide hover:bg-black/90 transition"
+            className="w-full py-3 bg-[#0e2c1c] text-white rounded-xl font-medium hover:bg-green-700 transition"
           >
             {loading ? "Sending..." : "Send Request"}
           </button>
 
+          {/* Status Message */}
           {status && (
-            <p className="text-center text-[#0e2c1c] font-medium">{status}</p>
+            <p className="text-center text-green-700 font-medium mt-2">{status}</p>
           )}
+
         </form>
       </motion.div>
     </section>

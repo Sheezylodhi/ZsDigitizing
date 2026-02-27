@@ -13,7 +13,7 @@ async function connectDB() {
   }
 
   const db = await mongoose.connect(process.env.MONGODB_URI, {
-    dbName: "myzsdigitize",
+    dbName: "myzs",
   });
 
   connection.isConnected = db.connections[0].readyState;
