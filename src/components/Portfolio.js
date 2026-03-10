@@ -45,7 +45,7 @@ export default function Portfolio() {
       ? portfolioItems
       : portfolioItems.filter((item) => item.category === selected);
 
-  const categories = ["All", "Logo", "3D Puff", "Patch", "Apparel", "Vector", "Fix"];
+  const categories = ["All", "Embridory Digitizing", "3D Puff", "Patch", "Apparel", "Vector", "Fix"];
 
   return (
     <section id="portfolio" className="py-24 bg-gray-50">

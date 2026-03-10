@@ -8,15 +8,22 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const portfolioItems = [
-  { title: "Vector 1", img: "/portfolio/vector1.jpeg", category: "Vector", desc: "Premium Vector embroidery." },
-  { title: "Vector 2", img: "/portfolio/vector2.jpeg", category: "Vector", desc: "Premium Vector embroidery." },
-  { title: "Vector 3", img: "/portfolio/vector3.jpeg", category: "Vector", desc: "Premium Vector embroidery." },
-  { title: "Logo 1", img: "/portfolio/logo1.jpg", category: "Logo", desc: "High-quality logo digitizing." },
-  { title: "Logo 2", img: "/portfolio/logo2.jpg", category: "Logo", desc: "High-quality logo digitizing." },
-  { title: "Cap 1", img: "/portfolio/cap1.jpg", category: "Patches", desc: "Premium cap embroidery." },
-  { title: "Patch 1", img: "/portfolio/patch1.jpg", category: "Patches", desc: "Custom patches." },
-  { title: "Jacket 1", img: "/portfolio/jacket1.jpg", category: "Apparel", desc: "Full embroidery jackets." },
-  { title: "3D Puff", img: "/portfolio/3dpuff1.jpg", category: "3D Puff", desc: "Premium 3D puff embroidery." },
+    { title: "Embriodery", img: "/portfolio/embroidery1.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+   { title: "Embriodery", img: "/portfolio/embroidery2.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+    { title: "Embriodery", img: "/portfolio/embroidery3.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+     { title: "Embriodery", img: "/portfolio/embroidery4.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+      { title: "Embriodery", img: "/portfolio/embroidery5.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+       { title: "Embriodery", img: "/portfolio/embroidery6.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+        { title: "Embriodery", img: "/portfolio/embroidery7.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+         { title: "Embriodery", img: "/portfolio/embroidery8.BMP", category: "Embriodery Digitizing", desc: "High-quality logo digitizing." },
+  { title: "Vector ", img: "/portfolio/vector1.jpg", category: "Vector", desc: "Premium Vector embroidery." },
+  { title: "Vector ", img: "/portfolio/vector2.jpg", category: "Vector", desc: "Premium Vector embroidery." },
+  { title: "Vector ", img: "/portfolio/vector3.jpg", category: "Vector", desc: "Premium Vector embroidery." },
+   { title: "Vector ", img: "/portfolio/vector4.jpg", category: "Vector", desc: "Premium Vector embroidery." },
+    { title: "Vector ", img: "/portfolio/vector5.jpg", category: "Vector", desc: "Premium Vector embroidery." },
+  { title: "Patch ", img: "/portfolio/patch1.BMP", category: "Patches", desc: "Custom patches." },
+    { title: "Patch ", img: "/portfolio/patch2.BMP", category: "Patches", desc: "Custom patches." },
+      { title: "Patch ", img: "/portfolio/patch3.BMP", category: "Patches", desc: "Custom patches." },
   // ... baqi items yahan add karein
 ];
 
@@ -83,7 +90,7 @@ export default function PortfolioPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`cursor-pointer  px-4 py-2 rounded-lg font-semibold transition ${
                 selectedCategory === cat ? "bg-[#2A4E3B] text-white shadow-lg" : "bg-white text-[#2A4E3B] border border-[#2A4E3B] hover:bg-[#2A4E3B] hover:text-white"
               }`}
             >
@@ -93,14 +100,14 @@ export default function PortfolioPage() {
         </div>
 
         {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className=" cursor-pointer grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredItems.map((item, i) => (
             <motion.div
               key={`${selectedCategory}-${i}`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className="relative overflow-hidden shadow-md hover:shadow-xl cursor-pointer group"
+              className=" cursor-pointer relative overflow-hidden shadow-md hover:shadow-xl cursor-pointer group"
               onClick={() => openModal(i)}
             >
               <img src={item.img} alt={item.title} className="w-full h-48 object-contain" />
@@ -135,7 +142,7 @@ export default function PortfolioPage() {
             {/* Close Button */}
             <button
               onClick={closeModal}
-              className="absolute -top-12 right-0 text-white text-4xl hover:text-red-500 transition"
+              className="absolute -top-10 cursor-pointer right-0 text-white text-4xl hover:text-red-500 transition"
             >
               &times;
             </button>

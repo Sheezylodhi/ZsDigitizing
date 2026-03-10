@@ -76,25 +76,35 @@ export default function ClientOrders() {
 
   return (
     <ClientGuard>
-      <div className="min-h-screen bg-[#f8fafc] p-4 sm:p-10 flex flex-col gap-6 sm:gap-10">
+      <div className="min-h-screen bg-white p-4 sm:p-10 flex flex-col gap-6 sm:gap-10">
 
         {/* HEADER CARD */}
-        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0e2c1c]">Orders List</h1>
-            <p className="text-gray-500 text-sm mt-1 sm:mt-2">Track your orders, progress & delivery status</p>
-          </div>
-
-          {client && (
-            <div className="flex items-center gap-3 md:gap-4 mt-4 md:mt-0">
-              <div className="flex items-center gap-2 px-4 py-2 border border-gray-200 bg-white rounded-xl shadow-sm">
-                <User size={18} className="text-gray-600" />
-                <span className="font-semibold text-gray-700">{client.name}</span>
-              </div>
-              <NotificationIcon userId={client._id} />
-            </div>
-          )}
-        </div>
+     <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
+     
+       {/* LEFT — HEADING */}
+       <div>
+         <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">
+           Order List
+         </h1>
+         <p className="text-gray-500 text-xs sm:text-sm">
+           Track your orders, progress & delivery status
+         </p>
+       </div>
+     
+       {/* RIGHT — USER + NOTIFICATION */}
+       {client && (
+         <div className="flex items-center gap-3">
+           <div className="flex items-center gap-2 px-2 py-1.5 border border-gray-200 bg-gray-50 rounded-lg">
+             <User size={14} className="text-gray-500" />
+             <span className="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">
+               {client.name}
+             </span>
+           </div>
+     
+           <NotificationIcon userId={client._id} />
+         </div>
+       )}
+     </div>
 
         {/* FILTER CARD */}
         <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-4 sm:p-8 flex flex-col sm:flex-row gap-4 sm:gap-6">

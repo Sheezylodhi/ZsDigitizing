@@ -69,7 +69,7 @@ export default function FreeTrialPopup() {
             {/* LEFT IMAGE */}
             <div className="relative hidden md:block">
               <Image
-                src="/images/embridorydigitizing.jpeg"
+                src="/popup.jpg"
                 alt="Free Trial"
                 fill
                 className="object-cover"
@@ -100,12 +100,12 @@ export default function FreeTrialPopup() {
 
                   <h2 className="text-3xl font-extrabold text-[#0e2c1c] leading-tight mb-3">
                     Try Our Service <br />
-                    <span className="text-green-600">Absolutely Free</span>
+                    <span className="text-green-600">Complimentary Trial</span>
                   </h2>
 
                   <p className="text-gray-600 text-sm mb-6 max-w-sm">
-                    Get your first embroidery digitizing sample done by our
-                    professional team — no cost, no commitment.
+                 Get Your First Left Chest or Cap Logo Digitize 
+Professional embroidery digitizing by our expert team. No cost. No commitment.
                   </p>
 
                   <form onSubmit={submitHandler} className="space-y-4 max-w-sm">

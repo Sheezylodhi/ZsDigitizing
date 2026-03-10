@@ -88,10 +88,12 @@ export default function Dashboard() {
           <div className="max-w-[1600px] mx-auto space-y-16">
             
             {/* ---------- HEADER ---------- */}
-           <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#0e2c1c]">Admin Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-2">Complete Platform Overview</p>
+              <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Admin Dashboard</h1>
+            <p className="text-gray-500 text-xs sm:text-sm">
+      Complete Platform Overview
+    </p>
           </div>
 
           <div className="flex items-center gap-4">

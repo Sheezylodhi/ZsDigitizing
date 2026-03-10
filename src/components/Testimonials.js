@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star, StarHalf } from "lucide-react";
 
-// random rating generator: 4, 4.5, 5
 const ratingsPool = [4, 4.5, 5];
 const getRandomRating = () =>
   ratingsPool[Math.floor(Math.random() * ratingsPool.length)];
@@ -59,14 +58,22 @@ const testimonials = [
 
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
-  const nextSlide = () =>
+  const nextSlide = () => {
+    setDirection(1);
     setIndex((prev) => (prev + 1) % testimonials.length);
-  const prevSlide = () =>
+  };
+
+  const prevSlide = () => {
+    setDirection(-1);
     setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 6000);
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
@@ -74,6 +81,21 @@ export default function Testimonials() {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 200 : -200,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction) => ({
+      x: direction > 0 ? -200 : 200,
+      opacity: 0,
+    }),
+  };
 
   return (
     <section
@@ -88,18 +110,20 @@ export default function Testimonials() {
         <div className="relative max-w-4xl mx-auto flex items-center">
           <button
             onClick={prevSlide}
-            className="hidden md:block p-2 text-[#2A4E3B] hover:scale-110 transition"
+            className="hidden cusrsor-pointer md:block p-2 text-[#2A4E3B] hover:scale-110 transition"
           >
             <ChevronLeft size={48} strokeWidth={3} />
           </button>
 
-          <div className="relative w-full">
-            <AnimatePresence mode="wait">
+          <div className="relative w-full overflow-hidden">
+            <AnimatePresence custom={direction} mode="wait">
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.5 }}
                 className="bg-white p-8 md:p-12 rounded-[2rem] shadow-xl border border-gray-100"
               >
@@ -130,7 +154,6 @@ export default function Testimonials() {
                     </div>
                   </div>
 
-                  {/* ⭐ Rating */}
                   <div className="flex flex-col items-end">
                     <div className="flex gap-1 text-yellow-400">
                       {[...Array(fullStars)].map((_, i) => (
@@ -158,7 +181,7 @@ export default function Testimonials() {
 
           <button
             onClick={nextSlide}
-            className="hidden md:block p-2 text-[#2A4E3B] hover:scale-110 transition"
+            className="hidden cusrsor-pointer md:block p-2 text-[#2A4E3B] hover:scale-110 transition"
           >
             <ChevronRight size={48} strokeWidth={3} />
           </button>

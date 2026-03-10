@@ -1,5 +1,5 @@
 "use client";
-import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import {  FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function WhatsAppButton() {
@@ -16,7 +16,6 @@ Hello Maaz, I wan to more info about your work
 
 
   const buttons = [
-    { icon: <FaWhatsapp />, link: whatsappLink, color: "bg-green-500 hover:bg-green-600", label: "WhatsApp" },
     { icon: <FaEnvelope />, link: emailLink, color: "bg-blue-500 hover:bg-blue-600", label: "Email" },
   ];
 

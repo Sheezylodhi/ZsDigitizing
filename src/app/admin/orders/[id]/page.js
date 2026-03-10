@@ -89,22 +89,18 @@ export default function OrderDetail() {
       className="w-full max-w-4xl space-y-6"
     >
       {/* HEADER */}
-       <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#0e2c1c]">
-              Orders List
-            </h1>
-            <p className="text-gray-500 text-sm mt-2">
-              Manage all client orders & track progress
-            </p>
+              <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Order Detail</h1>
+            <p className="text-gray-500 text-xs sm:text-sm">
+     See all clients orders detail
+    </p>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
               <User size={18} className="text-gray-600" />
-              <span className="font-semibold text-gray-700">
-                Admin
-              </span>
+              <span className="font-semibold text-gray-700">Admin</span>
             </div>
             {adminId && <NotificationIcon userId={adminId} />}
           </div>

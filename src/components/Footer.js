@@ -53,23 +53,45 @@ export default function Footer() {
               <Link href="/Terms" className="hover:text-[#0f3c24] transition duration-300">Terms & Conditions</Link>
             </li>
           </ul>
+
           <div className="flex items-center gap-4">
-           
-            <a href="https://www.facebook.com/profile.php?id=100086903257419" className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110">
+
+            <a 
+              href="https://www.facebook.com/profile.php?id=100086903257419"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110"
+            >
               <FaFacebookF size={20} />
             </a>
-            <a href="https://www.instagram.com/zs_digitizing/" className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110">
+
+            <a 
+              href="https://www.instagram.com/zs_digitizing/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110"
+            >
               <FaInstagram size={20} />
             </a>
-            <a href="https://www.tiktok.com/@zs_digitizing?_r=1&_t=ZS-9319IRmPQJx" className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110">
+
+            <a 
+              href="https://www.tiktok.com/@zs_digitizing?_r=1&_t=ZS-9319IRmPQJx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110"
+            >
               <FaTiktok size={20} />
             </a>
-            <a href="https://www.pinterest.com/zsdesignerpk/" className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110">
+
+            <a 
+              href="https://www.pinterest.com/zsdesignerpk/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110"
+            >
               <FaPinterestP size={20} />
             </a>
-            <a href="https://www.youtube.com/@ZS_Digitizing" className="hover:text-[#0f3c24] transition duration-300 transform hover:scale-110">
-              <FaYoutube size={20} />
-            </a>
+
           </div>
         </div>
 

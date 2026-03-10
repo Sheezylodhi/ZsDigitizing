@@ -91,68 +91,91 @@ export default function QuotesPage() {
         </div>
 
         {/* TABLE CARD */}
-        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-[#0e2c1c] text-left text-sm text-white">
-              <tr>
-                <th className="p-5">Name</th>
-                <th className="p-5">Company</th>
-                <th className="p-5">Email</th>
-                <th className="p-5">Message</th>
-                <th className="p-5">File</th>
-                <th className="p-5">Date</th>
-                <th className="p-5 text-right">View</th>
-                <th className="p-5 text-right">Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginated.length === 0 ? (
-                <tr>
-                  <td colSpan="8" className="p-20 text-center text-gray-400">
-                    No quotes found
-                  </td>
-                </tr>
-              ) : (
-                paginated.map(q => (
-                  <motion.tr
-                    key={q._id}
-                    whileHover={{ scale: 1.002 }}
-                    className="border-t hover:bg-gray-50 transition"
+       {/* TABLE CARD */}
+<div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
+
+  {/* Horizontal Scroll Wrapper */}
+  <div className="w-full overflow-x-auto">
+
+    <table className="min-w-[1000px] w-full">
+      <thead className="bg-[#0e2c1c] text-left text-sm text-white">
+        <tr>
+          <th className="p-5">Name</th>
+          <th className="p-5">Company</th>
+          <th className="p-5">Email</th>
+          <th className="p-5">Message</th>
+          <th className="p-5">File</th>
+          <th className="p-5">Date</th>
+          <th className="p-5 text-right">View</th>
+          <th className="p-5 text-right">Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {paginated.length === 0 ? (
+          <tr>
+            <td colSpan="8" className="p-20 text-center text-gray-400">
+              No quotes found
+            </td>
+          </tr>
+        ) : (
+          paginated.map(q => (
+            <motion.tr
+              key={q._id}
+              whileHover={{ scale: 1.002 }}
+              className="border-t hover:bg-gray-50 transition"
+            >
+              <td className="p-5 font-medium whitespace-nowrap">{q.name}</td>
+              <td className="p-5 whitespace-nowrap">{q.company || "-"}</td>
+              <td className="p-5 whitespace-nowrap">{q.email}</td>
+
+              <td className="p-5 max-w-xs truncate" title={q.message}>
+                {q.message}
+              </td>
+
+              <td className="p-5 whitespace-nowrap">
+                {q.fileUrl ? (
+                  <a
+                    href={q.fileUrl}
+                    target="_blank"
+                    className="text-green-600 font-medium hover:underline"
                   >
-                    <td className="p-5 font-medium">{q.name}</td>
-                    <td className="p-5">{q.company || "-"}</td>
-                    <td className="p-5">{q.email}</td>
-                    <td className="p-5 max-w-xs truncate" title={q.message}>{q.message}</td>
-                    <td className="p-5">
-                      {q.fileUrl ? (
-                        <a href={q.fileUrl} target="_blank" className="text-green-600 font-medium hover:underline">
-                          Download
-                        </a>
-                      ) : <span className="text-gray-400">-</span>}
-                    </td>
-                    <td className="p-5 text-gray-500">{new Date(q.createdAt).toLocaleDateString()}</td>
-                    <td className="p-5 text-right">
-                      <a
-                        href={`/admin/quotes/${q._id}`}
-                        className="w-10 h-9 flex items-center justify-center rounded-lg text-grey shadow hover:shadow-lg hover:scale-105 transition"
-                      >
-                        <Eye size={15} />
-                      </a>
-                    </td>
-                    <td className="p-5 text-right">
-                      <button
-                        onClick={() => handleDelete(q._id)}
-                        className="w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    Download
+                  </a>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
+              </td>
+
+              <td className="p-5 text-gray-500 whitespace-nowrap">
+                {new Date(q.createdAt).toLocaleDateString()}
+              </td>
+
+              <td className="p-5 text-right">
+                <a
+                  href={`/admin/quotes/${q._id}`}
+                  className="w-10 h-9 flex items-center justify-center rounded-lg text-grey shadow hover:shadow-lg hover:scale-105 transition"
+                >
+                  <Eye size={15} />
+                </a>
+              </td>
+
+              <td className="p-5 text-right">
+                <button
+                  onClick={() => handleDelete(q._id)}
+                  className="w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </td>
+            </motion.tr>
+          ))
+        )}
+      </tbody>
+    </table>
+
+  </div>
+</div>
 
         {/* PAGINATION */}
         {totalPages > 1 && (

@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const stats = [
-  { value: 500, suffix: "+", label: "Completed Orders" },
-  { value: 24, suffix: "h", label: "Fast Turnaround" },
-  { value: 100, suffix: "%", label: "Client Satisfaction" },
-  { value: 10, suffix: "+", label: "Years Experience" },
+  { value: 250, suffix: "+", label: "Completed Orders" },
+  { value: 6, suffix: "h", label: "Fast Turnaround" },
+  { value: 90, suffix: "%", label: "Client Satisfaction" },
+  { value: 3, suffix: "+", label: "Years Experience" },
 ];
 
 export default function Stats() {

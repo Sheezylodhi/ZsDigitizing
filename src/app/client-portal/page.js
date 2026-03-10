@@ -98,15 +98,15 @@ export default function ClientDashboard() {
 
   return (
     <ClientGuard>
-     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-200 px-4 sm:px-6 md:px-8 lg:px-10 pt-10 pb-10">
+     <div className="min-h-screen bg-white px-4 sm:px-6 md:px-8 lg:px-10 pt-10 pb-10">
 
         {/* HEADER */}
 {/* HEADER */}
-<div className="bg-white border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
+<div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
 
   {/* LEFT — HEADING */}
   <div>
-    <h1 className="text-lg sm:text-2xl font-semibold text-slate-800">
+    <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">
       Client Dashboard
     </h1>
     <p className="text-gray-500 text-xs sm:text-sm">

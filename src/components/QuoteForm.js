@@ -121,16 +121,16 @@ export default function QuoteForm() {
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700">Deadline</label>
+              <label className="text-sm font-medium text-gray-700">Turnaround Time </label>
               <select
                 name="deadline"
                 className="mt-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 transition"
               >
                 <option value="">Select...</option>
                 <option value="Rush">Rush</option>
+                <option value="6 Hours">6 Hours</option>
                 <option value="12 Hours">12 Hours</option>
                 <option value="24 Hours">24 Hours</option>
-                <option value="1 Day">1 Day</option>
               </select>
             </div>
           </div>
