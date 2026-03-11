@@ -9,20 +9,21 @@ const faqData = [
       "We provide embroidery digitizing, vector conversion, logo stitching, 3D puff embroidery, patch digitizing and custom design services."
   },
   {
-    question: "How fast can I get my order delivered?",
+    question: "How much does digitizing cost?",
     answer:
-      "Standard delivery is 12–24 hours. We also offer urgent/rush delivery within 2–6 hours depending on complexity."
+      "Embroidery digitizing typically starts at $10-15$ for left chest logos. Pricing depends on size, and design complexity. Yes, we offer bulk discounts and flat pricing for high-volume orders. Contact us for a custom quote."
   },
   {
-    question: "What file formats do you support?",
+    question: "What is the best  software for converting images into embroidery designs?",
     answer:
-      "We deliver in DST, PES, EXP, JEF, VP3, EMB, PDF, PNG and many other formats requested by customers."
+      "The best software for embroidery digitizing is different for everyone. It really depends on how good you're at it. For people who're really good at embroidery digitizing Wilcom and Hatch are the best. Wilcom has something called EmbroideryStudio and Hatch is also very popular. They are great for people who do embroidery digitizing all the time."
   },
   {
-    question: "Do you offer revisions?",
+    question: "Can artificial intelligence AI digitize embroidery?",
     answer:
-      "Yes, we provide free revisions until you are fully satisfied with the design."
+      "No artificial intelligence cannot fully turn embroidery into form. Artificial intelligence can change pictures into files that sewing machines can understand. It has a hard time with complicated parts, how close together the stitches are and getting the right settings, for the fabric. You have to fix things by hand to get the results. Artificial intelligence just cannot do it all on its own when it comes to embroidery."
   },
+  
   {
     question: "How can I request a quote?",
     answer:

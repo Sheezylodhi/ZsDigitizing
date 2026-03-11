@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const plans = [
-  
   {
     title: "LEFT CHEST / CAP",
     price: "10$ - 15$ ",
@@ -63,9 +62,37 @@ const plans = [
 export default function Pricing() {
   const sliderRef = useRef(null);
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = () => {
+    const el = sliderRef.current;
+    if (!el) return;
+
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 5);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = sliderRef.current;
+
+    if (!el) return;
+
+    el.addEventListener("scroll", checkScroll);
+    window.addEventListener("resize", checkScroll);
+
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, []);
+
   const scroll = (direction) => {
     if (!sliderRef.current) return;
+
     const amount = 320;
+
     sliderRef.current.scrollBy({
       left: direction === "left" ? -amount : amount,
       behavior: "smooth",
@@ -93,34 +120,46 @@ export default function Pricing() {
 
         {/* DESKTOP ARROWS */}
         <div className="hidden md:flex justify-end gap-3 mb-6">
-          <button
-            onClick={() => scroll("left")}
-            className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-100"
-          >
-            ←
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-100"
-          >
-            →
-          </button>
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll("left")}
+              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-100"
+            >
+              ←
+            </button>
+          )}
+
+          {canScrollRight && (
+            <button
+              onClick={() => scroll("right")}
+              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-100"
+            >
+              →
+            </button>
+          )}
         </div>
 
         {/* MOBILE ARROWS */}
         <div className="md:hidden flex justify-between items-center mb-4">
-          <button
-            onClick={() => scroll("left")}
-            className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
-          >
-            ←
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
-          >
-            →
-          </button>
+          {canScrollLeft ? (
+            <button
+              onClick={() => scroll("left")}
+              className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
+            >
+              ←
+            </button>
+          ) : (
+            <div />
+          )}
+
+          {canScrollRight && (
+            <button
+              onClick={() => scroll("right")}
+              className="w-9 h-9 rounded-full border flex items-center justify-center bg-white shadow"
+            >
+              →
+            </button>
+          )}
         </div>
 
         {/* SLIDER */}
