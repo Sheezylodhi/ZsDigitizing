@@ -20,11 +20,7 @@ const services = [
     title: "Custom Patches",
     desc: "Cap, jacket & badge patches with premium finishing.",
   },
-  {
-    id: "embroidery-fixes",
-    title: "Embroidery Fixes",
-    desc: "Editing, resizing & fixing old embroidery files.",
-  },
+ 
 ];
 
 export default function Services() {
