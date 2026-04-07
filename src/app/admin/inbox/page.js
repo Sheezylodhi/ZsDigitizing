@@ -614,35 +614,7 @@ const handleTouchEnd = () => {
                           className="w-full bg-gray-100 border-none rounded-full px-5 py-3 outline-none text-sm"
                         />
                       </div>
-                      <button
-  // 💻 Desktop (same as before)
-  onMouseDown={() => {
-    if (!isMobile) startRecording();
-  }}
-  onMouseUp={() => {
-    if (!isMobile) stopRecording();
-  }}
-  onMouseLeave={() => {
-    if (!isMobile) stopRecording();
-  }}
-
-  // 📱 Mobile (hold + slide)
-  onTouchStart={(e) => {
-    e.preventDefault();
-    if (isMobile) handleTouchStart(e);
-  }}
-  onTouchMove={(e) => {
-    if (isMobile) handleTouchMove(e);
-  }}
-  onTouchEnd={(e) => {
-    e.preventDefault();
-    if (isMobile) handleTouchEnd();
-  }}
-
-  className="bg-gray-200 text-gray-700 p-3 rounded-full hover:bg-gray-300 transition-all active:scale-125"
->
-  <Mic size={20} />
-</button>
+                      
                       <button
                         onClick={sendMessage}
                         className="bg-green-600 text-white p-3 rounded-full hover:bg-green-700 shadow-md"

@@ -17,7 +17,7 @@ export default async function notifyClient(clientId, type, id) {
     let Notifymessage = ""; // Plain text for dashboard
     let link = "";
 
-    // Fetch order only if needed
+    // Fetch order if needed
     let order = null;
     if (type === "order_created" || type === "order_submitted") {
       order = await Order.findById(id);
@@ -26,26 +26,20 @@ export default async function notifyClient(clientId, type, id) {
     }
 
     // ========================
-    // ORDER CREATED
+    // ORDER CREATED or SUBMITTED
     // ========================
-    if (type === "order_created") {
-      title = "New Order Created";
-      subject = "New Order Created";
-      message = `Your order #${order.orderType} - ${order.serialNumber} has been created successfully.`;
-      Notifymessage = message; // same for dashboard
-    }
+    if (type === "order_created" || type === "order_submitted") {
+      if (type === "order_created") {
+        title = "New Order Created";
+        subject = "New Order Created";
+        Notifymessage = `Your order #${order.orderType} - ${order.serialNumber} has been created successfully.`;
+      } else if (type === "order_submitted") {
+        title = "Order Delivered";
+        subject = "Your Order Has Been Delivered";
+        Notifymessage = `Your order #${order.orderType} - ${order.serialNumber} has been delivered.`;
+      }
 
-    // ========================
-    // ORDER SUBMITTED (DELIVERED)
-    // ========================
-    if (type === "order_submitted") {
-      title = "Order Delivered";
-      subject = "Your Order Has Been Delivered";
-
-      // Dashboard message (plain text)
-      Notifymessage = `Your order #${order.orderType} - ${order.serialNumber} has been delivered.`;
-
-      // Email message (HTML + files)
+      // Files HTML (for download buttons)
       let filesHTML = "";
       if (order.files && order.files.length > 0) {
         // ZIP link
@@ -59,14 +53,6 @@ export default async function notifyClient(clientId, type, id) {
           .map(id => `public_ids[]=${id}`)
           .join("&")}&fl_attachment=order_${order.serialNumber}.zip`;
 
-        filesHTML += `
-          <div style="margin:20px 0; text-align:center;">
-            <a href="${zipUrl}" 
-               style="background:#16a34a; color:#fff; padding:12px 25px; text-decoration:none; border-radius:6px; display:inline-block; font-size:14px; font-weight:600;">
-              Download All Files (ZIP)
-            </a>
-          </div>
-        `;
 
         filesHTML += order.files.map(file => {
           const downloadUrl =
@@ -84,16 +70,83 @@ export default async function notifyClient(clientId, type, id) {
       }
 
       message = `
-        Your order #${order.orderType} - ${order.serialNumber} has been delivered.<br/><br/>
-        You can download your files directly using the buttons below:<br/>
-        ${filesHTML}
-      `;
+       <div style="font-family:sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+  
+  <h2 style="color: #0e2c1c;">
+    ${type === "order_created" ? "Thank You for Your Order" : "Your Order is Ready for Download"}
+  </h2>
 
-      // Send email
+  <p>Hello,</p>
+
+  ${type === "order_created"
+    ? `<p>
+        Thank you for your order.<br>
+        Your order <b>${order.serialNumber}</b> has been successfully received and is now being processed.<br>
+        Our team has started working on your design. Once completed, the files will be made available for download in your client portal.
+      </p>`
+    : `<p>
+        Your order <b> ${order.serialNumber}</b> has been successfully completed and is now ready for download.<br>
+        You can access your files directly using the buttons below:
+      </p>`}
+
+  <!-- Wrap filesHTML in a container to prevent footer overlap -->
+  <div style="margin:20px 0; overflow: visible;">
+    ${filesHTML}
+  </div>
+
+  <div style="margin:20px 0;">
+    <a href="${process.env.SITE_URL}${link}" 
+       style="background: #0e2c1c; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 600; display:inline-block;">
+      View Order
+    </a>
+  </div>
+
+  <p style="font-size: 13px; color: #555;">
+    ${type === "order_created"
+      ? "If you have any questions or need assistance, please feel free to contact our support team at any time."
+      : "Thank you for choosing ZS Digitizing. We truly appreciate your trust and look forward to assisting you with your future projects. If you have any questions or need assistance, our support team is always happy to help."}
+  </p>
+
+  <!-- Footer (Fixed) -->
+  <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #555; clear: both;">
+    <div style="display: flex; align-items: flex-start;">
+      
+      <!-- Logo Circle -->
+      <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px; border: 1px solid #eee; flex-shrink: 0;">
+        <img src="https://www.zsdigitizing.com/Logoicon.png" 
+             alt="ZS Digitizing" 
+             style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+
+      <!-- Content -->
+      <div style="line-height: 1.4;">
+        <div><b>ZS Digitizing</b></div>
+        <div style="font-size: 13px; color: #777;">Client Support Team</div>
+
+        <div style="margin: 5px 0; font-size: 13px;">
+          <a href="mailto:Info@zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">Info@zsdigitizing.com</a> | 
+          <a href="https://www.zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">www.zsdigitizing.com</a>
+        </div>
+
+        <div style="font-size: 12px; color: #888;">
+          Embroidery Digitizing | Vector Art | Custom Patches
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+      `;
+    }
+
+    // ========================
+    // SEND EMAIL
+    // ========================
+    try {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
-        secure: true,
+        secure: Number(process.env.SMTP_PORT) === 465,
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
@@ -104,29 +157,12 @@ export default async function notifyClient(clientId, type, id) {
         from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
         to: client.email,
         subject,
-        html: `<div style="font-family: Arial, sans-serif; background:#f4f6f8; padding:20px;">
-          <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
-            <div style="background:#0e2c1c; padding:20px; text-align:center;">
-              <h1 style="color:#ffffff; margin:0; font-size:22px;">ZS Digitizing</h1>
-              <p style="color:#cbd5e1; margin:5px 0 0; font-size:12px;">Professional Embroidery Digitizing Services</p>
-            </div>
-            <div style="padding:30px;">
-              <h2 style="color:#0e2c1c; margin-bottom:10px;">${title}</h2>
-              <p style="color:#444; font-size:14px; line-height:1.6;">${message}</p>
-              <p style="color:#444; font-size:14px; margin-top:20px;">Thank you for choosing <strong>ZS Digitizing</strong>. We truly appreciate your trust in our services.</p>
-              <div style="text-align:center; margin:30px 0;">
-                <a href="${process.env.SITE_URL}${link}" style="background:#0e2c1c; color:#ffffff; padding:12px 25px; text-decoration:none; border-radius:6px; font-size:14px; font-weight:600;">View Order</a>
-              </div>
-              <p style="color:#777; font-size:13px;">If you have any questions, feel free to contact our support team anytime.</p>
-            </div>
-            <div style="background:#f1f5f9; padding:20px; text-align:center; font-size:12px; color:#666;">
-              <p style="margin:0;">© ${new Date().getFullYear()} ZS Digitizing. All rights reserved.</p>
-              <p style="margin:5px 0;">Karachi, Pakistan</p>
-              <p style="margin:5px 0;">Need help? Contact us anytime.</p>
-            </div>
-          </div>
-        </div>`,
+        html: `<p >${message}</p>`,
       });
+
+      console.log(`📧 Email sent for type=${type} to ${client.email}`);
+    } catch (e) {
+      console.error("❌ Failed to send email:", e);
     }
 
     // ========================
@@ -136,12 +172,12 @@ export default async function notifyClient(clientId, type, id) {
       userId: clientId,
       type,
       title,
-      message: Notifymessage, // dashboard sees plain text
+      message: Notifymessage,
       Notifymessage,
       link,
     });
 
-    console.log(`✅ Notification sent for type=${type} to ${client.email}`);
+    console.log(`✅ Notification saved for type=${type} to ${client.email}`);
   } catch (err) {
     console.error("notifyClient Error:", err);
   }

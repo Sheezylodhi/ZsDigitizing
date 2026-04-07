@@ -400,35 +400,7 @@ export default function ClientChat() {
               </div>
 
 
-              <button
-                // 💻 Desktop behavior (simple)
-                onMouseDown={() => {
-                  if (!isMobile) startRecording();
-                }}
-                onMouseUp={() => {
-                  if (!isMobile) stopRecording();
-                }}
-                onMouseLeave={() => {
-                  if (!isMobile) stopRecording();
-                }}
-
-                // 📱 Mobile behavior (hold + slide)
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  if (isMobile) handleTouchStart(e);
-                }}
-                onTouchMove={(e) => {
-                  if (isMobile) handleTouchMove(e);
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  if (isMobile) handleTouchEnd();
-                }}
-
-                className="text-gray-500 p-2 hover:bg-gray-100 rounded-full transition"
-              >
-                <Mic size={22} />
-              </button>
+             
               <button
                 onClick={sendMessage}
                 disabled={!newMessage.trim() && files.length === 0}
