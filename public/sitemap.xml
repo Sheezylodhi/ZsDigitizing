@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home Page -->
+  <url>
+    <loc>https://www.zsdigitizing.com/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <!-- About Section (Home ke #about) -->
+  <url>
+    <loc>https://www.zsdigitizing.com/about</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Services Section (Home ke #services) -->
+  <url>
+    <loc>https://www.zsdigitizing.com/#services</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Individual Service Pages (Dynamic) -->
+  <url>
+    <loc>https://www.zsdigitizing.com/services/RastertoVector</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.zsdigitizing.com/services/custom-patches</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.zsdigitizing.com/services/embroidery-digitizing</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Portfolio Section -->
+  <url>
+    <loc>https://www.zsdigitizing.com/portfolio</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Quote Form -->
+  <url>
+    <loc>https://www.zsdigitizing.com/quote</loc>
+    <priority>0.80</priority>
+  </url>
+
+ <url>
+    <loc>https://www.zsdigitizing.com/privacy</loc>
+    <priority>0.80</priority>
+  </url>
+   <url>
+    <loc>https://www.zsdigitizing.com/Terms</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.zsdigitizing.com/Login</loc>
+    <priority>0.80</priority>
+  </url>
+   <url>
+    <loc>https://www.zsdigitizing.com/Register</loc>
+    <priority>0.80</priority>
+  </url>
+
+</urlset>
