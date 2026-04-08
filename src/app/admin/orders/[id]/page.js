@@ -183,7 +183,7 @@ export default function OrderDetail() {
           onChange={(e) => setStatus(e.target.value)}
         >
           <option>Pending</option>
-          <option>In Progress</option>
+          <option>In Process</option>
           <option>Completed</option>
         </select>
 

@@ -15,7 +15,7 @@ const OrderSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["Pending", "In Progress", "Completed"],
+    enum: ["Pending", "In Process", "Completed"],
     default: "Pending"
   },
 
@@ -30,7 +30,7 @@ const OrderSchema = new mongoose.Schema({
 
   turnaround: {
     type: String,
-    enum: ["Rush 6 Hours", "12 Hours", "24 Hours"],
+    enum: ["Rush 4 Hours", "6 Hours",  "12 Hours", "24 Hours"],
     default: "24 Hours",
   },
 
