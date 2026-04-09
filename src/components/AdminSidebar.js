@@ -27,7 +27,6 @@ export default function AdminSidebar() {
     { name: "Create Order", href: "/admin/create-order", icon: PlusCircle },
     { name: "Order List", href: "/admin/orders", icon: ClipboardList },
     { name: "Client List", href: "/admin/clients", icon: Users },
-    { name: "Inbox", href: "/admin/inbox", icon: MessageCircle },
 
   ];
 

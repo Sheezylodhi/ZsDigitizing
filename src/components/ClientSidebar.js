@@ -25,7 +25,6 @@ export default function ClientSidebar() {
     { name: "Request for Order", href: "/client-portal/create-order", icon: PlusCircle },
     { name: "Change Password", href: "/client-portal/security", icon: PlusCircle },
     { name: "Login History", href: "/client-portal/security/login-history", icon: ClipboardList },
-    { name: "Chat", href: "/client-portal/chat", icon: MessageCircle },
   ];
 
   const handleLogout = () => {

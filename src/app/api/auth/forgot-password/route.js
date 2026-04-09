@@ -37,68 +37,79 @@ export async function POST(req) {
       },
     });
     const emailHTML = `
-<div style="font-family:Arial;background:#f4f6f8;padding:40px">
+<div style="font-family:sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+  
+  <h2 style="color: #0e2c1c;">Reset Your Password</h2>
 
-  <div style="max-width:600px;margin:auto;background:white;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb">
+  <p>Hello <strong>${user.name || user.email}</strong>,</p>
 
-    <!-- HEADER -->
-    <div style="background:#0e2c1c;padding:25px;text-align:center">
-      <h1 style="color:white;margin:0">ZS Digitizing</h1>
-      <p style="color:#cbd5e1;font-size:13px;margin-top:5px">
-        Secure Account Recovery
-      </p>
-    </div>
+  <p>
+    We received a request to reset your account password.<br><br>
+    Click the button below to set a new password.
+  </p>
 
-    <!-- BODY -->
-    <div style="padding:30px">
+  <!-- BUTTON -->
+  <div style="text-align:center; margin: 25px 0;">
+    <a href="${resetLink}" 
+       style="background: #0e2c1c; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+      Reset Password
+    </a>
+  </div>
 
-      <h2 style="margin-top:0;color:#111">Reset Your Password</h2>
+  <p style="font-size: 14px; color: #555;">
+    This link will expire in <b>10 minutes</b>.
+  </p>
 
-      <p>Hello <strong>${user.name || user.email}</strong>,</p>
+  <p style="font-size: 14px; color: #555;">
+    If you did not request this, you can safely ignore this email.
+  </p>
 
-      <p>
-        We received a request to reset your account password.
-        Click the button below to set a new password.
-      </p>
+  <p style="margin-top:20px;">
+    If you need any assistance, feel free to contact us anytime.
+  </p>
 
-      <!-- BUTTON -->
-      <div style="text-align:center;margin:30px 0">
-        <a href="${resetLink}" 
-           style="background:#0e2c1c;color:white;padding:14px 25px;
-           text-decoration:none;border-radius:6px;font-weight:bold;
-           display:inline-block">
-           Reset Password
-        </a>
+  <p>
+    Best regards,
+  </p>
+
+  <!-- Footer SAME AS CLIENT PORTAL -->
+  <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #555;">
+  
+    <div style="display: flex; align-items: center;">
+      
+      <!-- Logo Circle -->
+      <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px; border: 1px solid #eee; flex-shrink: 0;">
+        <img 
+          src="https://www.zsdigitizing.com/Logoicon.png" 
+          alt="ZS Digitizing"
+          width="60"
+          height="60"
+          style="display: block; width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
       </div>
 
-      <p style="font-size:14px;color:#555">
-        This link will expire in <strong>10 minutes</strong>.
-      </p>
+      <!-- Content -->
+      <div>
+        <div><b>ZS Digitizing</b></div>
+        <div style="font-size: 13px; color: #777;">Client Support Team</div>
 
-      <p style="font-size:14px;color:#555">
-        If you did not request this, you can safely ignore this email.
-      </p>
+        <div style="margin: 5px 0;">
+          <a href="mailto:Info@zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">
+            Info@zsdigitizing.com
+          </a> | 
+          <a href="https://www.zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">
+            www.zsdigitizing.com
+          </a>
+        </div>
 
-      <hr style="margin:25px 0"/>
+        <div style="font-size: 12px; color: #888;">
+          Embroidery Digitizing | Vector Art | Custom Patches
+        </div>
+      </div>
 
-      <p style="font-size:13px;color:#777">
-        Need help? Contact support:
-      </p>
-
-      <p style="font-size:13px">
-        <a href="mailto:support@zsdigitizing.com">
-          support@zsdigitizing.com
-        </a>
-      </p>
-
-    </div>
-
-    <!-- FOOTER -->
-    <div style="background:#f9fafb;padding:15px;text-align:center;font-size:12px;color:#999">
-      © ${new Date().getFullYear()} ZS Digitizing. All rights reserved.
     </div>
 
   </div>
+
 </div>
 `;
 
