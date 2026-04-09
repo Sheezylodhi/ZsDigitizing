@@ -4,11 +4,17 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Script from "next/script";
 
 export const metadata = {
-  title: "ZS Digitizing | Embroidery Digitizing Services",
+  title: "ZS Digitizing  -  Embroidery Digitizing Services",
   description:
     "ZS Digitizing offers professional embroidery digitizing, logo digitizing, and custom patches with fast turnaround, high quality, and affordable pricing worldwide.",
   alternates: { canonical: "https://www.zsdigitizing.com/" },
-  icons: { icon: "/favicon.ico", shortcut: "/favicon.ico", apple: "/favicon.ico" },
+ icons: {
+    icon: [
+      { url: "/favicon.ico" }, // Legacy support
+      { url: "/icon.png", type: "image/png" }, // Modern browsers & Google
+    ],
+    apple: "/apple-icon.png", // Safari ke liye (180x180 PNG)
+  },
   verification: { google: "ynu-2uC5kMX8umxG4DlPxHalOFgXhvL-lFeuyrmfFFc" },
   openGraph: {
     title: "ZS Digitizing",
@@ -16,7 +22,7 @@ export const metadata = {
       "Professional embroidery digitizing services with fast turnaround and premium quality.",
     url: "https://www.zsdigitizing.com/",
     siteName: "ZS Digitizing",
-    images: [{ url: "/favicon.ico", width: 800, height: 600 }],
+   images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
     type: "website",
   },
 };
@@ -39,7 +45,7 @@ export default function RootLayout({ children }) {
             "@type": "Organization",
             "name": "ZS Digitizing",
             "url": "https://www.zsdigitizing.com",
-            "logo": "https://www.zsdigitizing.com/favicon.ico"
+            "logo": "https://www.zsdigitizing.com/icon.png"
           }
           `}
         </script>

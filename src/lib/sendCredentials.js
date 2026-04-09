@@ -70,11 +70,14 @@ export async function sendCredentials(email, username, password) {
   <div style="display: flex; align-items: center;">
     
     <!-- Logo Circle -->
-    <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px; border: 1px solid #eee;">
-      <img src="https://www.zsdigitizing.com/Logoicon.png" 
-           alt="ZS Digitizing" 
-           style="width: 100%; height: 100%; object-fit: cover;">
-    </div>
+    <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px; border: 1px solid #eee; flex-shrink: 0;">
+  <img 
+    src="https://www.zsdigitizing.com/Logoicon.png" 
+    alt="ZS Digitizing"
+    width="60"
+    height="60"
+    style="display: block; width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+</div>
 
     <!-- Content -->
     <div>

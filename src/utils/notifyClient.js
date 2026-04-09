@@ -3,6 +3,7 @@ import Notification from "@/lib/models/Notification";
 import User from "@/lib/models/User";
 import Order from "@/lib/models/Order";
 import nodemailer from "nodemailer";
+import { v2 as cloudinary } from "cloudinary";
 
 export default async function notifyClient(clientId, type, id) {
   try {
@@ -13,8 +14,8 @@ export default async function notifyClient(clientId, type, id) {
 
     let title = "";
     let subject = "";
-    let message = "";      // HTML for email
-    let Notifymessage = ""; // Plain text for dashboard
+    let message = "";
+    let Notifymessage = "";
     let link = "";
 
     // Fetch order if needed
@@ -40,33 +41,33 @@ export default async function notifyClient(clientId, type, id) {
       }
 
       // Files HTML (for download buttons)
-      let filesHTML = "";
+  let filesHTML = "";
       if (order.files && order.files.length > 0) {
-        // ZIP link
-        const publicIds = order.files.map(f => {
-          const urlParts = f.fileUrl.split("/upload/")[1];
-          const withoutVersion = urlParts.replace(/^v\d+\//, "");
-          return withoutVersion.replace(/\.[^/.]+$/, "");
-        });
+// ✅ notifyClient.js mein filesHTML wala part isse replace karein
+filesHTML = order.files
+  .map((file) => {
+    let downloadUrl = file.fileUrl;
 
-        const zipUrl = `https://res.cloudinary.com/${process.env.CLOUD_NAME}/raw/download?${publicIds
-          .map(id => `public_ids[]=${id}`)
-          .join("&")}&fl_attachment=order_${order.serialNumber}.zip`;
+    // Cloudinary raw files ke liye transformation link break kar deti hai
+    // Is liye hum direct link use karenge aur browser ko 'download' attribute se handle karenge
+    if (downloadUrl.includes('cloudinary.com')) {
+       // Kuch cases mein Cloudinary HTTPS ke bajaye HTTP deta hai, usay fix karein
+       downloadUrl = downloadUrl.replace('http://', 'https://');
+    }
 
-
-        filesHTML += order.files.map(file => {
-          const downloadUrl =
-            file.fileUrl.replace("/upload/", `/upload/fl_attachment/`) +
-            `?filename=${encodeURIComponent(file.fileName)}`;
-          return `
-            <div style="margin:10px 0; text-align:center;">
-              <a href="${downloadUrl}" 
-                 style="background:#0e2c1c; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; display:inline-block; font-size:14px;">
-                Download ${file.fileName}
-              </a>
-            </div>
-          `;
-        }).join("");
+    return `
+      <div style="margin:10px 0; text-align:center;">
+        <a href="${downloadUrl}" 
+           download="${file.fileName}" 
+           target="_blank"
+           style="background:#0e2c1c; color:#fff; padding:12px 25px; text-decoration:none; border-radius:5px; display:inline-block; font-size:14px; font-weight:bold;">
+           Download: ${file.fileName}
+        </a>
+        <p style="font-size:11px; color:#666; margin-top:5px;">File: ${file.fileName}</p>
+      </div>
+    `;
+  })
+  .join("");
       }
 
       message = `
@@ -85,11 +86,10 @@ export default async function notifyClient(clientId, type, id) {
         Our team has started working on your design. Once completed, the files will be made available for download in your client portal.
       </p>`
     : `<p>
-        Your order <b> ${order.serialNumber}</b> has been successfully completed and is now ready for download.<br>
+        Your order <b>${order.serialNumber}</b> has been successfully completed and is now ready for download.<br>
         You can access your files directly using the buttons below:
       </p>`}
 
-  <!-- Wrap filesHTML in a container to prevent footer overlap -->
   <div style="margin:20px 0; overflow: visible;">
     ${filesHTML}
   </div>
@@ -107,32 +107,20 @@ export default async function notifyClient(clientId, type, id) {
       : "Thank you for choosing ZS Digitizing. We truly appreciate your trust and look forward to assisting you with your future projects. If you have any questions or need assistance, our support team is always happy to help."}
   </p>
 
-  <!-- Footer (Fixed) -->
   <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 14px; color: #555; clear: both;">
     <div style="display: flex; align-items: flex-start;">
-      
-      <!-- Logo Circle -->
       <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px; border: 1px solid #eee; flex-shrink: 0;">
-        <img src="https://www.zsdigitizing.com/Logoicon.png" 
-             alt="ZS Digitizing" 
-             style="width: 100%; height: 100%; object-fit: cover;">
+        <img src="https://www.zsdigitizing.com/Logoicon.png" alt="ZS Digitizing" width="60" height="60" style="display: block; width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
       </div>
-
-      <!-- Content -->
       <div style="line-height: 1.4;">
         <div><b>ZS Digitizing</b></div>
         <div style="font-size: 13px; color: #777;">Client Support Team</div>
-
         <div style="margin: 5px 0; font-size: 13px;">
           <a href="mailto:Info@zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">Info@zsdigitizing.com</a> | 
           <a href="https://www.zsdigitizing.com" style="color: #0e2c1c; text-decoration: none;">www.zsdigitizing.com</a>
         </div>
-
-        <div style="font-size: 12px; color: #888;">
-          Embroidery Digitizing | Vector Art | Custom Patches
-        </div>
+        <div style="font-size: 12px; color: #888;">Embroidery Digitizing | Vector Art | Custom Patches</div>
       </div>
-
     </div>
   </div>
 </div>
@@ -157,7 +145,7 @@ export default async function notifyClient(clientId, type, id) {
         from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
         to: client.email,
         subject,
-        html: `<p >${message}</p>`,
+        html: `<p>${message}</p>`,
       });
 
       console.log(`📧 Email sent for type=${type} to ${client.email}`);

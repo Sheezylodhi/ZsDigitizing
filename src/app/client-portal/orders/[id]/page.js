@@ -160,33 +160,49 @@ export default function ClientOrderDetail() {
           )}
 
           {/* ---------- FILES ---------- */}
-          <div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-200 space-y-3">
-            <h2 className="text-sm font-semibold text-gray-700">Submitted Files By Admin</h2>
+          {/* ---------- FILES ---------- */}
+<div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-200 space-y-3">
+  <h2 className="text-sm font-semibold text-gray-700">Submitted Files By Admin</h2>
 
-            {order.files.length > 0 ? (
-              <div className="space-y-2">
-                {order.files.map((file, i) => (
-                  <div
-                    key={i}
-                    style={{ cursor: "not-allowed" }}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg gap-2 sm:gap-0 opacity-80"
-                  >
-                    <span className="text-sm text-gray-500 truncate sm:truncate pr-0 sm:pr-4 select-none">{file.fileName}</span>
-            <a
-  href={file.fileUrl ? file.fileUrl.replace("/upload/", "/upload/fl_attachment/") : "#"}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="shrink-0 px-5 py-2.5 rounded-lg bg-[#0e2c1c] text-white text-xs font-semibold shadow-md hover:bg-[#123825] transition-all"
->
-  Download
-</a>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-sm">No files uploaded yet</p>
-            )}
-          </div>
+  {order.files.length > 0 ? (
+    <div className="space-y-2">
+     {order.files.map((file, i) => {
+  let downloadUrl = file.fileUrl;
+
+  // ✅ SAME LOGIC AS notifyClient
+  if (downloadUrl && downloadUrl.includes("cloudinary.com")) {
+    downloadUrl = downloadUrl.replace("http://", "https://");
+  }
+
+  return (
+    <div
+      key={i}
+      className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg gap-2 sm:gap-0 hover:border-[#0e2c1c]/30 transition-colors"
+    >
+      <div className="flex items-center gap-3 overflow-hidden">
+        <div className="w-2 h-2 rounded-full bg-[#0e2c1c]" />
+        <span className="text-sm text-gray-700 font-medium truncate max-w-[200px] sm:max-w-md">
+          {file.fileName}
+        </span>
+      </div>
+
+      <a
+        href={downloadUrl || "#"}
+        download={file.fileName} // ✅ browser handle karega
+        target="_blank"
+        rel="noopener noreferrer"
+        className="shrink-0 px-6 py-2 rounded-lg bg-[#0e2c1c] text-white text-xs font-bold shadow-sm hover:bg-[#154129] active:scale-95 transition-all"
+      >
+        Download
+      </a>
+    </div>
+  );
+})}
+    </div>
+  ) : (
+    <p className="text-gray-400 text-sm italic px-2">No files uploaded yet</p>
+  )}
+</div>
         </motion.div>
       </div>
     </ClientGuard>
