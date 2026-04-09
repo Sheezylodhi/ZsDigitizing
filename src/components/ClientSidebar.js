@@ -13,6 +13,7 @@ import {
   LogOut,
   MessageCircle
 } from "lucide-react";
+import ClientGuard from "@/components/ClientGuard";
 
 export default function ClientSidebar() {
   const pathname = usePathname();
@@ -35,6 +36,8 @@ export default function ClientSidebar() {
 
   return (
     <>
+    <ClientGuard>
+
       {/* ✅ MOBILE HEADER (LOGO + MENU ICON) */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-white shadow-sm">
         {/* Logo */}
@@ -163,6 +166,6 @@ export default function ClientSidebar() {
           Client Portal
         </div>
       </aside>
-    </>
+    </ClientGuard></>
   );
 }
