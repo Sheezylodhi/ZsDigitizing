@@ -61,6 +61,9 @@ export default function Dashboard() {
     { title: "Today Quotes", value: stats.quotesToday, icon: FileText, text: "text-orange-600", bg: "bg-orange-100" },
     { title: "Total Visitors", value: stats.totalVisitors, icon: Users, text: "text-purple-600", bg: "bg-purple-100" },
     { title: "Today Visitors", value: stats.visitorsToday, icon: Users, text: "text-indigo-600", bg: "bg-indigo-100" },
+      { title: "Completed Orders", value: stats.completedOrders, icon: ShoppingCart, text: "text-green-700", bg: "bg-green-100" },
+  { title: "Pending Orders", value: stats.pendingOrders, icon: ShoppingCart, text: "text-yellow-600", bg: "bg-yellow-100" },
+  { title: "In Process Orders", value: stats.inProcessOrders, icon: ShoppingCart, text: "text-blue-700", bg: "bg-blue-100" },
   ];
 
   const pieData = [

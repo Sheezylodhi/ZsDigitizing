@@ -37,6 +37,18 @@ export async function GET(req) {
       createdAt: { $gte: startDate },
     });
 
+    const completedOrders = await Order.countDocuments({
+  status: "Completed",
+});
+
+const pendingOrders = await Order.countDocuments({
+  status: "Pending",
+});
+
+const inProcessOrders = await Order.countDocuments({
+  status: "In Process",
+});
+
     return NextResponse.json({
       totalVisitors,
       visitorsToday,
@@ -44,6 +56,9 @@ export async function GET(req) {
       quotesToday,
       totalOrders,
       ordersToday,
+       completedOrders,
+  pendingOrders,
+  inProcessOrders,
     });
   } catch (err) {
     console.error(err);

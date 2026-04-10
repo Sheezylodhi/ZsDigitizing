@@ -74,12 +74,12 @@ export default function ClientDashboard() {
 
   const completed = filteredOrders.filter((o) => o.status === "Completed").length;
   const pending = filteredOrders.filter((o) => o.status === "Pending").length;
-  const progress = filteredOrders.filter((o) => o.status === "In Progress").length;
+  const Process = filteredOrders.filter((o) => o.status === "In Process").length;
 
   const pieData = [
     { name: "Completed", value: completed },
     { name: "Pending", value: pending },
-    { name: "In Progress", value: progress },
+    { name: "In Process", value: Process},
   ];
 
   const COLORS = ["#22c55e", "#f59e0b", "#3b82f6"];
@@ -87,7 +87,7 @@ export default function ClientDashboard() {
   const barData = [
     { name: "Completed", orders: completed },
     { name: "Pending", orders: pending },
-    { name: "In Progress", orders: progress },
+    { name: "In Process", orders: Process },
   ];
 
   const cardStyle =
@@ -150,7 +150,7 @@ export default function ClientDashboard() {
           {[
             { title: "Completed", value: completed, color: "green", Icon: CheckCircle },
             { title: "Pending", value: pending, color: "amber", Icon: Clock },
-            { title: "In Progress", value: progress, color: "blue", Icon: Loader },
+            { title: "In Process", value: Process, color: "blue", Icon: Loader },
           ].map((card, i) => (
             <motion.div
               key={i}
