@@ -122,13 +122,7 @@ export default function QuotesPage() {
             >
               <td className="p-4 md:p-5 font-medium whitespace-nowrap">{q.name}</td>
               <td className="p-4 md:p-5 whitespace-nowrap">{q.email}</td>
-              <td className="p-4 md:p-5 whitespace-nowrap">
-                {q.fileUrl ? (
-                  <a href={q.fileUrl} target="_blank" className="text-green-600 font-medium hover:underline">Download</a>
-                ) : (
-                  <span className="text-gray-400">-</span>
-                )}
-              </td>
+             
               <td className="p-4 md:p-5 text-gray-500 whitespace-nowrap">{new Date(q.createdAt).toLocaleDateString()}</td>
               <td className="p-4 md:p-5 text-right">
                 <a href={`/admin/quotes/${q._id}`} className="w-10 h-9 flex items-center justify-center rounded-lg text-grey shadow hover:shadow-lg hover:scale-105 transition">
