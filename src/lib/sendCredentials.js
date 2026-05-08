@@ -14,7 +14,7 @@ export async function sendCredentials(email, username, password) {
 
   try {
     await transporter.sendMail({
-      from: `"Client Portal" <${process.env.SMTP_USER}>`,
+      from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Your Client Portal Access Details ",
       html: `
