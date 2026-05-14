@@ -1,47 +1,82 @@
 import mongoose from "mongoose";
 
-const FileSchema = new mongoose.Schema({
-  fileName: String,
-  fileUrl: String,
-  uploadedAt: { type: Date, default: Date.now }
-}, { _id: false });
-
-const OrderSchema = new mongoose.Schema({
-  clientId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  adminId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-
-  title: { type: String, required: true },
-  description: { type: String },
-
-  status: {
-    type: String,
-    enum: ["Pending", "In Process", "Completed"],
-    default: "Pending"
+const FileSchema = new mongoose.Schema(
+  {
+    fileName: String,
+    fileUrl: String,
+    uploadedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
+  { _id: false }
+);
 
-  // ✅ ADMIN FILES (unchanged)
-  files: [FileSchema],
+const OrderSchema = new mongoose.Schema(
+  {
+    clientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 
-  // ✅ NEW CLIENT FILES FIELD
-  clientFile: [FileSchema],
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 
-  note: String,
-  submittedAt: Date,
+    title: {
+      type: String,
+      required: true,
+    },
 
-  turnaround: {
-    type: String,
-    enum: ["Rush 4 Hours", "6 Hours",  "12 Hours", "24 Hours"],
-    default: "24 Hours",
+    description: {
+      type: String,
+      default: "",
+    },
+
+    status: {
+      type: String,
+      enum: ["Pending", "In Process", "Completed"],
+      default: "Pending",
+    },
+
+    // ✅ ADMIN FILES
+    files: [FileSchema],
+
+    // ✅ CLIENT FILES
+    clientFile: [FileSchema],
+
+    note: {
+      type: String,
+      default: "",
+    },
+
+    submittedAt: Date,
+
+    turnaround: {
+      type: String,
+      enum: ["Rush 4 Hours", "6 Hours", "12 Hours", "24 Hours"],
+      default: "24 Hours",
+    },
+
+    orderType: {
+      type: String,
+      enum: ["Digitizing PPO", "Vector PPV", "Patches PO"],
+      required: true,
+    },
+
+    serialNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
+  {
+    timestamps: true,
+  }
+);
 
-  orderType: {
-    type: String,
-    enum: ["Digitizing PPO", "Vector PPV", "Patches PO"],
-    required: true,
-  },
-
-  serialNumber: { type: String, required: true, unique: true },
-
-}, { timestamps: true });
-
-export default mongoose.models.Order || mongoose.model("Order", OrderSchema);
+export default mongoose.models.Order ||
+  mongoose.model("Order", OrderSchema);

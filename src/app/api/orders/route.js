@@ -8,33 +8,91 @@ export async function POST(req) {
     await connectDB();
 
     const authHeader = req.headers.get("authorization");
-    if (!authHeader)
-      return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+
+    // ✅ SAFE AUTH CHECK
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ message: "Unauthorized" }),
+        { status: 401 }
+      );
+    }
 
     const token = authHeader.split(" ")[1];
+
     let adminId;
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       adminId = decoded.userId;
-    } catch {
-      return new Response(JSON.stringify({ message: "Invalid token" }), { status: 401 });
+    } catch (err) {
+      console.error("JWT ERROR:", err);
+
+      return new Response(
+        JSON.stringify({ message: "Invalid token" }),
+        { status: 401 }
+      );
     }
 
     const body = await req.json();
-    const { clientId, title, description, turnaround, orderType, status } = body;
 
-    if (!clientId || !title || !orderType)
-      return new Response(JSON.stringify({ message: "Client, Title & Order Type required" }), { status: 400 });
+    const {
+      clientId,
+      title,
+      description,
+      turnaround,
+      orderType,
+      status,
+    } = body;
 
+    if (!clientId || !title || !orderType) {
+      return new Response(
+        JSON.stringify({
+          message: "Client, Title & Order Type required",
+        }),
+        { status: 400 }
+      );
+    }
+
+    // ✅ PREFIX
     let prefix =
-      orderType === "Digitizing PPO" ? "PPO" :
-      orderType === "Vector PPV" ? "PPV" :
-      orderType === "Patches PO" ? "PO" : "GEN";
+      orderType === "Digitizing PPO"
+        ? "PPO"
+        : orderType === "Vector PPV"
+        ? "PPV"
+        : orderType === "Patches PO"
+        ? "PO"
+        : "GEN";
 
-    const count = await Order.countDocuments({ orderType });
-    const serialNumber = `${prefix}-${String(count + 1).padStart(2, "0")}`;
+   // ✅ SAFE SERIAL NUMBER GENERATOR
+let serialNumber;
+let isUnique = false;
 
+while (!isUnique) {
+
+  const latestOrder = await Order.findOne({
+    serialNumber: { $regex: `^${prefix}-` },
+  }).sort({ createdAt: -1 });
+
+  let nextNumber = 1;
+
+  if (latestOrder?.serialNumber) {
+    const lastNumber = parseInt(
+      latestOrder.serialNumber.split("-")[1]
+    );
+
+    nextNumber = lastNumber + 1;
+  }
+
+  serialNumber = `${prefix}-${String(nextNumber).padStart(2, "0")}`;
+
+  const existingOrder = await Order.findOne({ serialNumber });
+
+  if (!existingOrder) {
+    isUnique = true;
+  }
+}
+
+    // ✅ CREATE ORDER
     const order = await Order.create({
       clientId,
       adminId,
@@ -45,56 +103,78 @@ export async function POST(req) {
       serialNumber,
       status: status || "Pending",
       files: [],
+      clientFile: [],
     });
 
-    // ✅ NOTIFY CLIENT (SAFE)
+    // ✅ NOTIFICATION
     try {
       await notifyClient(clientId, "order_created", order._id);
     } catch (e) {
       console.error("Notify failed:", e);
     }
 
-    return new Response(JSON.stringify(order), { status: 201 });
-
+    return new Response(JSON.stringify(order), {
+      status: 201,
+    });
   } catch (err) {
     console.error("POST /api/orders Error:", err);
-    return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });
+
+    return new Response(
+      JSON.stringify({
+        message: err.message || "Server error",
+      }),
+      { status: 500 }
+    );
   }
 }
 
-// GET
+// ✅ GET ORDERS
 export async function GET(req) {
   try {
     await connectDB();
 
     const authHeader = req.headers.get("authorization");
+
     let clientId = null;
 
-    if (authHeader) {
+    if (authHeader?.startsWith("Bearer ")) {
       const token = authHeader.split(" ")[1];
+
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         clientId = decoded.userId;
-      } catch {}
+      } catch (err) {
+        console.error("JWT VERIFY ERROR:", err);
+      }
     }
 
     let orders;
+
+    // ✅ CLIENT ORDERS
     if (clientId) {
       orders = await Order.find({ clientId })
         .populate("clientId", "name email")
         .populate("adminId", "name email")
         .sort({ createdAt: -1 });
     } else {
+      // ✅ ADMIN ALL ORDERS
       orders = await Order.find()
         .populate("clientId", "name email")
         .populate("adminId", "name email")
         .sort({ createdAt: -1 });
     }
 
-    return new Response(JSON.stringify(orders), { status: 200 });
-
+    return new Response(JSON.stringify(orders), {
+      status: 200,
+    });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });
+    console.error("GET /api/orders Error:", err);
+
+    return new Response(
+      JSON.stringify({
+        message: err.message || "Server error",
+      }),
+      { status: 500 }
+    );
   }
 }
