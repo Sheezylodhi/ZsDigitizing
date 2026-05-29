@@ -31,31 +31,36 @@ export async function PATCH(req, context) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/);
+      // 1. Extension nikalein (e.g., ".pptx", ".pdf", ".dst")
+      const lastDotIndex = file.name.lastIndexOf('.');
+      const extension = lastDotIndex !== -1 ? file.name.substring(lastDotIndex) : "";
+      const nameWithoutExtension = lastDotIndex !== -1 ? file.name.substring(0, lastDotIndex) : file.name;
       
-      // ✅ Extension ke baghair naam nikalna
-      const originalName = file.name.split('.').slice(0, -1).join('.');
+      // 2. Special characters clean karein aur aakhir mein EXTENSION wapas jorrein!
+      // ✅ Yeh step Windows icons aur extensions ke liye sab se zaroori hai
+      const cleanPublicId = nameWithoutExtension.replace(/[^a-zA-Z0-9-_]/g, "_") + extension;
 
-  // ✅ route.js mein upload_stream settings ko isse replace karein
-const result = await new Promise((resolve, reject) => {
-  cloudinary.uploader.upload_stream(
-    {
-      resource_type: "auto", // Ye PDF/Docs ke liye extension save rakhta hai
-      folder: "orders/submissions",
-      public_id: file.name, // Full name with extension (e.g., "Portal emails (1).pdf")
-      use_filename: true,
-      unique_filename: false, 
-      overwrite: true
-    },
-    (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    }
-  ).end(buffer);
-});
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          {
+            resource_type: "auto", // Automatically detects images or raw docs
+            folder: "orders/submissions",
+            public_id: cleanPublicId, // ✅ Saved with extension on Cloudinary
+            use_filename: true,
+            unique_filename: false, 
+            overwrite: true
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        ).end(buffer);
+      });
+
+      // Agar asset raw hai toh result.secure_url perfect extension ke sath banega
       savedFiles.push({
-        fileName: file.name, 
-        fileUrl: result.secure_url,
+        fileName: file.name, // Original name for DB
+        fileUrl: result.secure_url, // Sahi extension wala url (e.g., .../submissions/file.pptx)
         uploadedAt: new Date(),
       });
     }

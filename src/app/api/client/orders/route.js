@@ -55,26 +55,33 @@ export async function POST(req) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
+      // 1. File name se extension alag karein (e.g., "Assignment#03.pdf" -> "Assignment#03")
+      const nameWithoutExtension = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      
+      // 2. Cloudinary ke public_id ke liye special characters clean karein (sirf letters, numbers, hyphens, underscores)
+      const cleanPublicId = nameWithoutExtension.replace(/[^a-zA-Z0-9-_]/g, "_");
+
       // Extension check taake har format support ho
-     const result = await new Promise((resolve, reject) => {
-  cloudinary.uploader.upload_stream(
-    {
-      resource_type: "auto", // ✅ SAME AS SUBMIT ROUTE
-      folder: "orders/client_uploads",
-      public_id: file.name, // full name with extension
-      use_filename: true,
-      unique_filename: false,
-      overwrite: true
-    },
-    (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    }
-  ).end(buffer);
-});
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          {
+            resource_type: "auto", 
+            folder: "orders/client_uploads",
+            public_id: cleanPublicId, // ✅ Cleaned name without extension & hash
+            use_filename: true,
+            unique_filename: false,
+            overwrite: true,
+            flags: "attachment" // ✅ Adds metadata context for correct downloads
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        ).end(buffer);
+      });
 
       return {
-        fileName: file.name,
+        fileName: file.name, // ✅ Database me bilkul ORIGINAL name hi jayega (Assignment#03.pdf)
         fileUrl: result.secure_url,
         uploadedAt: new Date(),
       };

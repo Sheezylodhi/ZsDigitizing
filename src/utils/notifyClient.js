@@ -45,9 +45,11 @@ export default async function notifyClient(clientId, type, id) {
         filesHTML = order.files
           .map((file) => {
             let downloadUrl = file.fileUrl;
-            if (downloadUrl.includes('cloudinary.com')) {
+            if (downloadUrl && downloadUrl.includes('cloudinary.com')) {
               downloadUrl = downloadUrl.replace('http://', 'https://');
             }
+            
+            // ✅ ZERO STRING MANIPULATION - Direct direct clean link download hoga
             return `
               <div style="margin:10px 0; text-align:center;">
                 <a href="${downloadUrl}" 
@@ -143,7 +145,7 @@ export default async function notifyClient(clientId, type, id) {
       type,
       title,
       message: Notifymessage,
-      link: `/client-portal/orders/${id}`, // Dashboard notification stays direct
+      link: `/client-portal/orders/${id}`,
     });
 
   } catch (err) {

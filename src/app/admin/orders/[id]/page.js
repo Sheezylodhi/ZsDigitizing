@@ -8,35 +8,35 @@ import AdminGuard from "@/components/AdminGuard";
 import { User } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 
-
 export default function OrderDetail() {
   const { id } = useParams();
   const [orders, setOrders] = useState([]);
-
   const [order, setOrder] = useState(null);
   const [status, setStatus] = useState("");
   const [msg, setMsg] = useState("");
-   const [adminId, setAdminId] = useState(null);
+  const [adminId, setAdminId] = useState(null);
+  const [downloadingFile, setDownloadingFile] = useState(null); // Loader state for download
 
-   // 🔹 ORDERS FETCH
-      useEffect(() => {
-       fetch("/api/orders")
-         .then((res) => res.json())
-         .then((data) => setOrders(data));
-   
-       const token = localStorage.getItem("token");
-       if (!token) return;
-       try {
-         const decoded = jwtDecode(token);
-         setAdminId(decoded.userId);
-       } catch {}
-     }, []);
+  // 🔹 ORDERS FETCH
+  useEffect(() => {
+    fetch("/api/orders")
+      .then((res) => res.json())
+      .then((data) => setOrders(data));
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const decoded = jwtDecode(token);
+      setAdminId(decoded.userId);
+    } catch {}
+  }, []);
+
   useEffect(() => {
     if (!id) return;
 
     fetch(`/api/orders/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setOrder(data);
         setStatus(data.status);
       });
@@ -60,7 +60,44 @@ export default function OrderDetail() {
     }
   };
 
-    const Field = ({ label, value, big = false }) => (
+  // 🔹 FORCE DOWNLOAD WITH ORIGINAL NAME & EXTENSION LOGIC
+  const handleDownload = async (fileUrl, fileName) => {
+    try {
+      setDownloadingFile(fileName);
+      
+      // Cloudinary secure URL conversion
+      let secureUrl = fileUrl;
+      if (secureUrl && secureUrl.includes("cloudinary.com")) {
+        secureUrl = secureUrl.replace("http://", "https://");
+        
+        // URL path me attachment force dalna taake browser configuration bypass ho
+        if (!secureUrl.includes("fl_attachment")) {
+          secureUrl = secureUrl.replace("/upload/", "/upload/fl_attachment/");
+        }
+      }
+
+      const response = await fetch(secureUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName; // Force original name (e.g. OS_Assignment_2.docx)
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed, falling back to direct link", error);
+      window.open(fileUrl, "_blank");
+    } finally {
+      setDownloadingFile(null);
+    }
+  };
+
+  const Field = ({ label, value, big = false }) => (
     <div className="space-y-2">
       <p className="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
         {label}
@@ -79,140 +116,124 @@ export default function OrderDetail() {
 
   if (!order) return <p className="p-10">Loading order...</p>;
 
- return (
-      <AdminGuard>
-  
-  <div className="min-h-screen bg-white py-14 px-6 flex justify-center">
-    <motion.div
-      initial={{ opacity: 0, y: 25 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-4xl space-y-6"
-    >
-      {/* HEADER */}
-      <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
-          <div>
-              <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Order Detail</h1>
-            <p className="text-gray-500 text-xs sm:text-sm">
-     See all clients orders detail
-    </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
-              <User size={18} className="text-gray-600" />
-              <span className="font-semibold text-gray-700">Admin</span>
-            </div>
-            {adminId && <NotificationIcon userId={adminId} />}
-          </div>
-        </div>
-
-      {msg && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium">
-          {msg}
-        </div>
-      )}
-
-      {/* INFO GRID */}
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
-          <Field label="Serial Number" value={order.serialNumber} />
-          <Field label="Order Type" value={order.orderType} />
-        </div>
-
-        <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
-          <Field label="Title" value={order.title} />
-          <Field
-            label="Client"
-            value={`${order.clientId?.name} (${order.clientId?.email})`}
-          />
-        </div>
-      </div>
-
-      {/* DESCRIPTION */}
-      <div className="bg-white p-6 rounded-xl border border-gray-200">
-        <Field
-          label="Description"
-          value={order.description || "No description"}
-          big
-        />
-      </div>
-
-      {/* CLIENT FILES */}
-      {/* ---------- CLIENT FILES ---------- */}
-
-{/* ---------- CLIENT FILES SECTION ---------- */}
-<div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
-  <h2 className="text-sm font-semibold text-gray-700">Client Files</h2>
-
-  {!order.clientFile || order.clientFile.length === 0 ? (
-    <p className="text-gray-400 text-sm italic px-2">No client files uploaded</p>
-  ) : (
-    <div className="space-y-2">
-      {order.clientFile.map((file, i) => {
-  let downloadUrl = file.fileUrl;
-
-  // ✅ SAME LOGIC AS notifyClient
-  if (downloadUrl && downloadUrl.includes("cloudinary.com")) {
-    downloadUrl = downloadUrl.replace("http://", "https://");
-  }
-
   return (
-    <div
-      key={i}
-      className="flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg hover:border-[#0e2c1c]/20 transition-all"
-    >
-      <div className="flex items-center gap-3 overflow-hidden">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#0e2c1c]" />
-        <span className="text-sm text-gray-700 font-medium truncate max-w-[200px] sm:max-w-md">
-          {file.fileName || "Unnamed file"}
-        </span>
-      </div>
+    <AdminGuard>
+      <div className="min-h-screen bg-white py-14 px-6 flex justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-4xl space-y-6"
+        >
+          {/* HEADER */}
+          <div className="bg-white pt-10 mt-10 border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c]">Order Detail</h1>
+              <p className="text-gray-500 text-xs sm:text-sm">
+                See all clients orders detail
+              </p>
+            </div>
 
-      <a
-        href={downloadUrl || "#"}
-        download={file.fileName} // ✅ SAME behavior as email
-        target="_blank"
-        rel="noopener noreferrer"
-        className="shrink-0 px-5 py-2 rounded-lg bg-[#0e2c1c] text-white text-[11px] font-bold shadow-sm hover:bg-[#123825] active:scale-95 transition-all"
-      >
-        Download
-      </a>
-    </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
+                <User size={18} className="text-gray-600" />
+                <span className="font-semibold text-gray-700">Admin</span>
+              </div>
+              {adminId && <NotificationIcon userId={adminId} />}
+            </div>
+          </div>
+
+          {msg && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium">
+              {msg}
+            </div>
+          )}
+
+          {/* INFO GRID */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
+              <Field label="Serial Number" value={order.serialNumber} />
+              <Field label="Order Type" value={order.orderType} />
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
+              <Field label="Title" value={order.title} />
+              <Field
+                label="Client"
+                value={`${order.clientId?.name} (${order.clientId?.email})`}
+              />
+            </div>
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="bg-white p-6 rounded-xl border border-gray-200">
+            <Field
+              label="Description"
+              value={order.description || "No description"}
+              big
+            />
+          </div>
+
+          {/* ---------- CLIENT FILES SECTION ---------- */}
+          <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
+            <h2 className="text-sm font-semibold text-gray-700">Client Files</h2>
+
+            {!order.clientFile || order.clientFile.length === 0 ? (
+              <p className="text-gray-400 text-sm italic px-2">No client files uploaded</p>
+            ) : (
+              <div className="space-y-2">
+                {order.clientFile.map((file, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg hover:border-[#0e2c1c]/20 transition-all"
+                    >
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#0e2c1c]" />
+                        <span className="text-sm text-gray-700 font-medium truncate max-w-[200px] sm:max-w-md">
+                          {file.fileName || "Unnamed file"}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => handleDownload(file.fileUrl, file.fileName)}
+                        className="shrink-0 px-5 py-2 rounded-lg bg-[#0e2c1c] text-white text-[11px] font-bold shadow-sm hover:bg-[#123825] active:scale-95 transition-all"
+                      >
+                        {downloadingFile === file.fileName ? "Downloading..." : "Download"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* STATUS UPDATE */}
+          <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
+            <h2 className="text-sm font-semibold text-gray-700">
+              Update Status
+            </h2>
+
+            <select
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#0e2c1c]"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option>Pending</option>
+              <option>In Process</option>
+              <option>Completed</option>
+            </select>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={updateStatus}
+              className="w-full md:w-auto px-6 py-3 rounded-xl bg-[#0e2c1c] text-white font-semibold shadow-md hover:bg-[#123825] transition-all"
+            >
+              Update Status
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    </AdminGuard>
   );
-})}
-    </div>
-  )}
-</div>
-
-
-      {/* STATUS UPDATE */}
-      <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
-        <h2 className="text-sm font-semibold text-gray-700">
-          Update Status
-        </h2>
-
-        <select
-          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#0e2c1c]"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        >
-          <option>Pending</option>
-          <option>In Process</option>
-          <option>Completed</option>
-        </select>
-
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={updateStatus}
-          className="w-full md:w-auto px-6 py-3 rounded-xl bg-[#0e2c1c] text-white font-semibold shadow-md hover:bg-[#123825] transition-all"
-        >
-          Update Status
-        </motion.button>
-      </div>
-    </motion.div>
-  </div>
-      </AdminGuard>
-  
-);
 }
