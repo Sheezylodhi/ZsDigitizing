@@ -11,7 +11,7 @@ export default function ClientEditOrderPage() {
   const { id } = useParams();
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
-const [orderSerial, setOrderSerial] = useState("");
+  const [orderSerial, setOrderSerial] = useState("");
   const [client, setClient] = useState(null);
   const [form, setForm] = useState({
     serialNumber: "",
@@ -47,12 +47,12 @@ const [orderSerial, setOrderSerial] = useState("");
         });
         let data;
 
-try {
-  const text = await res.text();
-  data = text ? JSON.parse(text) : [];
-} catch {
-  data = [];
-}
+        try {
+          const text = await res.text();
+          data = text ? JSON.parse(text) : [];
+        } catch {
+          data = [];
+        }
         if (!res.ok) throw new Error(data.message);
 
         setForm(data);
@@ -105,23 +105,23 @@ try {
         body: formData,
       });
 
-     let data;
+      let data;
 
-try {
-  const text = await res.text();
-  data = text ? JSON.parse(text) : [];
-} catch {
-  data = [];
-}
+      try {
+        const text = await res.text();
+        data = text ? JSON.parse(text) : [];
+      } catch {
+        data = [];
+      }
       if (!res.ok) throw new Error(data.message);
 
-setForm(data);
-setClientFiles(data.clientFile || []);
-setNewFiles([]);
+      setForm(data);
+      setClientFiles(data.clientFile || []);
+      setNewFiles([]);
 
-// ✅ Popup trigger
-setOrderSerial(data.serialNumber);
-setShowPopup(true);
+      // ✅ Popup trigger
+      setOrderSerial(data.serialNumber);
+      setShowPopup(true);
     } catch (err) {
       setMessage("Update failed ❌ " + err.message);
     } finally {
@@ -174,12 +174,12 @@ setShowPopup(true);
           >
             {/* Order Type */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold">Order Type</label>
+              <label className="text-sm font-semibold text-gray-700">Order Type</label>
               <select
                 name="orderType"
                 value={form.orderType}
                 onChange={handleChange}
-                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
+                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition text-gray-700"
               >
                 <option value="Digitizing PPO">Digitizing PPO</option>
                 <option value="Vector PPV">Vector PPV</option>
@@ -187,37 +187,39 @@ setShowPopup(true);
               </select>
             </div>
 
-            {/* Title */}
+            {/* ✅ Order Name Field (Converted to Textarea for proper line breaks) */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold">Title</label>
-              <input
+              <label className="text-sm font-semibold text-gray-700">Order Name</label>
+              <textarea
                 name="title"
                 value={form.title}
                 onChange={handleChange}
-                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
+                rows={form.title?.includes("\n") ? 2 : 1}
+                className="w-full px-5 py-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition resize-y min-h-[70px] text-gray-700 font-medium leading-relaxed align-middle"
+                style={{ whiteSpace: "pre-wrap" }}
               />
             </div>
 
             {/* Description */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold">Description</label>
+              <label className="text-sm font-semibold text-gray-700">Description</label>
               <textarea
                 name="description"
                 rows={5}
                 value={form.description}
                 onChange={handleChange}
-                className="w-full px-5 py-4 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition resize-none"
+                className="w-full px-5 py-4 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition text-gray-700"
               />
             </div>
 
             {/* Turnaround */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold">Turnaround</label>
+              <label className="text-sm font-semibold text-gray-700">Turnaround</label>
               <select
                 name="turnaround"
                 value={form.turnaround}
                 onChange={handleChange}
-                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
+                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition text-gray-700"
               >
                 <option>Rush 6 Hours</option>
                 <option>12 Hours</option>
@@ -228,7 +230,7 @@ setShowPopup(true);
             {/* Existing Files */}
             {clientFiles.length > 0 && (
               <div className="flex flex-col gap-3">
-                <label className="text-sm font-semibold">Existing Files</label>
+                <label className="text-sm font-semibold text-gray-700">Existing Files</label>
                 {clientFiles.map((file, index) => (
                   <div
                     key={index}
@@ -237,7 +239,8 @@ setShowPopup(true);
                     <a
                       href={file.fileUrl}
                       target="_blank"
-                      className="text-sm text-blue-600 underline"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 underline truncate max-w-[70%]"
                     >
                       {file.fileName}
                     </a>
@@ -246,7 +249,7 @@ setShowPopup(true);
                       onClick={() =>
                         setClientFiles(clientFiles.filter((_, i) => i !== index))
                       }
-                      className="text-red-600 text-sm font-semibold"
+                      className="text-red-600 text-sm font-semibold hover:underline"
                     >
                       Remove
                     </button>
@@ -257,7 +260,7 @@ setShowPopup(true);
 
             {/* Drag & Drop */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold">Upload New Files</label>
+              <label className="text-sm font-semibold text-gray-700">Upload New Files</label>
               <div
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -276,9 +279,10 @@ setShowPopup(true);
                   className="mt-4"
                 />
                 {newFiles.length > 0 && (
-                  <div className="mt-4 text-gray-700 text-sm">
+                  <div className="mt-4 text-gray-700 text-sm bg-gray-50 p-3 rounded-xl inline-block text-left border border-gray-100">
+                    <p className="font-semibold mb-1 text-xs uppercase tracking-wider text-gray-400">Selected Files:</p>
                     {newFiles.map((f, i) => (
-                      <div key={i}>{f.name}</div>
+                      <div key={i} className="truncate max-w-xs text-gray-600">• {f.name}</div>
                     ))}
                   </div>
                 )}
@@ -286,86 +290,86 @@ setShowPopup(true);
             </div>
 
             <button
-  type="submit"
-  disabled={saving}
-  className={`cursor-pointer w-full h-[70px] rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2
-    ${saving 
-      ? "bg-gray-400 cursor-not-allowed" 
-      : "bg-[#0e2c1c] text-white hover:bg-[#123825]"
-    }`}
->
-  {saving && (
-    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-  )}
-  {saving ? "Updating..." : "Update Order"}
-</button>
+              type="submit"
+              disabled={saving}
+              className={`cursor-pointer w-full h-[70px] rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2
+                ${saving 
+                  ? "bg-gray-400 cursor-not-allowed" 
+                  : "bg-[#0e2c1c] text-white hover:bg-[#123825]"
+                }`}
+            >
+              {saving && (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              )}
+              {saving ? "Updating..." : "Update Order"}
+            </button>
           </form>
+
+          {/* POPUP */}
           <AnimatePresence>
-  {showPopup && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4"
-    >
-      <motion.div
-        initial={{ scale: 0.6, y: 50, opacity: 0 }}
-        animate={{ scale: 1, y: 0, opacity: 1 }}
-        exit={{ scale: 0.6, y: 50, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 180, damping: 18 }}
-        className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 w-full max-w-md text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-white/20"
-      >
+            {showPopup && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4"
+              >
+                <motion.div
+                  initial={{ scale: 0.6, y: 50, opacity: 0 }}
+                  animate={{ scale: 1, y: 0, opacity: 1 }}
+                  exit={{ scale: 0.6, y: 50, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 180, damping: 18 }}
+                  className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 w-full max-w-md text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-white/20"
+                >
+                  {/* Glow */}
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-32 h-32 bg-green-400/30 blur-3xl rounded-full"></div>
 
-        {/* Glow */}
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-32 h-32 bg-green-400/30 blur-3xl rounded-full"></div>
+                  {/* Tick */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, delay: 0.2 }}
+                    className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg"
+                  >
+                    <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <motion.path
+                        d="M5 13l4 4L19 7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                      />
+                    </svg>
+                  </motion.div>
 
-        {/* Tick */}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, delay: 0.2 }}
-          className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg"
-        >
-          <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-            <motion.path
-              d="M5 13l4 4L19 7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            />
-          </svg>
-        </motion.div>
+                  <h2 className="text-2xl font-bold text-[#0e2c1c] mb-2">
+                    Order Updated Successfully 🎉
+                  </h2>
 
-        <h2 className="text-2xl font-bold text-[#0e2c1c] mb-2">
-          Order Updated Successfully 🎉
-        </h2>
+                  <p className="text-gray-500 mb-4 text-sm">
+                    Your order has been updated successfully.
+                  </p>
 
-        <p className="text-gray-500 mb-4 text-sm">
-          Your order has been updated successfully.
-        </p>
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-5 py-3 rounded-xl font-semibold text-[#0e2c1c] mb-6 shadow-inner">
+                    {orderSerial}
+                  </div>
 
-        <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-5 py-3 rounded-xl font-semibold text-[#0e2c1c] mb-6 shadow-inner">
-          {orderSerial}
-        </div>
-
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            setShowPopup(false);
-            router.push("/client-portal/orders");
-          }}
-          className="cursor-pointer w-full bg-gradient-to-r from-[#0e2c1c] to-[#123825] text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-2xl transition"
-        >
-          Go to Orders
-        </motion.button>
-
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setShowPopup(false);
+                      router.push("/client-portal/orders");
+                    }}
+                    className="cursor-pointer w-full bg-gradient-to-r from-green-700 to-green-800 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-2xl transition"
+                  >
+                    Go to Orders
+                  </motion.button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </ClientGuard>

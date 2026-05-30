@@ -106,8 +106,8 @@ export default function ClientOrderDetail() {
       </p>
 
       <div
-        style={{ cursor: "not-allowed" }}
-        className={`w-full flex items-start px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 text-[15px] font-medium select-none opacity-70 ${
+        style={{ cursor: "not-allowed", whiteSpace: "pre-line" }} // ✅ Line breaks (\n) ko handle karne ke liye pre-line use kiya
+        className={`w-full flex items-start px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 text-[15px] font-medium select-none opacity-70 break-words ${
           big ? "min-h-[90px]" : "min-h-[60px]"
         }`}
       >
@@ -169,14 +169,15 @@ export default function ClientOrderDetail() {
 
             <div className="bg-white p-5 sm:p-6 rounded-xl border border-gray-200 space-y-4">
               <div className="space-y-2">
-                <p className="text-[11px] text-gray-400 uppercase tracking-wider">Status</p>
+                <p className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Status</p>
                 <span
                   className={`inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 text-sm font-semibold rounded-md ${statusStyle(order.status)}`}
                 >
                   {order.status}
                 </span>
               </div>
-              <Field label="Title" value={order.title} />
+              {/* ✅ Title updated to Order Name */}
+              <Field label="Order Name" value={order.title} />
             </div>
           </div>
 

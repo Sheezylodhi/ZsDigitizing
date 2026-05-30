@@ -118,7 +118,7 @@ export default function EditOrderPage() {
       <div className="min-h-screen bg-white py-14 px-6 flex justify-center">
         <div className="w-full max-w-4xl space-y-6">
           {/* HEADER */}
-          <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
+          <div className="bg-white pt-10 mt-10 border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
             <div>
               <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Edit Order</h1>
               <p className="text-gray-500 text-xs sm:text-sm">
@@ -159,7 +159,7 @@ export default function EditOrderPage() {
                   name="serialNumber"
                   value={form.serialNumber}
                   readOnly
-                  className="w-full px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 cursor-not-allowed"
+                  className="w-full px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 cursor-not-allowed select-none"
                 />
               </div>
               <div className="space-y-2">
@@ -170,7 +170,7 @@ export default function EditOrderPage() {
                   name="orderType"
                   value={form.orderType}
                   readOnly
-                  className="w-full px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 cursor-not-allowed"
+                  className="w-full px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 cursor-not-allowed select-none"
                 />
               </div>
               <div className="space-y-2">
@@ -181,7 +181,7 @@ export default function EditOrderPage() {
                   name="clientId"
                   value={form.clientId}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none"
+                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none text-gray-700"
                 >
                   <option value="">Select Client</option>
                   {clients.map((c) => (
@@ -192,14 +192,17 @@ export default function EditOrderPage() {
                 </select>
               </div>
               <div className="space-y-2">
+                {/* ✅ Label updated to Order Name & replaced input with textarea to fully support multi-lines edit */}
                 <p className="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
-                  Title
+                  Order Name
                 </p>
-                <input
+                <textarea
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none"
+                  rows={form.title?.includes("\n") ? 2 : 1}
+                  className="w-full px-5 py-3.5 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none text-gray-700 resize-y min-h-[56px] font-medium"
+                  style={{ whiteSpace: "pre-wrap" }}
                 />
               </div>
             </div>
@@ -212,7 +215,7 @@ export default function EditOrderPage() {
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 min-h-[120px] focus:ring-2 focus:ring-[#0e2c1c] outline-none"
+                className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 min-h-[120px] focus:ring-2 focus:ring-[#0e2c1c] outline-none text-gray-700"
               />
             </div>
 
@@ -225,7 +228,7 @@ export default function EditOrderPage() {
                   name="turnaround"
                   value={form.turnaround}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none"
+                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none text-gray-700"
                 >
                   <option>Rush 6 Hours</option>
                   <option>12 Hours</option>
@@ -240,7 +243,7 @@ export default function EditOrderPage() {
                   name="status"
                   value={form.status}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none"
+                  className="w-full px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-[#0e2c1c] outline-none text-gray-700"
                 >
                   <option>Pending</option>
                   <option>In Progress</option>

@@ -149,12 +149,13 @@ export default function ClientCreateOrderPage() {
             {/* TITLE */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold">Order Name</label>
-              <input
-                className="w-full h-[70px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
-                placeholder="Order Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+             <textarea
+                    rows={1}
+                    placeholder=""
+                    className="w-full min-h-[65px] py-[18px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition resize-y font-normal"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
             </div>
 
             {/* DESCRIPTION */}

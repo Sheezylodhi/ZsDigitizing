@@ -97,16 +97,20 @@ export default function OrderDetail() {
     }
   };
 
-  const Field = ({ label, value, big = false }) => (
-    <div className="space-y-2">
+  // ✅ Modified Field component to support multiple lines dynamically
+  const Field = ({ label, value, big = false, isMultiLine = false }) => (
+    <div className="space-y-2 w-full">
       <p className="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
         {label}
       </p>
 
       <div
-        style={{ cursor: "not-allowed" }}
+        style={{ 
+          cursor: "not-allowed",
+          whiteSpace: isMultiLine ? "pre-line" : "normal" // ✅ Breaks text into new lines if true
+        }}
         className={`w-full flex items-start px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 text-[15px] font-medium select-none opacity-70 ${
-          big ? "min-h-[90px]" : "min-h-[60px]"
+          big || isMultiLine ? "min-h-[90px]" : "min-h-[60px]"
         }`}
       >
         {value || "-"}
@@ -156,7 +160,8 @@ export default function OrderDetail() {
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
-              <Field label="Title" value={order.title} />
+              {/* ✅ Label changed to Order Name & added isMultiLine to support Shift+Enter rendering */}
+              <Field label="Order Name" value={order.title} isMultiLine={true} />
               <Field
                 label="Client"
                 value={`${order.clientId?.name} (${order.clientId?.email})`}
@@ -169,7 +174,7 @@ export default function OrderDetail() {
             <Field
               label="Description"
               value={order.description || "No description"}
-              big
+              isMultiLine={true} // ✅ Yeh bhi multiline handles karega properly
             />
           </div>
 

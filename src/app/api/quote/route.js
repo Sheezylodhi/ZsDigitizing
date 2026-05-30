@@ -24,17 +24,29 @@ export async function POST(req) {
       if (!file?.name) continue;
       const buffer = Buffer.from(await file.arrayBuffer());
 
+      // File ka original name bina extension ke nikalne ke liye (Cloudizing public_id ke liye)
+      const originalNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: "auto", folder: "quotes" },
+          { 
+            resource_type: "auto", 
+            folder: "quotes",
+            use_filename: true,          // ✅ Cloudinary ko asli naam use karne par majboor karega
+            unique_filename: false,      // ✅ Taake aage lagne wale random characters hat sakein
+            filename_override: file.name // ✅ Metadata mein original name force karega
+          },
           (err, res) => (err ? reject(err) : resolve(res))
         );
         uploadStream.end(buffer);
       });
 
+      // Browser mein direct original extension ke sath download force karne ke liye URL optimize kiya hai
+      const forcedDownloadUrl = result.secure_url.replace("/upload/", "/upload/fl_attachment/");
+
       uploadedFiles.push({
         originalName: file.name,
-        cloudinaryUrl: result.secure_url,
+        cloudinaryUrl: forcedDownloadUrl, // ✅ Ab database mein download link proper save hoga
       });
     }
 
@@ -56,8 +68,9 @@ export async function POST(req) {
         },
       });
 
+      // Email mein bhi download support wala link bhej rahe hain
       const fileLinks = uploadedFiles.length
-        ? uploadedFiles.map(f => `<li><a href="${f.cloudinaryUrl}" target="_blank">${f.originalName}</a></li>`).join("")
+        ? uploadedFiles.map(f => `<li><a href="${f.cloudinaryUrl}" download="${f.originalName}" target="_blank">${f.originalName}</a></li>`).join("")
         : "No files attached.";
 
       const emailHtml = `

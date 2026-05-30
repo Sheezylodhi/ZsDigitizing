@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AdminGuard from "@/components/AdminGuard";
-import { User } from "lucide-react";
+import { User, FileText, Image as ImageIcon, FileArchive, File, Download } from "lucide-react";
 import NotificationIcon from "@/components/NotificationIcon";
 import { jwtDecode } from "jwt-decode";
 
@@ -12,6 +12,29 @@ export default function QuoteDetail() {
   const { id } = useParams();
   const [quote, setQuote] = useState(null);
   const [adminId, setAdminId] = useState(null);
+  const [error, setError] = useState(null);
+    const [downloadingFile, setDownloadingFile] = useState(null);
+
+  // 🔹 Is function ko pehle wale function se replace karein
+const handleDownload = async (fileUrl, originalName) => {
+  try {
+    
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = originalName; // ✅ Yeh browser ko force karega asli naam aur extension rakhne par
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  } catch (err) {
+    console.error("Download failed:", err);
+    // Fallback agar fetch block ho jaye cross-origin ki wajah se
+    window.open(fileUrl.replace("/upload/", "/upload/fl_attachment/"), "_blank");
+  }
+};
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -24,17 +47,55 @@ export default function QuoteDetail() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/quote/${id}`, {
+    const token = localStorage.getItem("token");
+    
+    // Yahan route check karein jo aapki backend dynamic ID file se match kare
+    fetch(`/api/admin/quotes/${id}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     })
-      .then(res => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || "Failed to fetch quote details");
+        }
+        return res.json();
+      })
       .then(data => setQuote(data))
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        setError(err.message);
+      });
   }, [id]);
 
-  if (!quote) return <p className="p-10">Loading quote...</p>;
+  // Extension ke mutabik Icon select karne ka function
+  const getFileIcon = (fileName) => {
+    if (!fileName) return <File size={18} className="text-gray-500" />;
+    const ext = fileName.split('.').pop().toLowerCase();
+    
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) {
+      return <ImageIcon size={18} className="text-blue-500" />;
+    }
+    if (['pdf', 'doc', 'docx', 'txt', 'rtf'].includes(ext)) {
+      return <FileText size={18} className="text-red-500" />;
+    }
+    if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
+      return <FileArchive size={18} className="text-amber-500" />;
+    }
+    return <File size={18} className="text-gray-500" />;
+  };
+
+  // Safe helper link generation original filename ke liye
+  const getDownloadLink = (file) => {
+    if (!file.cloudinaryUrl) return "#";
+    // fl_attachment ke sath original name force karne ke liye query param ya transformation use hota hai
+    const baseCleanUrl = file.cloudinaryUrl.replace("/upload/", "/upload/fl_attachment/");
+    return baseCleanUrl;
+  };
+
+  if (error) return <p className="p-10 text-red-600 font-semibold">Error: {error}</p>;
+  if (!quote) return <p className="p-10 text-gray-500 animate-pulse">Loading quote details...</p>;
 
   const Field = ({ label, value, big = false }) => (
     <div className="space-y-2">
@@ -89,34 +150,41 @@ export default function QuoteDetail() {
           </div>
 
           {/* FILES */}
-          {/* FILES */}
-<div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
-  <h2 className="text-sm font-semibold text-gray-700">Uploaded Files</h2>
+          <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
+            <h2 className="text-sm font-semibold text-gray-700">Uploaded Files</h2>
 
-  {!quote.fileNameArray || quote.fileNameArray.length === 0 ? (
-    <p className="text-gray-400 text-sm">No files uploaded</p>
-  ) : (
-    <div className="flex flex-col gap-2">
-      {quote.fileNameArray.map((file, idx) => (
-        <div
-          key={idx}
-          className="flex items-center justify-between px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg"
-        >
-          <span className="text-sm text-gray-600 truncate pr-4">
-            {file.originalName}
-          </span>
+            {!quote.fileNameArray || quote.fileNameArray.length === 0 ? (
+              <p className="text-gray-400 text-sm">No files uploaded</p>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {quote.fileNameArray.map((file, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      {/* Dynamic Icon */}
+                      <div className="shrink-0">
+                        {getFileIcon(file.originalName)}
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium truncate pr-4">
+                        {file.originalName}
+                      </span>
+                    </div>
 
-          <a
-  href={file.cloudinaryUrl.replace("/upload/", "/upload/fl_attachment/")}
-  className="shrink-0 px-5 py-2.5 rounded-lg bg-[#0e2c1c] text-white text-xs font-semibold shadow-md hover:bg-[#123825] transition-all"
+                    {/* Purane <a> tag ko is <button> se replace karein */}
+<button
+  onClick={() => handleDownload(file.cloudinaryUrl, file.originalName)}
+  className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0e2c1c] text-white text-xs font-semibold shadow-md hover:bg-[#123825] transition-all cursor-pointer"
 >
+  <Download size={13} />
   Download
-</a>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </motion.div>
       </div>
     </AdminGuard>

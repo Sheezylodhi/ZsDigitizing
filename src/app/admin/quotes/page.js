@@ -13,6 +13,7 @@ export default function QuotesPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState(null); // 🔹 popup target
+  const [isDeleting, setIsDeleting] = useState(false); // Loader for delete button
   const perPage = 6;
   const router = useRouter();
 
@@ -35,19 +36,26 @@ export default function QuotesPage() {
 
   // 🔹 DELETE HANDLER
   const handleDelete = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget || !deleteTarget._id) return;
 
     try {
+      setIsDeleting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(`/api/admin/quotes/${deleteTarget._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Delete failed");
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Delete failed");
+
+      // UI state update (Instant filter)
       setQuotes(prev => prev.filter(q => q._id !== deleteTarget._id));
       setDeleteTarget(null);
     } catch (err) {
-      alert(err.message);
+      alert("Error: " + err.message);
+    } finally {
+      setIsDeleting(false);
       setDeleteTarget(null);
     }
   };
@@ -94,56 +102,53 @@ export default function QuotesPage() {
         </div>
 
         {/* TABLE CARD */}
-        {/* TABLE CARD */}
-<div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
-  {/* Horizontal scroll wrapper */}
-  <div className="w-full overflow-x-auto">
-    <table className="w-full table-auto min-w-[700px]">
-      <thead className="bg-[#0e2c1c] text-left text-sm text-white">
-        <tr>
-          <th className="p-4 md:p-5">Name</th>
-          <th className="p-4 md:p-5">Email</th>
-          <th className="p-4 md:p-5">Date</th>
-          <th className="p-4 md:p-5 text-right">View</th>
-          <th className="p-4 md:p-5 text-right">Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {paginated.length === 0 ? (
-          <tr>
-            <td colSpan="6" className="p-10 md:p-20 text-center text-gray-400">No quotes found</td>
-          </tr>
-        ) : (
-          paginated.map(q => (
-            <motion.tr
-              key={q._id}
-              whileHover={{ scale: 1.002 }}
-              className="border-t hover:bg-gray-50 transition"
-            >
-              <td className="p-4 md:p-5 font-medium whitespace-nowrap">{q.name}</td>
-              <td className="p-4 md:p-5 whitespace-nowrap">{q.email}</td>
-             
-              <td className="p-4 md:p-5 text-gray-500 whitespace-nowrap">{new Date(q.createdAt).toLocaleDateString()}</td>
-              <td className="p-4 md:p-5 text-right">
-                <a href={`/admin/quotes/${q._id}`} className="w-10 h-9 flex items-center justify-center rounded-lg text-grey shadow hover:shadow-lg hover:scale-105 transition">
-                  <Eye size={15} />
-                </a>
-              </td>
-              <td className="p-4 md:p-5 text-right">
-                <button
-                  onClick={() => setDeleteTarget(q)}
-                  className="w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
-                >
-                  <Trash2 size={15} />
-                </button>
-              </td>
-            </motion.tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full table-auto min-w-[700px]">
+              <thead className="bg-[#0e2c1c] text-left text-sm text-white">
+                <tr>
+                  <th className="p-4 md:p-5">Name</th>
+                  <th className="p-4 md:p-5">Email</th>
+                  <th className="p-4 md:p-5">Date</th>
+                  <th className="p-4 md:p-5 text-right">View</th>
+                  <th className="p-4 md:p-5 text-right">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginated.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="p-10 md:p-20 text-center text-gray-400">No quotes found</td>
+                  </tr>
+                ) : (
+                  paginated.map(q => (
+                    <motion.tr
+                      key={q._id}
+                      whileHover={{ scale: 1.002 }}
+                      className="border-t hover:bg-gray-50 transition"
+                    >
+                      <td className="p-4 md:p-5 font-medium whitespace-nowrap">{q.name}</td>
+                      <td className="p-4 md:p-5 whitespace-nowrap">{q.email}</td>
+                      <td className="p-4 md:p-5 text-gray-500 whitespace-nowrap">{new Date(q.createdAt).toLocaleDateString()}</td>
+                      <td className="p-4 md:p-5 text-right">
+                        <a href={`/admin/quotes/${q._id}`} className="w-10 h-9 inline-flex items-center justify-center rounded-lg text-gray-600 border border-gray-200 bg-white shadow-sm hover:shadow-lg hover:scale-105 transition">
+                          <Eye size={15} />
+                        </a>
+                      </td>
+                      <td className="p-4 md:p-5 text-right">
+                        <button
+                          onClick={() => setDeleteTarget(q)}
+                          className="w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition cursor-pointer"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         {/* PAGINATION */}
         {totalPages > 1 && (
@@ -152,7 +157,7 @@ export default function QuotesPage() {
               <button
                 key={i}
                 onClick={() => setPage(i + 1)}
-                className={`px-4 py-2 rounded-lg transition ${
+                className={`px-4 py-2 rounded-lg transition cursor-pointer ${
                   page === i + 1 ? "bg-[#0e2c1c] text-white shadow-lg" : "bg-white border border-gray-200 hover:bg-gray-50"
                 }`}
               >
@@ -180,20 +185,22 @@ export default function QuotesPage() {
               >
                 <h2 className="text-xl font-bold text-[#0e2c1c] mb-4">Delete Quote?</h2>
                 <p className="text-gray-500 mb-6">
-                  Are you sure you want to delete quote from <span className="font-semibold">{deleteTarget.name}</span>?
+                  Are you sure you want to delete quote from <span className="font-semibold text-red-600">{deleteTarget.name}</span>? This action cannot be undone.
                 </p>
                 <div className="flex gap-4 justify-center">
                   <button
+                    disabled={isDeleting}
                     onClick={() => setDeleteTarget(null)}
-                    className="cursor-pointer px-6 py-3 rounded-xl bg-gray-300 text-gray-700 font-semibold hover:bg-gray-400 transition"
+                    className="cursor-pointer px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
+                    disabled={isDeleting}
                     onClick={handleDelete}
-                    className="cursor-pointer px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition"
+                    className="cursor-pointer px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition flex items-center gap-2 disabled:bg-red-400"
                   >
-                    Delete
+                    {isDeleting ? "Deleting..." : "Delete Permanently"}
                   </button>
                 </div>
               </motion.div>
