@@ -70,8 +70,8 @@ export default function Footer() {
         </p>
         <p className="mt-1">
           Developed by{" "}
-          <a href="https://portfolio-eta-lyart-37.vercel.app/" className="text-green-400 font-semibold hover:text-green-600 transition" target="_blank" rel="noopener noreferrer">
-            Zaib
+          <a href="https://my-agency-omega-two.vercel.app/" className="text-green-400 font-semibold hover:text-green-600 transition" target="_blank" rel="noopener noreferrer">
+            WebmashLabs
           </a>
         </p>
       </div>
