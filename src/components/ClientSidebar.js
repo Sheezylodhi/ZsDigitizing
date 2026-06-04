@@ -11,7 +11,7 @@ import {
   Menu,
   X,
   LogOut,
-  MessageCircle
+  MessageCircle,KeyRound
 } from "lucide-react";
 import ClientGuard from "@/components/ClientGuard";
 
@@ -24,7 +24,8 @@ export default function ClientSidebar() {
     { name: "Dashboard", href: "/client-portal", icon: LayoutDashboard },
     { name: "My Orders", href: "/client-portal/orders", icon: ClipboardList },
     { name: "Request for Order", href: "/client-portal/create-order", icon: PlusCircle },
-    { name: "Change Password", href: "/client-portal/security", icon: PlusCircle },
+    { name: "Chat With Support", href: "/client-portal/chat", icon: ClipboardList },
+    { name: "Change Password", href: "/client-portal/security", icon: KeyRound },
   ];
 
   const handleLogout = () => {
@@ -40,9 +41,7 @@ export default function ClientSidebar() {
       {/* ✅ MOBILE HEADER (LOGO + MENU ICON) */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-white shadow-sm">
         {/* Logo */}
-        <Link href="/">
-          <img src="/logo.png" alt="Logo" className="h-8 object-contain" />
-        </Link>
+       
         {/* Menu Button */}
         <button onClick={() => setOpen(true)}>
           <Menu size={26} className="text-[#0e2c1c]" />

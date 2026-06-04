@@ -197,43 +197,48 @@ export default function ClientChat() {
 
   return (
     <div
-      className="p-4 sm:p-8"
+      className="p-4 py-15 sm:p-8"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Drag & Drop Overlay */}
-      <AnimatePresence>
-        {isDragging && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-green-600/10 backdrop-blur-sm border-4 border-dashed border-green-600 flex items-center justify-center pointer-events-none rounded-3xl">
-            <div className="bg-white p-6 rounded-2xl shadow-2xl text-center">
-              <Paperclip className="w-12 h-12 text-green-600 mx-auto mb-2 animate-bounce" />
-              <p className="text-xl font-bold text-gray-800">Drop files here</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      
 
       {/* Header Info */}
-      <div className="bg-white border border-gray-200 shadow-lg rounded-2xl px-6 py-5 flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-xl sm:text-3xl font-bold text-[#0e2c1c]">Chat With Support</h1>
-          <p className="text-gray-500 text-sm">Ask any query from our team</p>
-        </div>
-        {client && (
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg">
-              <User size={16} className="text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">{client.name}</span>
+     
+ <header className="  flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 bg-[#0e2c1c] rounded-xl text-white hidden xs:flex shrink-0">
+              </div>
+              <div className="truncate">
+                <h1 className="text-xl sm:text-2xl font-bold text-[#0e2c1c] truncate">
+                 Chat With Support
+                </h1>
+                <p className="text-gray-500 text-xs sm:text-sm font-medium">
+                 Ask any query from our team
+                </p>
+              </div>
             </div>
-            <NotificationIcon userId={client._id} />
-          </div>
-        )}
-      </div>
 
-      <div className="max-w-2xl mx-auto h-[75vh] flex flex-col bg-[#f0f2f5] shadow-2xl rounded-2xl overflow-hidden border border-gray-200 relative">
+            {client && (
+              <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 border-t sm:border-t-0 pt-3 sm:pt-0">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100 max-w-[180px]">
+                  <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                    <User size={14} className="text-green-700" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-semibold text-gray-700 truncate">
+                    {client.name}
+                  </span>
+                </div>
+                <div className="shrink-0">
+                  <NotificationIcon userId={client._id} />
+                </div>
+              </div>
+            )}
+          </header>
+      <div className=" py-5 max-w-2xl mx-auto h-[75vh] flex flex-col bg-[#f0f2f5] shadow-2xl rounded-2xl overflow-hidden border border-gray-200 relative">
         {/* Chat Header */}
-        <div className="p-4 bg-white border-b flex items-center gap-3 z-10">
+        <div className="p-4  bg-white border-b flex items-center gap-3 z-10">
           <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold">S</div>
           <div>
             <h3 className="font-bold text-gray-800 leading-none">Support Team</h3>
@@ -382,12 +387,7 @@ export default function ClientChat() {
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-1">
-                <input type="file" multiple onChange={e => setFiles(prev => [...prev, ...Array.from(e.target.files)])} className="hidden" id="file-upload" />
-                <label htmlFor="file-upload" className="text-gray-500 hover:text-green-600 cursor-pointer p-2 rounded-full hover:bg-gray-100">
-                  <Paperclip size={22} />
-                </label>
-              </div>
+              
 
               <div className="flex-1 relative">
                 <input

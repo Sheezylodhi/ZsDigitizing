@@ -10,40 +10,42 @@ export default async function notifyAdmin(clientId, type, id) {
     const client = await User.findById(clientId);
     if (!client) throw new Error("Client not found");
 
+    // Admin ki ID nikaalna
     const admin = await User.findOne({ role: "admin" });
-    if (!admin) throw new Error("Admin not found");
+    if (!admin) {
+      console.error("Admin user not found in DB");
+      return;
+    }
 
     let message = "";
     let title = "";
     let link = "";
 
     if (type === "client_order_created") {
-      // ✅ Order notification for admin
       const order = await Order.findById(id);
-      if (!order) throw new Error("Order not found");
-
-      const orderRef = `${order.orderType} - ${order.serialNumber}`;
-      title = "New Client Order";
-      message = `${client.name} created order #${orderRef}`;
-      link = `/admin/orders/${order._id}`;
-
+      if (order) {
+        title = "New Client Order";
+        message = `${client.name} created order #${order.orderType} - ${order.serialNumber}`;
+        link = `/admin/orders/${order._id}`;
+      }
     } else if (type === "chat_message") {
-      // ✅ Chat notification for admin
       title = "New Message from Client";
-      message = `${client.name} sent you a message.`;
+      message = `${client.name} sent a new message.`;
       link = `/admin/inbox`;
     }
 
+    // Save Notification for Admin
     await Notification.create({
-      userId: admin._id,
+      userId: admin._id, // Zaroori: Admin ki ID save honi chahiye
       type,
       title,
-      message,
+      message: message,
+      Notifymessage: message, // Schema ke hisaab se
       link,
+      read: false
     });
 
-    console.log(`✅ Admin notified: ${message}`);
-
+    console.log(`✅ Admin notified successfully`);
   } catch (err) {
     console.error("notifyAdmin Error:", err);
   }

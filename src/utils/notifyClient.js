@@ -13,23 +13,25 @@ export default async function notifyClient(clientId, type, id) {
 
     let title = "";
     let subject = "";
-    let message = "";
-    let Notifymessage = "";
+    let message = ""; // Email HTML content
+    let Notifymessage = ""; // DB Notification message
     let link = "";
 
-    // Fetch order if needed
-    let order = null;
-    if (type === "order_created" || type === "order_submitted") {
-      order = await Order.findById(id);
-      if (!order) throw new Error("Order not found");
-      
-      // Original Order Path
-      const orderPath = `/client-portal/orders/${order._id}`;
-      // Login Redirect Link with Callback
-      link = `/login?callbackUrl=${encodeURIComponent(orderPath)}`;
+    // 1. CHAT MESSAGE LOGIC
+    if (type === "chat_message") {
+      title = "New Message";
+      Notifymessage = "You have received a new message from support.";
+      link = "/client-portal/chat";
     }
 
+    // 2. ORDER LOGIC
     if (type === "order_created" || type === "order_submitted") {
+      const order = await Order.findById(id);
+      if (!order) throw new Error("Order not found");
+
+      const orderPath = `/client-portal/orders/${order._id}`;
+      link = `/login?callbackUrl=${encodeURIComponent(orderPath)}`;
+
       if (type === "order_created") {
         title = "New Order Created";
         subject = "New Order Created";
@@ -40,6 +42,7 @@ export default async function notifyClient(clientId, type, id) {
         Notifymessage = `Your order #${order.orderType} - ${order.serialNumber} has been delivered.`;
       }
 
+      // Email HTML Generation
       let filesHTML = "";
       if (order.files && order.files.length > 0) {
         filesHTML = order.files
@@ -48,21 +51,15 @@ export default async function notifyClient(clientId, type, id) {
             if (downloadUrl && downloadUrl.includes('cloudinary.com')) {
               downloadUrl = downloadUrl.replace('http://', 'https://');
             }
-            
-            // ✅ ZERO STRING MANIPULATION - Direct direct clean link download hoga
             return `
               <div style="margin:10px 0; text-align:center;">
-                <a href="${downloadUrl}" 
-                   download="${file.fileName}" 
-                   target="_blank"
+                <a href="${downloadUrl}" download="${file.fileName}" target="_blank"
                    style="background:#0e2c1c; color:#fff; padding:12px 25px; text-decoration:none; border-radius:5px; display:inline-block; font-size:14px; font-weight:bold;">
                    Download: ${file.fileName}
                 </a>
-                <p style="font-size:11px; color:#666; margin-top:5px;">File: ${file.fileName}</p>
               </div>
             `;
-          })
-          .join("");
+          }).join("");
       }
 
       message = `
@@ -124,29 +121,34 @@ export default async function notifyClient(clientId, type, id) {
   </div>
 </div>
       `;
+
+      // Email Sending
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: Number(process.env.SMTP_PORT) === 465,
+        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      });
+
+      await transporter.sendMail({
+        from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
+        to: client.email,
+        subject,
+        html: message,
+      });
     }
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    });
-
-    await transporter.sendMail({
-      from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
-      to: client.email,
-      subject,
-      html: message,
-    });
-
+    // 3. DATABASE NOTIFICATION
     await Notification.create({
       userId: clientId,
       type,
       title,
       message: Notifymessage,
-      link: `/client-portal/orders/${id}`,
+      Notifymessage: Notifymessage,
+      link,
     });
+
+    console.log("Notification saved & Email sent (if applicable)");
 
   } catch (err) {
     console.error("notifyClient Error:", err);
