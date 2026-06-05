@@ -83,7 +83,7 @@ export default function Dashboard() {
 
   return (
     <AdminGuard>
-      <div className="flex flex-col md:flex-row min-h-screen bg-[#f8fafc]">
+      <div className="flex flex-col md:flex-row min-h-screen ">
         {/* Sidebar Space Holder */}
        
 

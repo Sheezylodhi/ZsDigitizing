@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   LogOut,
+  Briefcase,
   MessageCircle
 } from "lucide-react";
 
@@ -28,6 +29,9 @@ export default function AdminSidebar() {
     { name: "Order List", href: "/admin/orders", icon: ClipboardList },
     { name: "Client List", href: "/admin/clients", icon: Users },
     { name: "Inbox", href: "/admin/inbox", icon: Users },
+    { name: "Portfolio List", href: "/admin/manage-portfolio", icon: Briefcase },
+    { name: "Portfolio Handler", href: "/admin/add-portfolio", icon: PlusCircle },
+
 
   ];
 

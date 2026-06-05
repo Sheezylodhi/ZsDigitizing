@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User } from "lucide-react";
+import { User, ClipboardList, CheckCircle2 } from "lucide-react";
 import NotificationIcon from "@/components/NotificationIcon";
 import AdminGuard from "@/components/AdminGuard";
-import AdminSidebar from "@/components/AdminSidebar";
 import { jwtDecode } from "jwt-decode";
-
 
 export default function CreateOrderPage() {
   const [clients, setClients] = useState([]);
@@ -19,9 +17,9 @@ export default function CreateOrderPage() {
   const [status, setStatus] = useState("Pending");
   const [message, setMessage] = useState("");
   const [adminId, setAdminId] = useState(null);
-  const [loading, setLoading] = useState(false); // button loading
-  const [showPopup, setShowPopup] = useState(false); // popup
-  const [orderSerial, setOrderSerial] = useState(""); // serial number from API
+  const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [orderSerial, setOrderSerial] = useState("");
 
   useEffect(() => {
     fetch("/api/clients")
@@ -30,11 +28,9 @@ export default function CreateOrderPage() {
       .catch(err => console.error(err));
 
     const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const decoded = jwtDecode(token);
-      setAdminId(decoded.userId);
-    } catch {}
+    if (token) {
+      try { const decoded = jwtDecode(token); setAdminId(decoded.userId); } catch {}
+    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -43,261 +39,116 @@ export default function CreateOrderPage() {
       setMessage("Client, Title & Order Type required");
       return;
     }
-
     setLoading(true);
     setMessage("");
-
     const token = localStorage.getItem("token");
 
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          clientId,
-          title,
-          description,
-          turnaround,
-          orderType,
-          status,
-        }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ clientId, title, description, turnaround, orderType, status }),
       });
-
       const data = await res.json();
-
       if (res.ok) {
         setOrderSerial(data.serialNumber);
-        setShowPopup(true); // ✅ show popup
-        setTitle("");
-        setDescription("");
-        setClientId("");
-        setTurnaround("24 Hours");
-        setOrderType("Digitizing PPO");
+        setShowPopup(true);
+        setTitle(""); setDescription(""); setClientId(""); setTurnaround("24 Hours"); setOrderType("Digitizing PPO");
       } else {
         setMessage(data.message || "Error creating order");
       }
-
-    } catch (err) {
-      setMessage("Error creating order");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { setMessage("Error creating order"); } finally { setLoading(false); }
   };
 
   return (
     <AdminGuard>
-      <div className="flex min-h-screen bg-[#f8fafc]">
-
-        <main className="flex-1 p-8 md:p-12 flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-4xl space-y-16"
-          >
-            {/* ---------- HEADER CARD ---------- */}
-            <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
-              <div>
-                <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Crate Order</h1>
-                <p className="text-gray-500 text-xs sm:text-sm">
-                  Fill order details and assign to client
-                </p>
+      <div className="min-h-screen py-10 px-4 sm:px-8 flex justify-center bg-[#fcfdfd]">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl space-y-8">
+          
+          {/* HEADER SECTION */}
+          <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 bg-[#0e2c1c] rounded-xl text-white hidden xs:flex shrink-0">
+                <ClipboardList size={20} />
               </div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
-                  <User size={18} className="text-gray-600" />
-                  <span className="font-semibold text-gray-700">Admin</span>
-                </div>
-                {adminId && <NotificationIcon userId={adminId} />}
+              <div className="truncate">
+                <h1 className="text-xl sm:text-2xl font-bold text-[#0e2c1c] truncate">Create Order</h1>
+                <p className="text-gray-500 text-xs sm:text-sm font-medium">Fill order details & assign to client</p>
               </div>
             </div>
 
-            {/* ---------- MESSAGE ---------- */}
-            {message && (
-              <div className="text-green-600 font-medium text-center text-base md:text-lg">
-                {message}
+            <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 border-t sm:border-t-0 pt-3 sm:pt-0">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
+                  <User size={14} className="text-gray-600" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-gray-700 truncate">Admin</span>
               </div>
-            )}
+              <div className="shrink-0">{adminId && <NotificationIcon userId={adminId} />}</div>
+            </div>
+          </header>
 
-            {/* ---------- FORM CARD ---------- */}
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white p-8 md:p-12 rounded-3xl border border-gray-200 shadow-xl flex flex-col gap-8"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {message && <div className="text-red-500 font-medium text-center">{message}</div>}
 
-                {/* Client */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Client
-                  </label>
-                  <select
-                    className="w-full h-[65px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
-                    value={clientId}
-                    onChange={(e) => setClientId(e.target.value)}
-                  >
-                    <option value="">Select Client</option>
-                    {clients.map(c => (
-                      <option key={c._id} value={c._id}>
-                        {c.name} ({c.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Order Type */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Order Type
-                  </label>
-                  <select
-                    className="w-full h-[65px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
-                    value={orderType}
-                    onChange={(e) => setOrderType(e.target.value)}
-                  >
-                    <option value="Digitizing PPO">Digitizing PPO</option>
-                    <option value="Vector PPV">Vector PPV</option>
-                    <option value="Patches PO">Patches PO</option>
-                  </select>
-                </div>
-
-                {/* ✅ Order Name (Updated from input to dynamic textarea) */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Order Name
-                  </label>
-                  <textarea
-                    rows={1}
-                    placeholder=""
-                    className="w-full min-h-[65px] py-[18px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition resize-y font-normal"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
-
-                {/* Turnaround */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Turnaround Time
-                  </label>
-                  <select
-                    className="w-full h-[65px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
-                    value={turnaround}
-                    onChange={(e) => setTurnaround(e.target.value)}
-                  >
-                    <option>Rush 4 Hours</option>
-                    <option>6 Hours</option>
-                    <option>12 Hours</option>
-                    <option>24 Hours</option>
-                  </select>
-                </div>
-
-                {/* Status */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Status
-                  </label>
-                  <select
-                    className="w-full h-[65px] px-5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option>Pending</option>
-                    <option>In Process</option>
-                    <option>Completed</option>
-                  </select>
-                </div>
-
-                {/* Description full width */}
-                <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="font-semibold text-sm md:text-base">
-                    Description
-                  </label>
-                  <textarea
-                    rows={5}
-                    className="w-full px-5 py-4 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition resize-none"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
+          {/* FORM CARD */}
+          <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Client</label>
+                <select value={clientId} onChange={(e) => setClientId(e.target.value)} className="w-full h-12 px-4 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/10">
+                  <option value="">Select Client</option>
+                  {clients.map(c => <option key={c._id} value={c._id}>{c.name} ({c.email})</option>)}
+                </select>
               </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Order Type</label>
+                <select value={orderType} onChange={(e) => setOrderType(e.target.value)} className="w-full h-12 px-4 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/10">
+                  <option value="Digitizing PPO">Digitizing PPO</option>
+                  <option value="Vector PPV">Vector PPV</option>
+                  <option value="Patches PO">Patches PO</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Order Name</label>
+                <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., Logo Digitizing" className="w-full h-12 px-4 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/10" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Turnaround</label>
+                <select value={turnaround} onChange={(e) => setTurnaround(e.target.value)} className="w-full h-12 px-4 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/10">
+                  <option>Rush 4 Hours</option>
+                  <option>6 Hours</option>
+                  <option>12 Hours</option>
+                  <option>24 Hours</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-2 md:col-span-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Description</label>
+                <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-4 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0e2c1c]/10 resize-none" />
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className={`cursor-pointer w-full h-[65px] rounded-xl font-semibold flex justify-center items-center gap-2 transition
-                  ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#0e2c1c] hover:bg-[#123825] text-white"} mt-4`}
-              >
-                {loading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
-                {loading ? "Creating..." : "Create Order"}
-              </button>
-            </form>
-            
-            <AnimatePresence>
-              {showPopup && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4"
-                >
-                  <motion.div
-                    initial={{ scale: 0.6, y: 50, opacity: 0 }}
-                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                    exit={{ scale: 0.6, y: 50, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 180, damping: 18 }}
-                    className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 w-full max-w-md text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-white/20"
-                  >
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-32 h-32 bg-green-400/30 blur-3xl rounded-full"></div>
+            <button disabled={loading} className="w-full h-14 bg-[#0e2c1c] text-white rounded-xl font-bold hover:bg-[#123825] transition-all shadow-lg active:scale-[0.99] flex items-center justify-center gap-2">
+              {loading ? "Creating..." : "Create Order"}
+            </button>
+          </form>
+        </motion.div>
 
-                    {/* Tick */}
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 260, delay: 0.2 }}
-                      className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg"
-                    >
-                      <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                        <motion.path
-                          d="M5 13l4 4L19 7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          initial={{ pathLength: 0 }}
-                          animate={{ pathLength: 1 }}
-                          transition={{ duration: 0.6, delay: 0.3 }}
-                        />
-                      </svg>
-                    </motion.div>
-
-                    <h2 className="text-2xl font-bold text-[#0e2c1c] mb-2">
-                      Order Created 
-                    </h2>
-
-                    <p className="text-gray-500 mb-4 text-sm">
-                      Order Serial Number:
-                    </p>
-
-                    <div className="bg-gray-100 px-4 py-2 rounded-lg font-semibold text-[#0e2c1c] mb-6">
-                      {orderSerial}
-                    </div>
-
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setShowPopup(false)}
-                      className="cursor-pointer w-full bg-gradient-to-r from-green-700 to-green-800 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-2xl transition"
-                    >
-                      OK
-                    </motion.button>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </main>
+        {/* POPUP */}
+        <AnimatePresence>
+          {showPopup && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-[99] px-4">
+              <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="bg-white rounded-[2rem] p-8 w-full max-w-sm text-center shadow-2xl border border-gray-100">
+                <div className="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 size={32} />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Order Created!</h2>
+                <p className="text-gray-500 text-sm mb-4">Serial Number:</p>
+                <div className="bg-gray-50 py-3 rounded-xl font-mono font-bold text-[#0e2c1c] text-lg mb-8 border border-gray-100">{orderSerial}</div>
+                <button onClick={() => setShowPopup(false)} className="w-full h-12 bg-[#0e2c1c] text-white font-bold rounded-xl hover:bg-[#123825] transition">OK</button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AdminGuard>
   );

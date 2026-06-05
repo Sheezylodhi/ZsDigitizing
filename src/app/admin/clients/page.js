@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { User, Pencil, Trash2 } from "lucide-react";
+import { User, Pencil, Trash2, Search, Users, UserPlus } from "lucide-react";
 import NotificationIcon from "@/components/NotificationIcon";
 import AdminGuard from "@/components/AdminGuard";
 import { jwtDecode } from "jwt-decode";
@@ -13,54 +13,41 @@ export default function ClientListPage() {
   const [adminId, setAdminId] = useState(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [deleteTarget, setDeleteTarget] = useState(null); // popup target
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const router = useRouter();
   const perPage = 6;
 
-  /* 🔹 FETCH CLIENTS */
   useEffect(() => {
     const fetchClients = async () => {
       try {
         const token = localStorage.getItem("token");
-
         const res = await fetch("/api/admin/clients", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         const data = await res.json();
         setClients(data);
-
-        const decoded = jwtDecode(token);
-        setAdminId(decoded.userId);
-      } catch (err) {
-        console.error(err);
-      }
+        if (token) {
+          try { const decoded = jwtDecode(token); setAdminId(decoded.userId); } catch {}
+        }
+      } catch (err) { console.error(err); }
     };
-
     fetchClients();
   }, []);
 
-  /* 🔹 DELETE */
   const handleDelete = async () => {
     if (!deleteTarget) return;
-
     try {
       const token = localStorage.getItem("token");
       await fetch(`/api/admin/clients/${deleteTarget._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setClients((prev) => prev.filter((c) => c._id !== deleteTarget._id));
-      setDeleteTarget(null); // close popup
-    } catch (err) {
-      alert("Delete failed");
       setDeleteTarget(null);
-    }
+    } catch (err) { alert("Delete failed"); setDeleteTarget(null); }
   };
 
-  /* 🔹 FILTER */
   const filtered = useMemo(() => {
     return clients.filter((c) =>
       c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -74,88 +61,66 @@ export default function ClientListPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-[#f8fafc] p-10 flex flex-col gap-10">
-
-        {/* HEADER CARD */}
-        <div className="bg-white pt-10 mt-10  border border-gray-200 shadow-lg rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-lg sm:text-3xl font-bold text-[#0e2c1c] ">Client List</h1>
-            <p className="text-gray-500 text-xs sm:text-sm">Manage all registered clients</p>
+      <div className="min-h-screen bg-[#fcfdfd] px-4 py-15 sm:px-6 lg:px-12">
+        {/* HEADER */}
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm mb-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#0e2c1c] rounded-xl text-white hidden xs:flex">
+              <Users size={20} />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#0e2c1c]">Clients</h1>
+              <p className="text-gray-500 text-xs sm:text-sm font-medium">Manage your registered users</p>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
-              <User size={18} className="text-gray-600" />
-              <span className="font-semibold text-gray-700">Admin</span>
+          <div className="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100">
+              <User size={14} className="text-green-700" />
+              <span className="text-xs sm:text-sm font-bold text-gray-700">Admin</span>
             </div>
             {adminId && <NotificationIcon userId={adminId} />}
           </div>
-        </div>
+        </header>
 
-        {/* SEARCH CARD */}
-        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8">
+        {/* SEARCH */}
+        <div className="relative mb-8">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
             placeholder="Search by name, email, or company..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-[70px] px-6 border border-gray-300 bg-white rounded-xl text-[15px] outline-none focus:ring-2 focus:ring-[#0e2c1c]/20 transition"
+            className="w-full h-12 pl-11 pr-4 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0e2c1c]/10 outline-none transition-all shadow-sm"
           />
         </div>
 
-        {/* TABLE CARD */}
-        <div className="bg-white border border-gray-200 shadow-lg rounded-3xl overflow-hidden">
-          <div className="w-full overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-[#0e2c1c] text-left text-sm text-white">
-                <tr>
-                  <th className="p-5">Name</th>
-                  <th className="p-5">Company</th>
-                  <th className="p-5">Phone</th>
-                  <th className="p-5">Email</th>
-                  <th className="p-5 text-right">Edit</th>
-                  <th className="p-5 text-right">Delete</th>
+        {/* TABLE */}
+        <div className="bg-white border border-gray-100 shadow-md rounded-[24px] overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse min-w-[800px]">
+              <thead>
+                <tr className="bg-[#0e2c1c] text-white">
+                  <th className="p-5 text-left text-xs font-bold uppercase tracking-wider">Name</th>
+                  <th className="p-5 text-left text-xs font-bold uppercase tracking-wider">Company</th>
+                  <th className="p-5 text-left text-xs font-bold uppercase tracking-wider">Phone</th>
+                  <th className="p-5 text-left text-xs font-bold uppercase tracking-wider">Email</th>
+                  <th className="p-5 text-right text-xs font-bold uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {paginated.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="p-20 text-center text-gray-400">
-                      No clients found
+              <tbody className="divide-y divide-gray-50">
+                {paginated.map((client) => (
+                  <tr key={client._id} className="hover:bg-gray-50 transition-colors">
+                    <td className="p-5 text-sm font-bold text-gray-800">{client.name}</td>
+                    <td className="p-5 text-sm text-gray-600">{client.company || "-"}</td>
+                    <td className="p-5 text-sm text-gray-600">{client.phone || "-"}</td>
+                    <td className="p-5 text-sm text-gray-500">{client.email}</td>
+                    <td className="p-5">
+                      <div className="flex justify-end gap-2">
+                        <button onClick={() => router.push(`/admin/edit-client/${client._id}`)} className="p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Pencil size={16} /></button>
+                        <button onClick={() => setDeleteTarget(client)} className="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><Trash2 size={16} /></button>
+                      </div>
                     </td>
                   </tr>
-                ) : (
-                  paginated.map((client) => (
-                    <motion.tr
-                      key={client._id}
-                      whileHover={{ scale: 1.002 }}
-                      className="border-t hover:bg-gray-50 transition"
-                    >
-                      <td className="p-5 font-medium">{client.name}</td>
-                      <td className="p-5">{client.company || "-"}</td>
-                      <td className="p-5">{client.phone || "-"}</td>
-                      <td className="p-5 text-gray-600">{client.email}</td>
-
-                      {/* EDIT */}
-                      <td className="p-5 text-right ">
-                        <button
-                          onClick={() => router.push(`/admin/edit-client/${client._id}`)}
-                          className="cursor-pointer w-10 h-9 inline-flex items-center justify-center rounded-lg bg-blue-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
-                        >
-                          <Pencil size={15} />
-                        </button>
-                      </td>
-
-                      {/* DELETE */}
-                      <td className="p-5 text-right">
-                        <button
-                          onClick={() => setDeleteTarget(client)}
-                          className="cursor-pointer w-10 h-9 inline-flex items-center justify-center rounded-lg bg-red-600 text-white shadow hover:shadow-lg hover:scale-105 transition"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </td>
-                    </motion.tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
@@ -163,58 +128,24 @@ export default function ClientListPage() {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex justify-center gap-3 mt-10">
+          <div className="flex justify-center items-center gap-2 mt-10">
             {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i + 1)}
-                className={`px-4 py-2 rounded-lg transition ${
-                  page === i + 1
-                    ? "bg-[#0e2c1c] text-white shadow-lg"
-                    : "bg-white border border-gray-200 hover:bg-gray-50"
-                }`}
-              >
-                {i + 1}
-              </button>
+              <button key={i} onClick={() => { setPage(i + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${page === i + 1 ? "bg-[#0e2c1c] text-white scale-110 shadow-lg" : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"}`}>{i + 1}</button>
             ))}
           </div>
         )}
 
-        {/* DELETE CONFIRM POPUP */}
+        {/* DELETE MODAL */}
         <AnimatePresence>
           {deleteTarget && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4"
-            >
-              <motion.div
-                initial={{ scale: 0.7, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.7, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 180, damping: 18 }}
-                className="bg-white rounded-3xl p-8 w-full max-w-md shadow-xl text-center border border-gray-200"
-              >
-                <h2 className="text-xl font-bold text-[#0e2c1c] mb-4">
-                  Delete Client?
-                </h2>
-                <p className="text-gray-500 mb-6">
-                  Are you sure you want to delete client <span className="font-semibold">{deleteTarget.name}</span>?
-                </p>
-                <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={() => setDeleteTarget(null)}
-                    className="cursor-pointer px-6 py-3 rounded-xl bg-gray-300 text-gray-700 font-semibold hover:bg-gray-400 transition"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    className="cursor-pointer px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition"
-                  >
-                    Delete
-                  </button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-[99] px-4">
+              <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="bg-white rounded-[2rem] p-8 w-full max-w-sm shadow-2xl border border-gray-100 text-center">
+                <div className="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><Trash2 size={28} /></div>
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Are you sure?</h2>
+                <p className="text-gray-500 text-sm mb-8">Delete client &quot;{deleteTarget.name}&quot;?</p>
+                <div className="flex gap-3">
+                  <button onClick={() => setDeleteTarget(null)} className="flex-1 h-12 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200">Cancel</button>
+                  <button onClick={handleDelete} className="flex-1 h-12 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700">Delete</button>
                 </div>
               </motion.div>
             </motion.div>

@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AdminGuard from "@/components/AdminGuard";
-import { User, FileText, Image as ImageIcon, FileArchive, File, Download } from "lucide-react";
+import { User, FileText, Image as ImageIcon, FileArchive, File, Download, Mail } from "lucide-react";
 import NotificationIcon from "@/components/NotificationIcon";
 import { jwtDecode } from "jwt-decode";
 
@@ -13,28 +13,23 @@ export default function QuoteDetail() {
   const [quote, setQuote] = useState(null);
   const [adminId, setAdminId] = useState(null);
   const [error, setError] = useState(null);
-    const [downloadingFile, setDownloadingFile] = useState(null);
 
-  // 🔹 Is function ko pehle wale function se replace karein
-const handleDownload = async (fileUrl, originalName) => {
-  try {
-    
-    const response = await fetch(fileUrl);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = originalName; // ✅ Yeh browser ko force karega asli naam aur extension rakhne par
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    a.remove();
-  } catch (err) {
-    console.error("Download failed:", err);
-    // Fallback agar fetch block ho jaye cross-origin ki wajah se
-    window.open(fileUrl.replace("/upload/", "/upload/fl_attachment/"), "_blank");
-  }
-};
+  const handleDownload = async (fileUrl, originalName) => {
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = originalName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (err) {
+      window.open(fileUrl.replace("/upload/", "/upload/fl_attachment/"), "_blank");
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,143 +38,99 @@ const handleDownload = async (fileUrl, originalName) => {
       const decoded = jwtDecode(token);
       setAdminId(decoded.userId);
     } catch {}
-  }, []);
-
-  useEffect(() => {
-    if (!id) return;
-    const token = localStorage.getItem("token");
     
-    // Yahan route check karein jo aapki backend dynamic ID file se match kare
-    fetch(`/api/admin/quotes/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.message || "Failed to fetch quote details");
-        }
-        return res.json();
-      })
-      .then(data => setQuote(data))
-      .catch(err => {
-        console.error(err);
-        setError(err.message);
-      });
+    if (id) {
+      fetch(`/api/admin/quotes/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => res.json())
+        .then(data => setQuote(data))
+        .catch(err => setError(err.message));
+    }
   }, [id]);
 
-  // Extension ke mutabik Icon select karne ka function
   const getFileIcon = (fileName) => {
     if (!fileName) return <File size={18} className="text-gray-500" />;
     const ext = fileName.split('.').pop().toLowerCase();
-    
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) {
-      return <ImageIcon size={18} className="text-blue-500" />;
-    }
-    if (['pdf', 'doc', 'docx', 'txt', 'rtf'].includes(ext)) {
-      return <FileText size={18} className="text-red-500" />;
-    }
-    if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
-      return <FileArchive size={18} className="text-amber-500" />;
-    }
+    if (['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(ext)) return <ImageIcon size={18} className="text-blue-500" />;
+    if (['pdf', 'doc', 'docx', 'txt'].includes(ext)) return <FileText size={18} className="text-red-500" />;
+    if (['zip', 'rar', '7z'].includes(ext)) return <FileArchive size={18} className="text-amber-500" />;
     return <File size={18} className="text-gray-500" />;
   };
 
-  // Safe helper link generation original filename ke liye
-  const getDownloadLink = (file) => {
-    if (!file.cloudinaryUrl) return "#";
-    // fl_attachment ke sath original name force karne ke liye query param ya transformation use hota hai
-    const baseCleanUrl = file.cloudinaryUrl.replace("/upload/", "/upload/fl_attachment/");
-    return baseCleanUrl;
-  };
-
-  if (error) return <p className="p-10 text-red-600 font-semibold">Error: {error}</p>;
-  if (!quote) return <p className="p-10 text-gray-500 animate-pulse">Loading quote details...</p>;
+  if (error) return <p className="p-10 text-red-600">Error: {error}</p>;
+  if (!quote) return <p className="p-10 text-gray-500">Loading...</p>;
 
   const Field = ({ label, value, big = false }) => (
-    <div className="space-y-2">
-      <p className="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">{label}</p>
-      <div
-        style={{ cursor: "not-allowed" }}
-        className={`w-full flex items-start px-5 py-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-500 text-[15px] font-medium select-none opacity-70 ${big ? "min-h-[90px]" : "min-h-[60px]"}`}
-      >
-        {value || "-"}
+    <div className="flex flex-col gap-2">
+      <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{label}</label>
+      <div className={`w-full p-4 rounded-xl bg-gray-50 border border-gray-100 text-gray-700 text-sm font-medium ${big ? "h-32" : "h-12 flex items-center"}`}>
+        {value || "N/A"}
       </div>
     </div>
   );
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-white py-14 px-6 flex justify-center">
-        <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl space-y-6">
-
-          {/* HEADER */}
-          <div className="bg-white border border-gray-200 shadow-lg rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div>
-              <h1 className="text-3xl font-bold text-[#0e2c1c]">Quote Details</h1>
-              <p className="text-gray-500 text-sm mt-2">View client quote request & download files</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 px-5 py-3 border border-gray-200 bg-white rounded-xl shadow-sm">
-                <User size={18} className="text-gray-600" />
-                <span className="font-semibold text-gray-700">Admin</span>
+      <div className="min-h-screen py-15 px-4 sm:px-8 flex justify-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl space-y-8">
+          
+          {/* HEADER MATCHING ADD PORTFOLIO */}
+          <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 bg-[#0e2c1c] rounded-xl text-white hidden xs:flex shrink-0">
+                <Mail size={20} />
               </div>
-              {adminId && <NotificationIcon userId={adminId} />}
+              <div className="truncate">
+                <h1 className="text-xl sm:text-2xl font-bold text-[#0e2c1c] truncate">Quote Details</h1>
+                <p className="text-gray-500 text-xs sm:text-sm font-medium">View client request & files</p>
+              </div>
             </div>
-          </div>
 
-          {/* CLIENT INFO */}
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
+            <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 border-t sm:border-t-0 pt-3 sm:pt-0">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
+                  <User size={14} className="text-gray-600" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-gray-700 truncate">Admin</span>
+              </div>
+              <div className="shrink-0">{adminId && <NotificationIcon userId={adminId} />}</div>
+            </div>
+          </header>
+
+          {/* CONTENT CARDS */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
               <Field label="Full Name" value={quote.name} />
               <Field label="Email" value={quote.email} />
               <Field label="Phone" value={quote.phone} />
             </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-5">
-              <Field label="Company" value={quote.company || "N/A"} />
-              <Field label="Website" value={quote.website || "N/A"} />
-              <Field label="Deadline" value={quote.deadline || "N/A"} />
+            <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+              <Field label="Company" value={quote.company} />
+              <Field label="Website" value={quote.website} />
+              <Field label="Deadline" value={quote.deadline} />
             </div>
           </div>
 
-          {/* PROJECT DETAILS */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
             <Field label="Type of Work" value={quote.type} />
-            <Field label="Message / Requirements" value={quote.message || "No description"} big />
+            <Field label="Requirements" value={quote.message} big />
           </div>
 
-          {/* FILES */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
-            <h2 className="text-sm font-semibold text-gray-700">Uploaded Files</h2>
-
-            {!quote.fileNameArray || quote.fileNameArray.length === 0 ? (
-              <p className="text-gray-400 text-sm">No files uploaded</p>
+          {/* FILES SECTION */}
+          <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <h2 className="text-sm font-bold text-gray-700 uppercase mb-4">Uploaded Files</h2>
+            {!quote.fileNameArray?.length ? (
+              <p className="text-gray-400 text-sm italic">No files attached.</p>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="grid gap-3">
                 {quote.fileNameArray.map((file, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition"
-                  >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      {/* Dynamic Icon */}
-                      <div className="shrink-0">
-                        {getFileIcon(file.originalName)}
-                      </div>
-                      <span className="text-sm text-gray-700 font-medium truncate pr-4">
-                        {file.originalName}
-                      </span>
+                  <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      {getFileIcon(file.originalName)}
+                      <span className="text-sm font-semibold text-gray-700">{file.originalName}</span>
                     </div>
-
-                    {/* Purane <a> tag ko is <button> se replace karein */}
-<button
-  onClick={() => handleDownload(file.cloudinaryUrl, file.originalName)}
-  className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0e2c1c] text-white text-xs font-semibold shadow-md hover:bg-[#123825] transition-all cursor-pointer"
->
-  <Download size={13} />
-  Download
-</button>
+                    <button onClick={() => handleDownload(file.cloudinaryUrl, file.originalName)} className="flex items-center gap-2 px-4 py-2 bg-[#0e2c1c] text-white text-xs font-bold rounded-lg hover:bg-[#123825] transition">
+                      <Download size={14} /> Download
+                    </button>
                   </div>
                 ))}
               </div>
