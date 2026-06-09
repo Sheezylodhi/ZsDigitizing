@@ -2,10 +2,9 @@ import nodemailer from "nodemailer";
 
 export async function sendCredentials(email, username, password) {
   const transporter = nodemailer.createTransport({
-    // 'service: gmail' ko delete kar dein
-    host: process.env.SMTP_HOST, // smtp.hostinger.com
-    port: Number(process.env.SMTP_PORT), // 465
-    secure: true, 
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: true,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -13,10 +12,11 @@ export async function sendCredentials(email, username, password) {
   });
 
   try {
+    // 1. Client ko email bhejna (Jo aapne pehle banayi thi)
     await transporter.sendMail({
       from: `"ZS Digitizing" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: "Your Client Portal Access Details ",
+      subject: "Your Client Portal Access Details",
       html: `
         <div style="font-family:sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
   
@@ -102,10 +102,30 @@ export async function sendCredentials(email, username, password) {
 
 </div>
 </div>
+      `// Yahan aapka wahi purana HTML template rahega
+    });
+
+    // 2. Admin ko alert email bhejna
+    await transporter.sendMail({
+      from: `"System Alert" <${process.env.SMTP_USER}>`,
+      to: "info@zsdigitizing.com", // Admin ki email
+      subject: "🔔 New Client Registered Successfully",
+      html: `
+        <div style="font-family: sans-serif; border: 2px solid #0e2c1c; padding: 20px; border-radius: 10px;">
+          <h2 style="color: #0e2c1c;">New Client Account Details</h2>
+          <p>A new client account has been created on the system. Details are given below:</p>
+          <ul style="list-style: none; padding: 0;">
+            <li><b>Client Email:</b> ${email}</li>
+            <li><b>Username:</b> ${username}</li>
+            <li><b>Password:</b> ${password}</li>
+          </ul>
+          <p style="color: #666; font-size: 12px;">This email is only for admin alert.</p>
+        </div>
       `
     });
-    console.log("Credentials email sent to:", email);
+
+    console.log("Credentials sent to client and admin notification triggered.");
   } catch (error) {
-    console.error("Error sending credentials email:", error);
+    console.error("Error sending emails:", error);
   }
 }
