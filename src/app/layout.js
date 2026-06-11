@@ -32,10 +32,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* Google Site Verification */}
-        <meta
-          name="google-site-verification"
-          content="ynu-2uC5kMX8umxG4DlPxHalOFgXhvL-lFeuyrmfFFc"
-        />
+        <meta name="google-site-verification" content="ZJggTEfi7NE5KGQrfG9MVmxInllqpEZ6XZex3MOozz4" />
 
         {/* Schema for SEO */}
         <script type="application/ld+json">
