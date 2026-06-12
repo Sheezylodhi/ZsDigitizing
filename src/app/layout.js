@@ -1,6 +1,7 @@
 import "./globals.css";
 import VisitorTracker from "@/components/VisitorTracker";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Chat from "@/components/Chat";
 import Script from "next/script";
 
 export const metadata = {
@@ -65,6 +66,7 @@ export default function RootLayout({ children }) {
         <VisitorTracker />
         {children}
         <WhatsAppButton />
+           <Chat />
       </body>
     </html>
   );
