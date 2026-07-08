@@ -11,7 +11,7 @@ const services = [
     desc: "High-quality embroidery digitizing with clean stitches and fast delivery.",
   },
   {
-    id: "RastertoVector",
+    id: "rastertovector",
     title: "Vector Art",
     desc: "Raster to vector conversion for screen printing & branding.",
   },

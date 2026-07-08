@@ -15,7 +15,7 @@ const services = [
     img: "/images/embridorydigitizing1.webp",
   },
   {
-    id: "RastertoVector",
+    id: "rastertovector",
     title: "Raster To Vector",
     img: "/images/rastertovector.webp",
   },

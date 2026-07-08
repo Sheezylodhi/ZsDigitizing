@@ -13,15 +13,9 @@
     <priority>0.90</priority>
   </url>
 
-  <!-- Services Section (Home ke #services) -->
-  <url>
-    <loc>https://www.zsdigitizing.com/#services</loc>
-    <priority>0.90</priority>
-  </url>
-
   <!-- Individual Service Pages (Dynamic) -->
   <url>
-    <loc>https://www.zsdigitizing.com/services/RastertoVector</loc>
+    <loc>https://www.zsdigitizing.com/services/rastertovector</loc>
     <priority>0.80</priority>
   </url>
   <url>
@@ -50,15 +44,15 @@
     <priority>0.80</priority>
   </url>
    <url>
-    <loc>https://www.zsdigitizing.com/Terms</loc>
+    <loc>https://www.zsdigitizing.com/terms</loc>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://www.zsdigitizing.com/Login</loc>
+    <loc>https://www.zsdigitizing.com/login</loc>
     <priority>0.80</priority>
   </url>
    <url>
-    <loc>https://www.zsdigitizing.com/Register</loc>
+    <loc>https://www.zsdigitizing.com/register</loc>
     <priority>0.80</priority>
   </url>
 
