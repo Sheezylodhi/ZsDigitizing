@@ -13,6 +13,13 @@ import FreeTrialPopup from "@/components/FreeTrialPopup";
 import Footer from "@/components/Footer";
 
 
+export const metadata = {
+  title: "ZS Digitizing - Professional Embroidery Digitizing & Vector Services",
+  description: "ZS Digitizing offers professional embroidery digitizing, logo digitizing, and custom patches with fast turnaround, high quality, and affordable pricing worldwide.",
+  alternates: {
+    canonical: "https://www.zsdigitizing.com/",
+  },
+};
 
 
 export default function Home() {

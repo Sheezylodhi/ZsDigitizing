@@ -8,6 +8,18 @@ import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export async function generateMetadata({ params }) {
+  const { serviceId } = await params;
+  
+  return {
+    title: `${serviceId.replace(/-/g, ' ')} | ZS Digitizing`,
+    description: `Professional ${serviceId.replace(/-/g, ' ')} services by ZS Digitizing. High quality, fast turnaround, and affordable pricing.`,
+    alternates: {
+      canonical: `https://www.zsdigitizing.com/services/${serviceId}`,
+    },
+  };
+}
+
 const services = [
   {
     id: "embroidery-digitizing",

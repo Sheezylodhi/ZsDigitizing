@@ -8,7 +8,6 @@ export const metadata = {
   title: "ZS Digitizing  -  Embroidery Digitizing Services",
   description:
     "ZS Digitizing offers professional embroidery digitizing, logo digitizing, and custom patches with fast turnaround, high quality, and affordable pricing worldwide.",
-  alternates: { canonical: "https://www.zsdigitizing.com/" },
  icons: {
     icon: [
       { url: "/favicon.ico" }, // Legacy support

@@ -8,6 +8,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NextImage from "next/image";
 
+export const metadata = {
+  title: "Our Embroidery & Design Portfolio | ZS Digitizing",
+  description: "Explore our latest embroidery digitizing, vector conversion, and custom logo projects. See the quality of work ZS Digitizing delivers to clients worldwide.",
+  alternates: {
+    canonical: "https://www.zsdigitizing.com/portfolio",
+  },
+};
+
+
 if (typeof window !== "undefined") {
   Modal.setAppElement("body");
 }

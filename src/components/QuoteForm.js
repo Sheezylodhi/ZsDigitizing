@@ -68,7 +68,7 @@ export default function QuoteForm() {
         className="w-full max-w-3xl bg-white border border-gray-200 shadow-lg rounded-3xl p-10"
       >
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-[#0e2c1c]">Request a Quote</h2>
+          <h1 className="text-4xl font-bold text-[#0e2c1c]">Request a Quote</h1>
           <p className="text-gray-600 mt-2">
             Share your requirements and get an accurate quote for your project.
           </p>

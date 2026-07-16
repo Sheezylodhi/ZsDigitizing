@@ -6,6 +6,18 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 
+export const metadata = {
+  title: "Forgot Password | ZS Digitizing",
+  description: "Reset your password to regain access to your ZS Digitizing account.",
+  robots: {
+    index: false, 
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://www.zsdigitizing.com/forgot-password",
+  },
+};
+
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [showPopup, setShowPopup] = useState(false);

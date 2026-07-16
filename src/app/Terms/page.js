@@ -4,6 +4,14 @@ import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export const metadata = {
+  title: "Terms & Conditions | ZS Digitizing",
+  description: "Read the terms and conditions for using ZS Digitizing services, including payment terms, copyright policy, and our service guidelines.",
+  alternates: {
+    canonical: "https://www.zsdigitizing.com/terms",
+  },
+};
+
 export default function Terms() {
   return (
     <div className="flex flex-col min-h-screen w-full bg-gray-50">

@@ -8,6 +8,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import { useRouter } from "next/navigation";
 
+export const metadata = {
+  title: "Create Your Account | ZS Digitizing",
+  description: "Register to join ZS Digitizing and start your professional embroidery and digitizing projects.",
+  alternates: {
+    canonical: "https://www.zsdigitizing.com/register",
+  },
+};
+
 export default function RegisterPage() {
   const [form, setForm] = useState({
     name: "",
