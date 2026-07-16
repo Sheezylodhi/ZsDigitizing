@@ -1,4 +1,4 @@
-"use client";
+
 import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

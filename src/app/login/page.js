@@ -9,14 +9,6 @@ import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCheckCircle, FaTimesCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 
-export const metadata = {
-  title: "Login to Your Account | ZS Digitizing",
-  description: "Secure login to access your ZS Digitizing account, manage orders, and track your projects.",
-  alternates: {
-    canonical: "https://www.zsdigitizing.com/login",
-  },
-};
-
 function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
