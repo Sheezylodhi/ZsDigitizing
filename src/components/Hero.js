@@ -1,149 +1,107 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const words = [
-  "Embroidery Digitizing",
-  "Raster To Vector",
-  "Custom Patches",
-  "Embroidery Fixes",
-];
-
-const images = [
-  "/images/embridorydigitizing.webp",
-  "/images/rastertovector.webp",
-  "/images/custompatches.webp",
-  "/images/embridoryfixes1.webp",
+const slides = [
+  { id: 1, image: "/images/ourservices.jpg" },
+  { id: 2, image: "/images/rastertovector.png" },
+  { id: 3, image: "/images/custompatches.png" },
+  { id: 4, image: "/images/embridorydigitizing.png" },
 ];
 
 export default function Hero() {
-  const [text, setText] = useState("");
   const [index, setIndex] = useState(0);
-  const [subIndex, setSubIndex] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-  const [hold, setHold] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
+  // Automatic Slider Logic - Ab yeh hamesha chalta rahega
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 5000); // Har 5 seconds baad slide change hogi
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  // Next Slide function with temporary pause on click
+  const nextSlide = useCallback(() => {
+    setIndex((prev) => (prev + 1) % slides.length);
+    setIsPaused(true);
+    const resumeTimer = setTimeout(() => setIsPaused(false), 8000); // 8 seconds baad autoplay resume ho jayega
+    return () => clearTimeout(resumeTimer);
   }, []);
 
-  useEffect(() => {
-    const currentWord = words[index];
-    const timeout = setTimeout(() => {
-      if (hold) return;
-
-      if (!deleting && subIndex < currentWord.length) {
-        setSubIndex((prev) => prev + 1);
-      } else if (!deleting && subIndex === currentWord.length) {
-        setHold(true);
-        setTimeout(() => {
-          setHold(false);
-          setDeleting(true);
-        }, 2000);
-      } else if (deleting && subIndex > 0) {
-        setSubIndex((prev) => prev - 1);
-      } else if (deleting && subIndex === 0) {
-        setDeleting(false);
-        setIndex((prev) => (prev + 1) % words.length);
-        setAnimKey(Math.random());
-      }
-
-      setText(currentWord.substring(0, subIndex));
-    }, deleting ? 50 : 100);
-
-    return () => clearTimeout(timeout);
-  }, [subIndex, index, deleting, hold]);
-
-  const nextSlide = useCallback(() => setIndex((prev) => (prev + 1) % words.length), []);
-  const prevSlide = useCallback(() => setIndex((prev) => (prev - 1 + words.length) % words.length), []);
-
-  // Prefetch next/prev images safely
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const next = (index + 1) % images.length;
-    const prev = (index - 1 + images.length) % images.length;
-    [next, prev].forEach((i) => {
-      const img = new window.Image();
-      img.src = images[i];
-    });
-  }, [index]);
+  // Previous Slide function with temporary pause on click
+  const prevSlide = useCallback(() => {
+    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+    setIsPaused(true);
+    const resumeTimer = setTimeout(() => setIsPaused(false), 8000);
+    return () => clearTimeout(resumeTimer);
+  }, []);
 
   return (
-    <section className="pt-32 md:pt-40 pb-24 bg-[#f7f9f8] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
-        {/* Typewriter */}
-        <motion.div
-          initial={{ opacity: 0, x: isMobile ? 0 : -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="z-20"
-        >
-          <h1 className="text-3xl md:text-5xl font-bold text-[#1e4030] leading-tight mb-5">
-  Embroidery Digitizing Services
-  <span className="block min-h-[1.2em] h-auto relative mt-2 text-green-600 break-words">
-    <span className="inline">{text}</span>
-    <span className="ml-1 animate-pulse border-r-4 border-green-600">&nbsp;</span>
-  </span>
-</h1>
-
-          <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-8 max-w-lg">
-            Precision digital embroidery services with fast delivery, clean stitches,
-            and competitive pricing trusted by global apparel brands and studios.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <a href="/quote" className="px-6 md:px-8 py-3 rounded-lg bg-[#1e4030] text-white font-semibold shadow hover:bg-green-800 transition text-sm md:text-base">
-              Get a Quote
-            </a>
-            <a href="#services" className="px-6 md:px-8 py-3 rounded-lg border border-[#1e4030] text-[#1e4030] font-semibold shadow hover:bg-[#1e4030] hover:text-white transition text-sm md:text-base">
-              Our Services
-            </a>
-          </div>
-        </motion.div>
-
-        {/* Hero Image */}
-        <motion.div
-          key={animKey}
-          initial={{ opacity: 0, x: isMobile ? 0 : 30, scale: 0.96 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.7 }}
-          className="relative flex justify-center items-center"
-        >
-          <div className="absolute -top-10 -right-10 w-48 h-48 md:w-64 md:h-64 bg-green-200 rounded-full blur-3xl opacity-40 -z-10 pointer-events-none"></div>
-
-          <div className="relative w-full max-w-[1019px] aspect-[1019/859]">
+    <section className="relative w-full h-[75vh] md:h-[85vh] mt-0 md:mt-31 overflow-hidden bg-black flex items-center justify-center">
+      
+      {/* Background Image Slider with Crossfade Animation */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 1.03 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 w-full h-full flex items-center justify-center"
+          >
             <Image
-              src={images[index]}
-              alt={words[index]}
+              src={slides[index].image}
+              alt={`Slide ${index + 1}`}
               fill
-              className="shadow-2xl object-cover"
-              loading={index === 0 ? "eager" : "lazy"}
+              priority={index === 0}
+              className="object-contain md:object-cover object-center"
             />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-            <button
-              onClick={prevSlide}
-              className="absolute top-1/2 -left-2 md:-left-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
-            >
-              <ChevronLeft size={20} className="text-[#1e4030] md:w-6 md:h-6" />
-            </button>
+      {/* Navigation Left Button */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white p-3 md:p-4 rounded-full z-20 transition border border-white/20 cursor-pointer shadow-2xl"
+        aria-label="Previous Slide"
+      >
+        <ChevronLeft size={24} className="md:w-7 md:h-7" />
+      </button>
 
-            <button
-              onClick={nextSlide}
-              className="absolute top-1/2 -right-2 md:-right-8 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full z-20 transition"
-            >
-              <ChevronRight size={20} className="text-[#1e4030] md:w-6 md:h-6" />
-            </button>
-          </div>
-        </motion.div>
+      {/* Navigation Right Button */}
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white p-3 md:p-4 rounded-full z-20 transition border border-white/20 cursor-pointer shadow-2xl"
+        aria-label="Next Slide"
+      >
+        <ChevronRight size={24} className="md:w-7 md:h-7" />
+      </button>
+
+      {/* Pagination Dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => {
+              setIndex(i);
+              setIsPaused(true);
+              setTimeout(() => setIsPaused(false), 8000);
+            }}
+            className={`transition-all duration-300 rounded-full cursor-pointer ${
+              index === i ? "w-6 h-2 bg-green-500" : "w-2 h-2 bg-white/60 hover:bg-white"
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
