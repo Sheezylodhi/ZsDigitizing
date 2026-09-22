@@ -37,22 +37,26 @@ export default function Navbar() {
     <header
       className="
         fixed
-        top-0 md:top-9
+        top-[72px]
+        sm:top-9
         left-0
         w-full
         h-20
         z-50
         bg-[#0e2c1c]
         shadow-[0_8px_35px_rgba(7,26,16,0.18)]
-        border-b border-white/[0.08]
+        border-b
+        border-white/[0.08]
       "
     >
       {/* Very subtle top light */}
       <div
         className="
           absolute
-          top-0 left-0
-          w-full h-px
+          top-0
+          left-0
+          w-full
+          h-px
           bg-gradient-to-r
           from-transparent
           via-[#b7d0c0]/40
@@ -60,13 +64,25 @@ export default function Navbar() {
         "
       />
 
-      <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div
+        className="
+          max-w-7xl
+          mx-auto
+          px-4
+          h-full
+          flex
+          items-center
+          justify-between
+        "
+      >
         {/* ================= LOGO ================= */}
+
         <Link
           href="/"
           className="
             relative
-            flex items-center
+            flex
+            items-center
             h-full
             group
             shrink-0
@@ -93,7 +109,8 @@ export default function Navbar() {
               absolute
               left-5
               bottom-2
-              w-16 h-3
+              w-16
+              h-3
               bg-[#b7d0c0]/10
               blur-xl
               rounded-full
@@ -103,16 +120,19 @@ export default function Navbar() {
         </Link>
 
         {/* ================= DESKTOP MENU ================= */}
+
         <nav
           className="
-            hidden lg:flex
+            hidden
+            lg:flex
             items-center
             gap-1
             ml-auto
             mr-8
             p-1
             rounded-full
-            border border-white/[0.07]
+            border
+            border-white/[0.07]
             bg-white/[0.035]
             backdrop-blur-md
           "
@@ -150,7 +170,8 @@ export default function Navbar() {
                       inset-0
                       rounded-full
                       bg-white/[0.10]
-                      border border-white/[0.08]
+                      border
+                      border-white/[0.08]
                     "
                     transition={{
                       type: "spring",
@@ -176,7 +197,8 @@ export default function Navbar() {
 
                 <span
                   className={`
-                    relative z-10
+                    relative
+                    z-10
                     ${
                       active
                         ? "text-white"
@@ -195,7 +217,8 @@ export default function Navbar() {
                       bottom-1
                       left-1/2
                       -translate-x-1/2
-                      w-1 h-1
+                      w-1
+                      h-1
                       rounded-full
                       bg-[#b7d0c0]
                       shadow-[0_0_8px_rgba(183,208,192,0.8)]
@@ -208,6 +231,7 @@ export default function Navbar() {
         </nav>
 
         {/* ================= DESKTOP LOGIN ================= */}
+
         <div className="hidden lg:flex items-center">
           <Link href="/login">
             <motion.div
@@ -243,7 +267,8 @@ export default function Navbar() {
                 size={18}
                 strokeWidth={1.8}
                 className="
-                  relative z-10
+                  relative
+                  z-10
                   transition-transform
                   duration-300
                   group-hover:scale-110
@@ -280,6 +305,7 @@ export default function Navbar() {
         </div>
 
         {/* ================= MOBILE CONTROLS ================= */}
+
         <div className="lg:hidden flex items-center gap-2">
           {/* Login */}
           <Link href="/login">
@@ -324,18 +350,36 @@ export default function Navbar() {
               {isOpen ? (
                 <motion.div
                   key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
+                  initial={{
+                    rotate: -90,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    rotate: 0,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    rotate: 90,
+                    opacity: 0,
+                  }}
                 >
                   <X size={19} />
                 </motion.div>
               ) : (
                 <motion.div
                   key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
+                  initial={{
+                    rotate: 90,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    rotate: 0,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    rotate: -90,
+                    opacity: 0,
+                  }}
                 >
                   <Menu size={19} />
                 </motion.div>
@@ -346,6 +390,7 @@ export default function Navbar() {
       </div>
 
       {/* ================= MOBILE MENU ================= */}
+
       <AnimatePresence>
         {isOpen && (
           <>
@@ -358,7 +403,8 @@ export default function Navbar() {
               className="
                 fixed
                 inset-0
-                top-20
+                top-[152px]
+                sm:top-[116px]
                 bg-black/30
                 backdrop-blur-[2px]
                 lg:hidden

@@ -68,12 +68,7 @@ export default function FinalCTA() {
             />
           </Link>
 
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-7 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/10 sm:px-8"
-          >
-            Contact Us
-          </Link>
+          
         </div>
 
         {/* Bottom line */}

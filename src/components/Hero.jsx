@@ -121,7 +121,7 @@ export default function Hero() {
       {/* =====================================================
           MAIN CONTENT
       ====================================================== */}
-      <div className="relative mx-auto max-w-[1440px] px-6 pb-10 pt-8 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-6 pb-10 pt-[180px] sm:pt-[140px] lg:px-10">
         {/* ===================================================
             TOP STATUS BAR
         ==================================================== */}
@@ -221,7 +221,7 @@ export default function Hero() {
               </Link>
 
               <Link
-                href="/services"
+                href="/#services"
                 className="group inline-flex items-center gap-2 border border-slate-900/[0.1] bg-white/50 px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-600 backdrop-blur-sm transition hover:border-slate-900/20 hover:bg-white hover:text-slate-950"
               >
                 Explore Services

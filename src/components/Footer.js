@@ -19,10 +19,8 @@ export default function Footer() {
   const services = [
     "Embroidery Digitizing",
     "Vector Art",
-    "3D Puff Embroidery",
     "Custom Patches",
-    "Logo Digitizing",
-    "Applique Digitizing",
+
   ];
 
   const payments = [
@@ -276,7 +274,7 @@ export default function Footer() {
                 mt-5
                 text-sm
                 leading-7
-                text-white/55
+                text-white
                 max-w-sm
               "
             >
@@ -422,7 +420,7 @@ export default function Footer() {
                       items-center
                       gap-2
                       text-sm
-                      text-white/50
+                      text-white
                       hover:text-white
                       transition-colors
                       duration-300
@@ -475,7 +473,7 @@ export default function Footer() {
                       items-center
                       gap-2
                       text-sm
-                      text-white/50
+                      text-white
                       hover:text-white
                       transition-colors
                       duration-300
@@ -527,7 +525,7 @@ export default function Footer() {
                   items-start
                   gap-3
                   text-sm
-                  text-white/55
+                  text-white
                   hover:text-white
                   transition-colors
                 "
@@ -556,14 +554,14 @@ export default function Footer() {
 
               {/* Phone */}
               <a
-                href="tel:+10000000000"
+                href="tel:+1 727 761 7877"
                 className="
                   group
                   flex
                   items-start
                   gap-3
                   text-sm
-                  text-white/55
+                  text-white
                   hover:text-white
                   transition-colors
                 "
@@ -602,7 +600,7 @@ export default function Footer() {
                   gap-3
                   text-sm
                   leading-6
-                  text-white/55
+                  text-white
                   hover:text-white
                   transition-colors
                 "
@@ -738,7 +736,7 @@ export default function Footer() {
             "
           >
             {/* Copyright */}
-            <p className="text-[11px] text-white/35 text-center md:text-left">
+            <p className="text-[11px] text-white text-center md:text-left">
               © {new Date().getFullYear()} ZS Digitizing. All rights reserved.
             </p>
 
@@ -748,7 +746,7 @@ export default function Footer() {
                 href="/privacy"
                 className="
                   text-[11px]
-                  text-white/40
+                  text-white
                   hover:text-white
                   transition-colors
                 "
@@ -759,10 +757,10 @@ export default function Footer() {
               <span className="w-1 h-1 rounded-full bg-white/15" />
 
               <Link
-                href="/Terms"
+                href="/terms"
                 className="
                   text-[11px]
-                  text-white/40
+                  text-white
                   hover:text-white
                   transition-colors
                 "
@@ -782,7 +780,7 @@ export default function Footer() {
                 items-center
                 gap-1.5
                 text-[11px]
-                text-white/35
+                text-white
                 hover:text-white
                 transition-colors
               "
