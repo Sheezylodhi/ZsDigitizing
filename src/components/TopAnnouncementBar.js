@@ -1,34 +1,83 @@
 // TopAnnouncementBar.js
 "use client";
 
-import { motion } from "framer-motion";
+import { Mail, Phone } from "lucide-react";
 
 export default function TopAnnouncementBar() {
-  const text = "Bulk Order? Get Max Discounts & Exclusive Deals – Contact ZS digitizing Now! ";
-  const repeatedText = Array(10).fill(text);
-
   return (
     <div
       className="
-        w-full bg-black text-white overflow-hidden py-2 px-4
-        fixed top-0 left-0 z-50
+        fixed top-0 left-0
+        w-full
+        h-9
+        z-[60]
+        bg-white
+        border-b border-[#e5ebe7]
+        flex items-center
       "
     >
-      <motion.div
-        className="flex"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          repeat: Infinity,
-          duration: 20,
-          ease: "linear",
-        }}
+      <div
+        className="
+          w-full
+          max-w-7xl
+          mx-auto
+          px-4
+          flex items-center justify-center
+          gap-5
+          text-[#0e2c1c]
+        "
       >
-        {repeatedText.map((t, idx) => (
-          <span key={idx} className="whitespace-nowrap mr-16">
-            {t}
+        {/* Announcement */}
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#315c45]" />
+
+          <span className="text-[11px] sm:text-[12px] font-semibold tracking-wide">
+            Bulk Order? Get Max Discounts & Exclusive Deals – Contact ZS digitizing Now!
           </span>
-        ))}
-      </motion.div>
+        </div>
+
+        {/* Divider */}
+        <div className="hidden sm:block w-px h-4 bg-[#dce8df]" />
+
+        {/* Email */}
+        <a
+          href="mailto:info@zsdigitizing.com"
+          className="
+            hidden sm:flex
+            items-center gap-1.5
+            whitespace-nowrap
+            text-[11px]
+            font-medium
+            text-[#315c45]
+            hover:text-[#0e2c1c]
+            transition-colors
+          "
+        >
+          <Mail size={13} />
+          info@zsdigitizing.com
+        </a>
+
+        {/* Divider */}
+        <div className="hidden md:block w-px h-4 bg-[#dce8df]" />
+
+        {/* Phone */}
+        <a
+          href="tel:+1 727 761 7877"
+          className="
+            hidden md:flex
+            items-center gap-1.5
+            whitespace-nowrap
+            text-[11px]
+            font-medium
+            text-[#315c45]
+            hover:text-[#0e2c1c]
+            transition-colors
+          "
+        >
+          <Phone size={13} />
+          +1 727 761 7877
+        </a>
+      </div>
     </div>
   );
 }

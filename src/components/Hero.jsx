@@ -171,18 +171,18 @@ export default function Hero() {
             </div>
 
             {/* Heading */}
-            <h1 className="max-w-[700px] text-[52px] font-black leading-[0.94] tracking-[-0.055em] text-slate-950 sm:text-[64px] lg:text-[76px]">
+            <h1 className="max-w-[700px] text-[52px] font-black leading-[0.94] tracking-[-0.055em] text-[#0e2c1c] sm:text-[64px] lg:text-[76px]">
               Your Design.
 
               <br />
 
-              <span className="text-slate-300">
+              <span className="text-slate-200">
                 Ready to Stitch.
               </span>
 
               <br />
 
-              <span className="text-emerald-500">
+              <span className="text-[#0e2c1c]">
                 Made for Your Brand.
               </span>
             </h1>

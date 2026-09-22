@@ -2,23 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  FileText,
   Sparkles,
   Scissors,
   Layers3,
   Zap,
+  PenTool,
+  FileOutput,
 } from "lucide-react";
 
 const stitchValues = [8426, 8731, 9104, 9478, 9862, 10214];
-
-const fileNames = [
-  "ZS_LOGO.EMB",
-  "CUSTOM_LOGO.DST",
-  "BRAND_MARK.PES",
-  "PATCH_DESIGN.PDF",
-  "CAP_FRONT.EMB",
-  "APPAREL_LOGO.DST",
-];
 
 const services = [
   "Embroidery Digitizing",
@@ -37,23 +29,21 @@ function formatNumber(value) {
 
 export default function EmbroideryStage() {
   const [stitchIndex, setStitchIndex] = useState(0);
-  const [fileIndex, setFileIndex] = useState(0);
   const [serviceIndex, setServiceIndex] = useState(0);
-
-  const [displayStitches, setDisplayStitches] = useState(
-    stitchValues[0]
-  );
-
+  const [displayStitches, setDisplayStitches] = useState(0);
   const [progress, setProgress] = useState(82);
   const [hovered, setHovered] = useState(false);
 
   const targetStitches = stitchValues[stitchIndex];
+  const currentService = services[serviceIndex];
+
+  /* =========================================================
+     ROTATING DATA
+  ========================================================= */
 
   useEffect(() => {
     const interval = setInterval(() => {
       setStitchIndex((prev) => (prev + 1) % stitchValues.length);
-
-      setFileIndex((prev) => (prev + 1) % fileNames.length);
 
       setServiceIndex((prev) => (prev + 1) % services.length);
 
@@ -61,15 +51,22 @@ export default function EmbroideryStage() {
         const next = prev + 4;
         return next > 98 ? 78 : next;
       });
-    }, 2800);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
+  /* =========================================================
+     STITCH COUNT
+     Always starts from 0 on first render.
+     Then smoothly counts to target.
+  ========================================================= */
+
   useEffect(() => {
     const start = displayStitches;
     const end = targetStitches;
-    const duration = 900;
+
+    const duration = 1100;
     const startTime = performance.now();
 
     let frame;
@@ -95,9 +92,10 @@ export default function EmbroideryStage() {
     return () => cancelAnimationFrame(frame);
   }, [targetStitches]);
 
-  /*
-   * Create actual stitch marks around the embroidery circle.
-   */
+  /* =========================================================
+     STITCH MARKS
+  ========================================================= */
+
   const stitches = useMemo(() => {
     return Array.from({ length: 72 }, (_, index) => {
       const angle = (index / 72) * 360;
@@ -111,12 +109,10 @@ export default function EmbroideryStage() {
     });
   }, [progress]);
 
-  const currentFile = fileNames[fileIndex];
-  const extension = currentFile.split(".")[1];
+  /* =========================================================
+     PROGRESS ARC
+  ========================================================= */
 
-  /*
-   * SVG completion arc
-   */
   const radius = 202;
   const circumference = 2 * Math.PI * radius;
 
@@ -124,19 +120,18 @@ export default function EmbroideryStage() {
     circumference - (progress / 100) * circumference;
 
   return (
-    <div
-      className="relative flex min-h-[580px] w-full items-center justify-center lg:min-h-[680px]"
+    <section
+      aria-label="Embroidery digitizing services"
+      className="relative flex min-h-[580px] w-full items-center justify-center overflow-hidden lg:min-h-[680px]"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {/* =====================================================
           AMBIENT LIGHT
       ====================================================== */}
+
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-100/40 blur-[100px]" />
 
-      {/* =====================================================
-          BACKGROUND RINGS
-      ====================================================== */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-100" />
 
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[470px] w-[470px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-slate-100/80" />
@@ -144,6 +139,7 @@ export default function EmbroideryStage() {
       {/* =====================================================
           MAIN COMPOSITION
       ====================================================== */}
+
       <div
         className={`relative h-[520px] w-[520px] max-w-[92vw] transition-transform duration-700 ease-out ${
           hovered ? "-translate-y-1" : ""
@@ -152,11 +148,12 @@ export default function EmbroideryStage() {
         {/* =====================================================
             OUTER COMPLETION ARC
         ====================================================== */}
+
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
           viewBox="0 0 520 520"
+          aria-hidden="true"
         >
-          {/* Base */}
           <circle
             cx="260"
             cy="260"
@@ -166,7 +163,6 @@ export default function EmbroideryStage() {
             strokeWidth="2"
           />
 
-          {/* Progress */}
           <circle
             cx="260"
             cy="260"
@@ -182,8 +178,9 @@ export default function EmbroideryStage() {
         </svg>
 
         {/* =====================================================
-            ROTATING THREAD RING
+            ROTATING THREAD RINGS
         ====================================================== */}
+
         <div className="absolute inset-[48px] animate-[spin_35s_linear_infinite] rounded-full border border-dashed border-emerald-200/70" />
 
         <div className="absolute inset-[65px] animate-[spinReverse_24s_linear_infinite] rounded-full border border-slate-200/80" />
@@ -191,6 +188,7 @@ export default function EmbroideryStage() {
         {/* =====================================================
             ACTUAL STITCHES
         ====================================================== */}
+
         <div className="absolute inset-[30px] animate-[spin_45s_linear_infinite]">
           {stitches.map((stitch, index) => (
             <span
@@ -211,9 +209,11 @@ export default function EmbroideryStage() {
         {/* =====================================================
             MOVING THREAD TRAIL
         ====================================================== */}
+
         <svg
           className="pointer-events-none absolute inset-[75px] h-[370px] w-[370px] animate-[spinReverse_18s_linear_infinite]"
           viewBox="0 0 370 370"
+          aria-hidden="true"
         >
           <defs>
             <linearGradient
@@ -264,6 +264,7 @@ export default function EmbroideryStage() {
         {/* =====================================================
             MAIN FABRIC
         ====================================================== */}
+
         <div
           className={`absolute left-1/2 top-1/2 h-[315px] w-[315px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_30px_80px_rgba(15,23,42,0.12)] transition-transform duration-700 ${
             hovered ? "scale-[1.015]" : ""
@@ -292,17 +293,17 @@ export default function EmbroideryStage() {
             }}
           />
 
-          {/* Green inner embroidery border */}
+          {/* Green embroidery borders */}
           <div className="absolute inset-[15px] rounded-full border border-dashed border-emerald-400/60" />
 
           <div className="absolute inset-[27px] rounded-full border border-slate-100" />
 
-          {/* Soft center */}
           <div className="absolute inset-[40px] rounded-full bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.09),transparent_65%)]" />
 
           {/* =================================================
               LOGO
           ================================================== */}
+
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative">
               <div className="absolute inset-0 scale-125 rounded-full bg-emerald-100/30 blur-3xl" />
@@ -327,21 +328,17 @@ export default function EmbroideryStage() {
         {/* =====================================================
             NEEDLE
         ====================================================== */}
+
         <div className="absolute left-1/2 top-[15px] -translate-x-1/2">
           <div className="relative">
-            {/* Needle body */}
             <div className="absolute left-1/2 top-0 h-[72px] w-[2px] -translate-x-1/2 bg-slate-300" />
 
-            {/* Needle head */}
             <div className="h-[11px] w-[25px] rounded-full border border-slate-300 bg-white shadow-sm" />
 
-            {/* Needle point */}
             <div className="absolute left-1/2 top-[62px] h-[14px] w-[1px] -translate-x-1/2 bg-emerald-500 animate-[needle_2.8s_ease-in-out_infinite]" />
 
-            {/* Thread */}
             <div className="absolute left-1/2 top-[72px] h-[92px] w-px -translate-x-1/2 bg-emerald-400/60 animate-[thread_2.8s_ease-in-out_infinite]" />
 
-            {/* Stitch sparks */}
             <div className="absolute left-1/2 top-[158px] -translate-x-1/2">
               <span className="absolute h-1 w-1 rounded-full bg-emerald-500 animate-[spark_2.8s_ease-out_infinite]" />
 
@@ -353,8 +350,9 @@ export default function EmbroideryStage() {
         </div>
 
         {/* =====================================================
-            TOP LEFT — LIVE PROJECT
+            TOP LEFT — SERVICE
         ====================================================== */}
+
         <div className="absolute left-[3px] top-[105px]">
           <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.22em] text-slate-400">
             <span className="relative flex h-2 w-2">
@@ -363,50 +361,46 @@ export default function EmbroideryStage() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
 
-            Live Project
+            Live Craft
           </div>
 
+          {/* Animated service */}
           <div
-            key={currentFile}
-            className="mt-2 flex items-center gap-2 animate-[fileIn_600ms_ease-out]"
+            key={currentService}
+            className="mt-3 flex items-center gap-2 animate-[serviceIn_700ms_cubic-bezier(.22,1,.36,1)]"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-              <FileText className="h-3.5 w-3.5 text-emerald-500" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+              <PenTool className="h-3.5 w-3.5 text-emerald-500" />
             </div>
 
             <div>
               <div className="text-[11px] font-black tracking-wide text-slate-800">
-                {currentFile.split(".")[0]}
-
-                <span className="ml-1 text-emerald-500">
-                  .{extension}
-                </span>
+                {currentService}
               </div>
 
-              <div className="mt-0.5 text-[8px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                Custom Logo
-              </div>
+              <div className="mt-1 h-px w-10 bg-emerald-400 transition-all duration-500" />
             </div>
           </div>
         </div>
 
         {/* =====================================================
-            TOP RIGHT — OUTPUT FILES
+            TOP RIGHT — OUTPUT FORMATS
         ====================================================== */}
+
         <div className="absolute right-[5px] top-[112px] text-right">
-          <div className="text-[8px] font-bold uppercase tracking-[0.22em] text-slate-400">
-            Output Files
+          <div className="flex items-center justify-end gap-2 text-[8px] font-bold uppercase tracking-[0.22em] text-slate-400">
+            <FileOutput className="h-3 w-3 text-emerald-500" />
+            Output Formats
           </div>
 
-          <div className="mt-2 flex gap-1.5">
-            {formats.map((format) => (
+          <div className="mt-3 flex gap-1.5">
+            {formats.map((format, index) => (
               <span
                 key={format}
-                className={`rounded-md border px-2 py-1 text-[8px] font-black tracking-wider transition-all duration-500 ${
-                  format === extension
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-600 shadow-sm"
-                    : "border-slate-100 bg-white text-slate-300"
-                }`}
+                className="format-chip rounded-md border border-slate-100 bg-white px-2 py-1 text-[8px] font-black tracking-wider text-slate-400 shadow-sm"
+                style={{
+                  animationDelay: `${index * 180}ms`,
+                }}
               >
                 {format}
               </span>
@@ -415,21 +409,22 @@ export default function EmbroideryStage() {
         </div>
 
         {/* =====================================================
-            BOTTOM LEFT — EMBROIDERY DIGITIZING
+            BOTTOM LEFT — SERVICE DETAIL
         ====================================================== */}
+
         <div className="absolute bottom-[91px] left-[3px]">
           <div className="flex items-center gap-2 text-[8px] font-bold uppercase tracking-[0.22em] text-slate-400">
             <Sparkles className="h-3 w-3 text-emerald-500" />
 
-            Embroidery Digitizing
+            Precision Service
           </div>
 
           <div
-            key={services[serviceIndex]}
-            className="mt-2 max-w-[175px] animate-[serviceIn_650ms_ease-out]"
+            key={`detail-${currentService}`}
+            className="mt-2 max-w-[175px] animate-[serviceIn_700ms_ease-out]"
           >
             <div className="text-[14px] font-black tracking-tight text-slate-900">
-              {services[serviceIndex]}
+              {currentService}
             </div>
 
             <div className="mt-1 h-px w-12 bg-emerald-400" />
@@ -439,6 +434,7 @@ export default function EmbroideryStage() {
         {/* =====================================================
             BOTTOM RIGHT — STITCH COUNT
         ====================================================== */}
+
         <div className="absolute bottom-[83px] right-[3px] text-right">
           <div className="flex items-center justify-end gap-2 text-[8px] font-bold uppercase tracking-[0.22em] text-slate-400">
             Stitch Count
@@ -446,9 +442,10 @@ export default function EmbroideryStage() {
             <Scissors className="h-3 w-3 text-emerald-500" />
           </div>
 
+          {/* Starts at 0, then counts up */}
           <div
             key={targetStitches}
-            className="mt-1 text-[25px] font-black tracking-[-0.04em] text-slate-900 animate-[numberIn_500ms_ease-out]"
+            className="mt-1 text-[25px] font-black tracking-[-0.04em] text-slate-900 tabular-nums animate-[numberIn_500ms_ease-out]"
           >
             {formatNumber(displayStitches)}
           </div>
@@ -459,8 +456,9 @@ export default function EmbroideryStage() {
         </div>
 
         {/* =====================================================
-            BOTTOM PROGRESS — READY FOR PRODUCTION
+            BOTTOM PROGRESS
         ====================================================== */}
+
         <div className="absolute bottom-[28px] left-1/2 w-[210px] -translate-x-1/2">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-400">
@@ -485,24 +483,24 @@ export default function EmbroideryStage() {
         {/* =====================================================
             MICRO LABELS
         ====================================================== */}
+
         <div className="absolute bottom-[1px] left-1/2 flex -translate-x-1/2 items-center gap-5 whitespace-nowrap">
           <span className="flex items-center gap-1 text-[7px] font-bold uppercase tracking-[0.2em] text-slate-300">
             <Layers3 className="h-2.5 w-2.5" />
-
             Thread Mapping
           </span>
 
           <span className="flex items-center gap-1 text-[7px] font-bold uppercase tracking-[0.2em] text-slate-300">
             <Zap className="h-2.5 w-2.5 text-emerald-400" />
-
-            Ready for Production
+            Production Ready
           </span>
         </div>
       </div>
 
       {/* =====================================================
-          CSS
+          ANIMATIONS
       ====================================================== */}
+
       <style jsx>{`
         @keyframes spin {
           from {
@@ -630,27 +628,21 @@ export default function EmbroideryStage() {
           }
         }
 
-        @keyframes fileIn {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
         @keyframes serviceIn {
-          from {
+          0% {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(10px) scale(0.97);
+            filter: blur(3px);
           }
 
-          to {
+          55% {
             opacity: 1;
-            transform: translateY(0);
+            filter: blur(0);
+          }
+
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
           }
         }
 
@@ -665,7 +657,38 @@ export default function EmbroideryStage() {
             transform: translateY(0);
           }
         }
+
+        /*
+          Ultra-smooth output format animation
+        */
+        .format-chip {
+          animation: formatPulse 2.8s ease-in-out infinite;
+          will-change: transform, opacity;
+        }
+
+        @keyframes formatPulse {
+          0%,
+          100% {
+            transform: translateY(0);
+            opacity: 0.55;
+          }
+
+          50% {
+            transform: translateY(-3px);
+            opacity: 1;
+          }
+        }
+
+        /*
+          Accessibility:
+          Respect users who prefer reduced motion.
+        */
+        @media (prefers-reduced-motion: reduce) {
+          .format-chip {
+            animation: none;
+          }
+        }
       `}</style>
-    </div>
+    </section>
   );
 }

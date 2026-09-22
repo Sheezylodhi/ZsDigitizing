@@ -8,6 +8,7 @@ import Pricing from "@/components/Pricing";
 import HowItWorksPage from "@/components/how-it-works";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
+import FinalCTA from "@/components/FinalCTA";
 
 import Footer from "@/components/Footer";
 
@@ -39,6 +40,7 @@ export default function Home() {
       <HowItWorksPage />
       <Testimonials />
       <FAQ/>
+      <FinalCTA/>
         <Footer />
 
 
