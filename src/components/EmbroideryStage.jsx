@@ -309,7 +309,7 @@ export default function EmbroideryStage() {
               <div className="absolute inset-0 scale-125 rounded-full bg-emerald-100/30 blur-3xl" />
 
               <img
-                src="/Herologo.jpeg"
+                src="/ZS-Hero.png"
                 alt="ZS Digitizing embroidery logo"
                 className="relative h-[205px] w-[205px] object-contain drop-shadow-[0_12px_20px_rgba(15,23,42,0.10)]"
               />
