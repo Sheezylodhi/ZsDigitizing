@@ -1,6 +1,6 @@
+
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BadgeCheck, Quote, Star } from "lucide-react";
 
@@ -10,8 +10,6 @@ const testimonials = [
     role: "Ocean Shore Store Owner",
     feedback:
       "The ZS digitizing quality is top-notch! My logos look crisp on every towel and shirt. Highly recommended.",
-    img: "/client1.webp",
-    flagImg: "/usaflag.webp",
     rating: 5,
   },
   {
@@ -19,8 +17,6 @@ const testimonials = [
     role: "Apparel Brand Owner",
     feedback:
       "Working with ZS Digitizing was seamless. The results delivered far exceeded what we had envisioned.",
-    img: "/client2.webp",
-    flagImg: "/finlandflag1.svg",
     rating: 5,
   },
   {
@@ -28,8 +24,6 @@ const testimonials = [
     role: "Textile CEO, Texas",
     feedback:
       "ZS Digitizing's innovative approach and excellent customer support make them a trusted partner for any project.",
-    img: "/client3.webp",
-    flagImg: "/usaflag.webp",
     rating: 5,
   },
   {
@@ -37,8 +31,6 @@ const testimonials = [
     role: "Startup Owner",
     feedback:
       "I'm incredibly impressed by their ability to deliver top-notch solutions while meeting tight deadlines.",
-    img: "/client.webp",
-    flagImg: "/ukflag.webp",
     rating: 5,
   },
   {
@@ -46,8 +38,6 @@ const testimonials = [
     role: "Motorsport Team Owner",
     feedback:
       "I've tried many digitizing services, but none compare to the quality here. My logos look sharp on every shirt and cap. If you want your brand to look professional, ZS Digitizing is the way to go!",
-    img: "/client5.webp",
-    flagImg: "/canadaflag.webp",
     rating: 5,
   },
 ];
@@ -286,14 +276,15 @@ export default function Testimonials() {
 
                 {/* Client */}
                 <footer className="relative flex items-center gap-4">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-lg ring-1 ring-[#234636]/10">
-                    <Image
-                      src={testimonial.img}
-                      alt={`${testimonial.name} - ${testimonial.role}`}
-                      fill
-                      sizes="56px"
-                      className="object-cover"
-                    />
+
+                  {/* Client initials/avatar replacement */}
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#234636] text-sm font-semibold tracking-wide text-white shadow-lg ring-1 ring-[#234636]/10">
+                    {testimonial.name
+                      .split(" ")
+                      .map((word) => word[0])
+                      .join("")
+                      .slice(0, 2)
+                      .toUpperCase()}
                   </div>
 
                   <div className="min-w-0">
@@ -301,14 +292,6 @@ export default function Testimonials() {
                       <h3 className="truncate font-bold text-[#234636]">
                         {testimonial.name}
                       </h3>
-
-                      <Image
-                        src={testimonial.flagImg}
-                        alt="Country flag"
-                        width={24}
-                        height={16}
-                        className="h-4 w-6 shrink-0 rounded-sm object-cover"
-                      />
                     </div>
 
                     <p className="mt-1 truncate text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">
@@ -316,7 +299,7 @@ export default function Testimonials() {
                     </p>
                   </div>
 
-                  <div className="ml-auto hidden shrink-0 sm:block">
+                  <div className="ml-auto shrink-0">
                     <BadgeCheck
                       size={22}
                       className="text-[#557762]"
