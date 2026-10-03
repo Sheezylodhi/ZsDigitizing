@@ -104,7 +104,7 @@ export default async function notifyClient(clientId, type, id) {
       <tr>
         <td style="width: 60px; vertical-align: top; padding-right: 15px;">
           <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid #eee;">
-            <img src="https://www.zsdigitizing.com/Logoicon.png" alt="ZS Digitizing" width="60" height="60" style="display: block; border-radius: 50%; object-fit: cover;">
+            <img src="https://www.zsdigitizing.com/Logoicon.jpeg" alt="ZS Digitizing" width="60" height="60" style="display: block; border-radius: 50%; object-fit: cover;">
           </div>
         </td>
         <td style="vertical-align: middle; line-height: 1.4;">
