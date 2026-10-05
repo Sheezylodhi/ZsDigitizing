@@ -11,7 +11,7 @@ const services = [
     number: "01",
     title: "Embroidery Digitizing",
     shortTitle: "Digitizing",
-    desc: "Production-ready embroidery files engineered for clean stitches, smooth runs, and exceptional detail.",
+    desc: "Embroidery files designed for clean stitching, consistent runs and excellent detailing.",
     image: "/images/embridorydigitizing1.webp",
     tags: ["EMB", "DST", "PES"],
   },
@@ -20,7 +20,7 @@ const services = [
     number: "02",
     title: "Vector Art",
     shortTitle: "Vector Artwork",
-    desc: "Precise raster-to-vector artwork created for screen printing, embroidery, branding, and large-format production.",
+    desc: "Accurate vector artwork designed for screen printing, embroidery, branding, and large format printing.",
     image: "/images/rastertovector.webp",
     tags: ["AI", "EPS", "SVG"],
   },
@@ -29,7 +29,7 @@ const services = [
     number: "03",
     title: "Custom Patches",
     shortTitle: "Patches",
-    desc: "Premium custom patches for caps, jackets, uniforms, brands, and specialty apparel.",
+    desc: "Custom patches for hats, jackets, uniforms, brands, and other types of clothing.",
     image: "/images/custompatches.webp",
     tags: ["CAP", "JACKET", "BADGE"],
   },
@@ -70,22 +70,21 @@ export default function Services() {
             <span className="h-px w-12 bg-[#c9a96a]" />
 
             <span className="text-[10px] font-bold tracking-[0.35em] text-[#697169]">
-              OUR EXPERTISE
+              OUR Services
             </span>
 
             <span className="h-px w-12 bg-[#c9a96a]" />
           </div>
 
           <h2 className="text-4xl font-semibold tracking-[-0.04em] text-[#173c2b] md:text-5xl lg:text-6xl">
-            Crafted for{" "}
+            Designed for{" "}
             <span className="font-serif italic text-[#697169]">
-              production.
+              Business.
             </span>
           </h2>
 
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#697169] md:text-base">
-            From precision embroidery digitizing to vector artwork and custom
-            patches — every file is prepared with production in mind.
+         Whether it is embroidery digitization or vector art or patches all files are prepared for production purposes.
           </p>
         </motion.div>
 

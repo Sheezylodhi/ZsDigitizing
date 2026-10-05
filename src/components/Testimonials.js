@@ -6,39 +6,39 @@ import { BadgeCheck, Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Robert J. Smith",
+    name: "Greg Cracknell",
     role: "Ocean Shore Store Owner",
     feedback:
       "The ZS digitizing quality is top-notch! My logos look crisp on every towel and shirt. Highly recommended.",
-    rating: 5,
+    rating: 4,
   },
   {
-    name: "David Smith",
+    name: "Stephanie Taylor",
     role: "Apparel Brand Owner",
     feedback:
       "Working with ZS Digitizing was seamless. The results delivered far exceeded what we had envisioned.",
-    rating: 5,
+    rating: 4.5,
   },
   {
-    name: "Emma",
+    name: "Lisa Greg",
     role: "Textile CEO, Texas",
     feedback:
       "ZS Digitizing's innovative approach and excellent customer support make them a trusted partner for any project.",
     rating: 5,
   },
   {
-    name: "Alex Miller",
+    name: "Craig Gaylard",
     role: "Startup Owner",
     feedback:
       "I'm incredibly impressed by their ability to deliver top-notch solutions while meeting tight deadlines.",
     rating: 5,
   },
   {
-    name: "Jason Reed",
+    name: "Jonathan Bince",
     role: "Motorsport Team Owner",
     feedback:
       "I've tried many digitizing services, but none compare to the quality here. My logos look sharp on every shirt and cap. If you want your brand to look professional, ZS Digitizing is the way to go!",
-    rating: 5,
+    rating: 4,
   },
 ];
 
@@ -171,8 +171,7 @@ export default function Testimonials() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
-          Discover why businesses trust ZS Digitizing for precise,
-          production-ready embroidery digitizing and reliable service.
+         Trusted by businesses to create the most accurate digitizing, production-ready files, and dependable service. Each design gets the attention it needs for quality all services every time.
         </p>
       </div>
 
@@ -322,7 +321,7 @@ export default function Testimonials() {
       {/* Bottom information */}
       <div className="relative z-10 mt-12 flex justify-center px-6 md:mt-16">
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
-          <span>Precision</span>
+          <span>Accuracy</span>
 
           <span className="h-1 w-1 rounded-full bg-[#C59A4A]" />
 

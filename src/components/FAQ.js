@@ -84,8 +84,7 @@ export default function FAQ() {
 
           {/* Description */}
           <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
-            Everything you need to know about our embroidery
-            digitizing services, pricing, turnaround times, and
+            Everything you need to know about our all services, pricing, turnaround times, and
             production-ready files.
           </p>
         </header>

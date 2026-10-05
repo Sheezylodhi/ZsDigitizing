@@ -160,7 +160,7 @@ export default function Hero() {
           {/* =================================================
               LEFT CONTENT
           ================================================== */}
-          <div className="relative z-10 max-w-[650px] py-16 lg:py-20">
+          <div className="relative z-10 max-w-[650px] py-10 lg:py-3">
             {/* Eyebrow */}
             <div className="mb-7 inline-flex items-center gap-2 border border-emerald-500/[0.12] bg-white/60 px-3 py-2 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
@@ -175,8 +175,9 @@ export default function Hero() {
               Your Design.
 
               <br />
+                
 
-              <span className="text-slate-200">
+              <span className="text-slate-400">
                 Ready to Stitch.
               </span>
 

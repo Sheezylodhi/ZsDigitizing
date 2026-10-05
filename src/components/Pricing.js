@@ -24,10 +24,11 @@ const plans = [
       "Small edit free",
       "Discount on bulk order",
     ],
+     popular: true,
   },
   {
     title: "JACKET BACK",
-    price: "20$ - 25$",
+    price: "15$ - 30$",
     sub: "",
     note: "Depends on complexity",
     features: [
@@ -41,7 +42,7 @@ const plans = [
   },
   {
     title: "VECTOR GRAPHICS",
-    price: "15$ - 150$",
+    price: "10$ - 150$",
     sub: "",
     note: "Depends on complexity",
     features: [
@@ -62,7 +63,7 @@ const plans = [
       "Other Formats (On request)",
       "Discount on bulk order",
     ],
-    popular: true,
+   
   },
 ];
 

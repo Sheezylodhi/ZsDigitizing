@@ -584,13 +584,13 @@ export default function Footer() {
                 </span>
 
                 <span className="pt-1.5">
-                  Contact Us
+                 +1 727 761 7877
                 </span>
               </a>
 
               {/* Address */}
               <a
-                href="https://www.bing.com/maps/default.aspx?v=2&pc=FACEBK&mid=8100&where1=7901%204th%20St%20N%2C%20%235155%2C%20Saint%20Petersburg%2C%20FL%2C%20United%20States%2C%2033702&FORM=FBKPL1"
+                href="https://www.google.com/search?q=7901+4th+St+N%2C+%235155+Saint+Petersburg%2C+FL+United+States%2C+33702&oq=7901+4th+St+N%2C+%235155+Saint+Petersburg%2C+FL+United+States%2C+33702&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDEyMzRqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
@@ -785,7 +785,7 @@ export default function Footer() {
                 transition-colors
               "
             >
-              Crafted by
+              Developed by
               <span className="font-semibold text-[#b7d0c0]/70 group-hover:text-[#b7d0c0]">
                 WebMashLabs
               </span>

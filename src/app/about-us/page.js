@@ -6,6 +6,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 
+
+
 export default function AboutPage() {
   const services = [
   {
@@ -15,7 +17,7 @@ export default function AboutPage() {
       "Convert logos, artwork, and designs into machine-ready embroidery files (DST, PES, EMB, JEF, EXP) with clean stitch paths and optimized output.",
   },
   {
-    id: "RastertoVector",
+    id: "rastertovector",
     title: "Vector Art Conversion",
     description:
       "Transform low-quality raster images into high-resolution vector files (AI, EPS, SVG, PDF) suitable for print, branding, and screen printing.",

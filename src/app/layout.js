@@ -4,24 +4,39 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Script from "next/script";
 
 export const metadata = {
-  title: "ZS Digitizing  -  Embroidery Digitizing Services",
-  description:
-    "ZS Digitizing offers professional embroidery digitizing, logo digitizing, and custom patches with fast turnaround, high quality, and affordable pricing worldwide.",
- icons: {
-    icon: [
-      { url: "/favicon.ico" }, // Legacy support
-      { url: "/icon.png", type: "image/png" }, // Modern browsers & Google
-    ],
-    apple: "/apple-icon.png", // Safari ke liye (180x180 PNG)
+  title: {
+    default: "ZS Digitizing | Professional Embroidery Digitizing & Vector Services",
+    template: "%s | ZS Digitizing",
   },
-  verification: { google: "ynu-2uC5kMX8umxG4DlPxHalOFgXhvL-lFeuyrmfFFc" },
+
+  description:
+    "Professional embroidery digitizing, vector artwork, and custom patch services with fast turnaround and production-ready quality worldwide.",
+
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
+  },
+
+  verification: {
+    google: "ynu-2uC5kMX8umxG4DlPxHalOFgXhvL-lFeuyrmfFFc",
+  },
+
   openGraph: {
-    title: "ZS Digitizing",
+    title: "ZS Digitizing | Professional Embroidery Digitizing Services",
     description:
-      "Professional embroidery digitizing services with fast turnaround and premium quality.",
+      "Professional embroidery digitizing, vector artwork, and custom patch services with fast turnaround and production-ready quality.",
     url: "https://www.zsdigitizing.com/",
     siteName: "ZS Digitizing",
-   images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
     type: "website",
   },
 };

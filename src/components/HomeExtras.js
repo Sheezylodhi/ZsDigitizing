@@ -32,7 +32,7 @@ const sewouts = [
   },
   {
     image: "/sewout6.jpg",
-    type: "JB Embroidery Digitizing",
+    type: "JacketBack Digitizing",
   },
   {
     image: "/sewout7.jpg",
@@ -44,7 +44,7 @@ const sewouts = [
   },
   {
     image: "/sewout9.jpg",
-    type: "Embrodiery Digitizing",
+    type: "Embroidery Digitizing",
   },
   {
     image: "/sewout10.jpg",
@@ -52,7 +52,7 @@ const sewouts = [
   },
   {
     image: "/sewout11.jpg",
-    type: "Lather Patches",
+    type: "Leather Patches",
   },
   {
     image: "/sewout12.jpg",
@@ -389,10 +389,11 @@ export default function HomeExtras() {
               className="text-[42px] font-semibold leading-[1.02] tracking-[-0.045em] text-[#18372a] sm:text-5xl md:text-6xl lg:text-[68px]"
             >
 
-              Crafted With
+              Designed To
+
 
               <span className="mt-2 block font-serif font-normal italic tracking-[-0.025em] text-[#697169]">
-                Precision.
+                Perfection.
               </span>
 
             </motion.h2>
@@ -404,8 +405,7 @@ export default function HomeExtras() {
               transition={{ duration: 0.8, delay: 0.16 }}
               className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#70766f] md:text-[15px]"
             >
-              A selection of embroidery work showcasing the detail,
-              precision, and craftsmanship behind every stitch.
+            A collection of embroidery art that reveals the skill and perfection that go into each stitch.
             </motion.p>
 
           </div>

@@ -9,6 +9,8 @@ import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCheckCircle, FaTimesCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 
+
+
 function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

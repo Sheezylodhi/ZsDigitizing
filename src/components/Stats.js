@@ -104,15 +104,14 @@ export default function Stats() {
           </div>
 
           <h2 className="text-4xl font-semibold tracking-[-0.03em] text-[#173c2b] md:text-5xl lg:text-6xl">
-            Precision backed by{" "}
+           Accuracy based on{" "}
             <span className="font-serif italic text-[#697169]">
               experience.
             </span>
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#687068] md:text-base">
-            Trusted by businesses for precise embroidery digitizing,
-            dependable turnaround, and production-ready artwork.
+            Businesses trust us to provide accurate embroidery digitizing, prompt service, and ready-to-produce designs.
           </p>
         </motion.div>
 
@@ -316,17 +315,17 @@ export default function Stats() {
         >
           <div>
             <p className="text-[10px] font-bold tracking-[0.28em] text-white">
-              PRECISION • QUALITY • RELIABILITY
+              ACCURACY  • QUALITY • RELIABILITY
             </p>
 
             <p className="mt-1 text-sm text-white/70">
-              Production-ready embroidery artwork, crafted with care.
+            Embroidery artwork that is ready to be used.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-medium text-white/80">
             <span className="h-2 w-2 rounded-full bg-[#c9a96a] shadow-[0_0_12px_rgba(201,169,106,0.8)]" />
-            Trusted craftsmanship
+            Trusted Clients
           </div>
         </motion.div>
       </div>
