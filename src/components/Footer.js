@@ -757,7 +757,7 @@ export default function Footer() {
               <span className="w-1 h-1 rounded-full bg-white/15" />
 
               <Link
-                href="/terms"
+                href="/terms-condition"
                 className="
                   text-[11px]
                   text-white

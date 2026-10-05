@@ -22,18 +22,15 @@ export default function FinalCTA() {
         <source src="/videos/final-cta.mp4" type="video/mp4" />
       </video>
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 -z-10 bg-[#071a10]/80" />
-
-      {/* Soft brand overlay */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0e2c1c]/70 via-[#0e2c1c]/75 to-[#071a10]/90" />
+      {/* Light dark overlay — keeps video visible */}
+      <div className="absolute inset-0 -z-10 bg-black/35" />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
         {/* Small label */}
         <div className="mb-6 inline-flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#9fbea9]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
 
-          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/70">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/80">
             Let&apos;s Create Something Great
           </span>
         </div>
@@ -44,13 +41,13 @@ export default function FinalCTA() {
           className="mx-auto max-w-4xl text-4xl font-bold leading-[1.08] tracking-[-0.035em] text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
           Your Design.
-          <span className="block text-[#b7d0c0]">
+          <span className="block text-white/85">
             Our Expertise.
           </span>
         </h2>
 
         {/* Description */}
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">
+        <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/80 sm:text-lg">
           Send us your artwork and let our digitizing experts prepare it
           for clean, professional embroidery.
         </p>
@@ -67,14 +64,12 @@ export default function FinalCTA() {
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
           </Link>
-
-          
         </div>
 
         {/* Bottom line */}
-        <div className="mx-auto mt-12 h-px w-20 bg-[#9fbea9]/50" />
+        <div className="mx-auto mt-12 h-px w-20 bg-white/40" />
 
-        <p className="mt-5 text-xs text-white/45">
+        <p className="mt-5 text-xs text-white/60">
           Professional digitizing • Clean stitch quality • Reliable delivery
         </p>
       </div>
