@@ -12,7 +12,7 @@ const services = [
     title: "Embroidery Digitizing",
     shortTitle: "Digitizing",
     desc: "Embroidery files designed for clean stitching, consistent runs and excellent detailing.",
-    image: "/images/embridorydigitizing1.webp",
+    image: "/images/2.png",
     tags: ["EMB", "DST", "PES"],
   },
   {
@@ -21,7 +21,7 @@ const services = [
     title: "Vector Art",
     shortTitle: "Vector Artwork",
     desc: "Accurate vector artwork designed for screen printing, embroidery, branding, and large format printing.",
-    image: "/images/rastertovector.webp",
+    image: "/images/1.png",
     tags: ["AI", "EPS", "SVG"],
   },
   {
@@ -30,7 +30,7 @@ const services = [
     title: "Custom Patches",
     shortTitle: "Patches",
     desc: "Custom patches for hats, jackets, uniforms, brands, and other types of clothing.",
-    image: "/images/custompatches.webp",
+    image: "/images/3.png",
     tags: ["CAP", "JACKET", "BADGE"],
   },
 ];
@@ -139,12 +139,12 @@ function ServiceCard({ service, index }) {
 
         <div className="absolute inset-0 overflow-hidden">
           <Image
-            src={service.image}
-            alt={`${service.title} service`}
-            fill
-            sizes="(max-width: 1024px) 100vw, 33vw"
-            className="object-cover opacity-0 scale-110 transition-all duration-1000 ease-out group-hover:scale-100 group-hover:opacity-100"
-          />
+  src={service.image}
+  alt={`${service.title} service`}
+  fill
+  sizes="(max-width: 1024px) 100vw, 33vw"
+  className="object-contain p-6 opacity-0 scale-105 transition-all duration-1000 ease-out group-hover:scale-100 group-hover:opacity-100"
+/>
 
           {/* Dark luxury overlay */}
           <div className="absolute inset-0 bg-[#102d20]/0 transition-all duration-700 group-hover:bg-[#102d20]/75" />

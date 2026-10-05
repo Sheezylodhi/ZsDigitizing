@@ -53,7 +53,7 @@ export default function TopAnnouncementBar() {
             "
           >
             Bulk Order? Get Max Discounts & Exclusive Deals – Contact ZS
-            digitizing Now!
+            Digitizing Now!
           </span>
         </div>
 

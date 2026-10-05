@@ -308,79 +308,151 @@ export default function Footer() {
             </div>
 
             {/* Socials */}
-            <div className="flex items-center gap-2 mt-7">
-              <a
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="
-                  group
-                  w-10 h-10
-                  rounded-full
-                  border border-white/[0.10]
-                  bg-white/[0.035]
-                  flex items-center justify-center
-                  text-white/60
-                  transition-all
-                  duration-300
-                  hover:bg-white
-                  hover:text-[#0e2c1c]
-                  hover:border-white
-                  hover:-translate-y-1
-                "
-              >
-                <Facebook size={16} />
-              </a>
+           {/* Socials */}
+<div className="flex flex-wrap items-center gap-2 mt-7">
 
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="
-                  group
-                  w-10 h-10
-                  rounded-full
-                  border border-white/[0.10]
-                  bg-white/[0.035]
-                  flex items-center justify-center
-                  text-white/60
-                  transition-all
-                  duration-300
-                  hover:bg-white
-                  hover:text-[#0e2c1c]
-                  hover:border-white
-                  hover:-translate-y-1
-                "
-              >
-                <Instagram size={16} />
-              </a>
+  {/* Facebook */}
+  <a
+    href="https://www.facebook.com/ZSDigitizing"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Facebook"
+    className="
+      group
+      w-10 h-10
+      rounded-full
+      border border-white/[0.10]
+      bg-white/[0.035]
+      flex items-center justify-center
+      text-white/60
+      transition-all
+      duration-300
+      hover:bg-white
+      hover:text-[#0e2c1c]
+      hover:border-white
+      hover:-translate-y-1
+    "
+  >
+    <Facebook size={16} />
+  </a>
 
-              <a
-                href="https://www.tiktok.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                className="
-                  group
-                  w-10 h-10
-                  rounded-full
-                  border border-white/[0.10]
-                  bg-white/[0.035]
-                  flex items-center justify-center
-                  text-white/60
-                  transition-all
-                  duration-300
-                  hover:bg-white
-                  hover:text-[#0e2c1c]
-                  hover:border-white
-                  hover:-translate-y-1
-                "
-              >
-                <Music2 size={16} />
-              </a>
-            </div>
+  {/* Instagram */}
+  <a
+    href="https://www.instagram.com/zs_digitizing"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram"
+    className="
+      group
+      w-10 h-10
+      rounded-full
+      border border-white/[0.10]
+      bg-white/[0.035]
+      flex items-center justify-center
+      text-white/60
+      transition-all
+      duration-300
+      hover:bg-white
+      hover:text-[#0e2c1c]
+      hover:border-white
+      hover:-translate-y-1
+    "
+  >
+    <Instagram size={16} />
+  </a>
+
+  {/* TikTok */}
+  <a
+    href="https://www.tiktok.com/@zs_digitizing"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="TikTok"
+    className="
+      group
+      w-10 h-10
+      rounded-full
+      border border-white/[0.10]
+      bg-white/[0.035]
+      flex items-center justify-center
+      text-white/60
+      transition-all
+      duration-300
+      hover:bg-white
+      hover:text-[#0e2c1c]
+      hover:border-white
+      hover:-translate-y-1
+    "
+  >
+    <Music2 size={16} />
+  </a>
+
+  {/* YouTube */}
+  <a
+    href="https://www.youtube.com/@ZS_Digitizing"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="YouTube"
+    className="
+      group
+      w-10 h-10
+      rounded-full
+      border border-white/[0.10]
+      bg-white/[0.035]
+      flex items-center justify-center
+      text-white/60
+      transition-all
+      duration-300
+      hover:bg-white
+      hover:text-[#0e2c1c]
+      hover:border-white
+      hover:-translate-y-1
+    "
+  >
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[17px] w-[17px]"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.8V8.2l6.4 3.8-6.4 3.8Z" />
+    </svg>
+  </a>
+
+  {/* Etsy */}
+ <a
+  href="https://www.etsy.com/shop/ZSDigitizing"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Etsy"
+  className="
+    group
+    w-10 h-10
+    rounded-full
+    border border-[#F1641E]/20
+    bg-[#F1641E]/10
+    flex items-center justify-center
+    text-[#F1641E]
+    transition-all
+    duration-300
+    hover:bg-[#F1641E]
+    hover:text-white
+    hover:border-[#F1641E]
+    hover:-translate-y-1
+    hover:shadow-lg
+    hover:shadow-[#F1641E]/20
+  "
+>
+  <svg
+    viewBox="0 0 24 24"
+    className="h-[17px] w-[17px]"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M5.5 4.5v15h13v-4h-2.1v1.7h-6.2v-4.3h4.9v-1.8h-4.9V6.8h6.2v1.7h2.1v-4h-13Z" />
+  </svg>
+</a>
+
+</div>
           </div>
 
           {/* EXPLORE */}

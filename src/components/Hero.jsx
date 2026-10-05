@@ -133,21 +133,21 @@ export default function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
 
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">
+            <span className="text-[12px] font-bold uppercase tracking-[0.3em] text-slate-500">
               Accepting New Orders
             </span>
           </div>
 
           <div className="hidden items-center gap-8 md:flex">
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-slate-400">
+            <span className="text-[12px] font-bold uppercase tracking-[0.25em] text-slate-400">
               Professional Digitizing
             </span>
 
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-slate-400">
+            <span className="text-[12px] font-bold uppercase tracking-[0.25em] text-slate-400">
               Worldwide Service
             </span>
 
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-emerald-600">
+            <span className="text-[12px] font-bold uppercase tracking-[0.25em] text-emerald-600">
               ZS Digitizing
             </span>
           </div>
@@ -165,7 +165,7 @@ export default function Hero() {
             <div className="mb-7 inline-flex items-center gap-2 border border-emerald-500/[0.12] bg-white/60 px-3 py-2 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
 
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-700">
+              <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-emerald-700">
                 Digitizing - Vector - Patches - Apparel & Promotional
               </span>
             </div>
@@ -189,14 +189,14 @@ export default function Hero() {
             </h1>
 
             {/* Description */}
-            <p className="mt-7 max-w-[570px] text-[15px] leading-7 text-slate-500">
+            <p className="mt-7 max-w-[570px] text-[18px] leading-7 text-slate-500">
               At ZSDigitizing, we create embroidery files and vector artwork
               for your project. From simple logos to detailed designs, send us
               your artwork and we’ll prepare it for production.
             </p>
 
             {/* Features */}
-            <div className="mt-7 flex flex-wrap gap-x-7 gap-y-3">
+            <div className="mt-7 flex flex-wrap gap-x-7 gap-y-3 ">
               <FeaturePill icon={Clock3}>
                 Quick Turnaround
               </FeaturePill>
@@ -292,7 +292,7 @@ export default function Hero() {
                 key={`${item}-${index}`}
                 className="flex items-center gap-10"
               >
-                <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">
+                <span className="text-[12px] font-bold uppercase tracking-[0.3em] text-slate-400">
                   {item}
                 </span>
 

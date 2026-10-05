@@ -128,7 +128,7 @@ export default function Navbar() {
             items-center
             gap-1
             ml-auto
-            mr-8
+            mr-5
             p-1
             rounded-full
             border
@@ -230,9 +230,62 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* ================= DESKTOP LOGIN ================= */}
+        {/* ================= DESKTOP ACTIONS ================= */}
 
-        <div className="hidden lg:flex items-center">
+        <div className="hidden lg:flex items-center gap-2">
+
+          {/* Etsy */}
+          <a
+            href="https://www.etsy.com/shop/ZSDigitizing"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit ZS Digitizing on Etsy"
+            className="
+              group
+              inline-flex
+              h-11
+              items-center
+              gap-2
+              rounded-full
+              border
+              border-[#F1641E]/30
+              bg-[#F1641E]/10
+              px-4
+              text-[#F1641E]
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-[#F1641E]
+              hover:bg-[#F1641E]
+              hover:text-white
+              hover:shadow-[0_8px_25px_rgba(241,100,30,0.25)]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[17px] w-[17px] shrink-0"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M5.5 4.5v15h13v-4h-2.1v1.7h-6.2v-4.3h4.9v-1.8h-4.9V6.8h6.2v1.7h2.1v-4h-13Z" />
+            </svg>
+
+            <span className="text-[13px] font-bold tracking-wide">
+              Etsy
+            </span>
+
+            <ArrowUpRight
+              size={14}
+              className="
+                transition-transform
+                duration-300
+                group-hover:translate-x-0.5
+                group-hover:-translate-y-0.5
+              "
+            />
+          </a>
+
+          {/* Login */}
           <Link href="/login">
             <motion.div
               whileHover={{
@@ -307,6 +360,45 @@ export default function Navbar() {
         {/* ================= MOBILE CONTROLS ================= */}
 
         <div className="lg:hidden flex items-center gap-2">
+
+          {/* Etsy */}
+          <a
+            href="YOUR_ETSY_LINK"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit ZS Digitizing on Etsy"
+            className="
+              group
+              h-9
+              px-3
+              flex
+              items-center
+              justify-center
+              gap-1.5
+              rounded-full
+              border
+              border-[#F1641E]/30
+              bg-[#F1641E]/10
+              text-[#F1641E]
+              transition-all
+              duration-300
+              active:scale-95
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[15px] w-[15px]"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M5.5 4.5v15h13v-4h-2.1v1.7h-6.2v-4.3h4.9v-1.8h-4.9V6.8h6.2v1.7h2.1v-4h-13Z" />
+            </svg>
+
+            <span className="text-[11px] font-bold">
+              Etsy
+            </span>
+          </a>
+
           {/* Login */}
           <Link href="/login">
             <motion.div
@@ -447,6 +539,7 @@ export default function Navbar() {
               "
             >
               <div className="max-w-7xl mx-auto px-5 py-5">
+
                 {/* Mobile menu heading */}
                 <div className="flex items-center gap-2 mb-4 px-2">
                   <Sparkles
@@ -545,6 +638,48 @@ export default function Navbar() {
                   })}
                 </div>
 
+                {/* Etsy CTA inside mobile menu */}
+                <a
+                  href="YOUR_ETSY_LINK"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
+                  className="
+                    mt-5
+                    flex
+                    items-center
+                    justify-between
+                    rounded-xl
+                    border
+                    border-[#F1641E]/25
+                    bg-[#F1641E]/10
+                    px-4
+                    py-3.5
+                    text-[#F1641E]
+                    transition-all
+                    duration-300
+                    hover:bg-[#F1641E]
+                    hover:text-white
+                  "
+                >
+                  <div className="flex items-center gap-3">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-[17px] w-[17px]"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M5.5 4.5v15h13v-4h-2.1v1.7h-6.2v-4.3h4.9v-1.8h-4.9V6.8h6.2v1.7h2.1v-4h-13Z" />
+                    </svg>
+
+                    <span className="text-sm font-semibold">
+                      Visit us on Etsy
+                    </span>
+                  </div>
+
+                  <ArrowUpRight size={16} />
+                </a>
+
                 {/* Bottom accent */}
                 <div className="mt-5 pt-4 border-t border-white/[0.07]">
                   <div className="flex items-center justify-between px-2">
@@ -557,6 +692,7 @@ export default function Navbar() {
                     </span>
                   </div>
                 </div>
+
               </div>
             </motion.div>
           </>
