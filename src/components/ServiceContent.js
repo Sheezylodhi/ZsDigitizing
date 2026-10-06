@@ -24,17 +24,17 @@ const services = [
   {
     id: "embroidery-digitizing",
     title: "Embroidery Digitizing",
-    img: "/images/embridorydigitizing1.webp",
+    img: "/images/2.png",
   },
   {
     id: "rastertovector",
     title: "Raster To Vector",
-    img: "/images/rastertovector.webp",
+    img: "/images/1.png",
   },
   {
     id: "custom-patches",
     title: "Custom Patches",
-    img: "/images/custompatches.webp",
+    img: "/images/3.png",
   },
 ];
 

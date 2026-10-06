@@ -69,7 +69,7 @@ export default function Services() {
           <div className="mb-5 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-[#c9a96a]" />
 
-            <span className="text-[10px] font-bold tracking-[0.35em] text-[#697169]">
+            <span className="text-[14px] font-bold tracking-[0.35em] text-[#697169]">
               OUR Services
             </span>
 
@@ -83,7 +83,7 @@ export default function Services() {
             </span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#697169] md:text-base">
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#697169] md:text-[18px]">
          Whether it is embroidery digitization or vector art or patches all files are prepared for production purposes.
           </p>
         </motion.div>
@@ -187,7 +187,7 @@ function ServiceCard({ service, index }) {
           {/* Content */}
           <div className="transition-all duration-700 group-hover:-translate-y-1">
             {/* Small label */}
-            <p className="mb-3 text-[9px] font-bold tracking-[0.3em] text-[#9d7b43] transition-colors duration-500 group-hover:text-[#dfc98e]">
+            <p className="mb-3 text-[13px] font-bold tracking-[0.3em] text-[#9d7b43] transition-colors duration-500 group-hover:text-[#dfc98e]">
               SPECIALIZED SERVICE
             </p>
 
@@ -195,7 +195,7 @@ function ServiceCard({ service, index }) {
               {service.title}
             </h3>
 
-            <p className="mt-4 max-w-[340px] text-sm leading-6 text-[#6b746d] transition-colors duration-500 group-hover:text-white/75">
+            <p className="mt-4 max-w-[340px] text-[18px] leading-6 text-[#6b746d] transition-colors duration-500 group-hover:text-white/75">
               {service.desc}
             </p>
 
@@ -204,7 +204,7 @@ function ServiceCard({ service, index }) {
               {service.tags.map((tag, tagIndex) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-[#173c2b]/10 bg-[#f7f6f1] px-3 py-1.5 text-[9px] font-bold tracking-[0.15em] text-[#536158] transition-all duration-500 group-hover:border-white/20 group-hover:bg-white/10 group-hover:text-white/80"
+                  className="rounded-full border border-[#173c2b]/10 bg-[#f7f6f1] px-3 py-1.5 text-[10px] font-bold tracking-[0.15em] text-[#536158] transition-all duration-500 group-hover:border-white/20 group-hover:bg-white/10 group-hover:text-white/80"
                   style={{
                     transitionDelay: `${tagIndex * 40}ms`,
                   }}
@@ -219,7 +219,7 @@ function ServiceCard({ service, index }) {
           <div className="mt-7 flex items-center gap-3">
             <div className="h-px flex-1 bg-[#173c2b]/10 transition-colors duration-700 group-hover:bg-white/20" />
 
-            <span className="text-[9px] font-bold tracking-[0.2em] text-[#173c2b]/50 transition-colors duration-500 group-hover:text-[#c9a96a]">
+            <span className="text-[12px] font-bold tracking-[0.2em] text-[#173c2b]/50 transition-colors duration-500 group-hover:text-[#c9a96a]">
               EXPLORE
             </span>
           </div>

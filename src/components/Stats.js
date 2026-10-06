@@ -96,7 +96,7 @@ export default function Stats() {
           <div className="mb-5 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-[#c9a96a]" />
 
-            <span className="text-[10px] font-semibold tracking-[0.35em] text-[#697169]">
+            <span className="text-[14px] font-semibold tracking-[0.35em] text-[#697169]">
               BUILT ON EXPERIENCE
             </span>
 
@@ -196,7 +196,7 @@ export default function Stats() {
 
                 {/* Eyebrow */}
                 <div className="relative z-10 flex items-center justify-between">
-                  <span className="text-[9px] font-bold tracking-[0.25em] text-[#9d7b43]">
+                  <span className="text-[11px] font-bold tracking-[0.25em] text-[#9d7b43]">
                     {item.eyebrow}
                   </span>
 
@@ -314,7 +314,7 @@ export default function Stats() {
           className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#173c2b]/10 bg-[#173c2b] px-6 py-5 text-center shadow-[0_20px_60px_rgba(23,60,43,0.12)] sm:flex-row sm:text-left md:px-8"
         >
           <div>
-            <p className="text-[10px] font-bold tracking-[0.28em] text-white">
+            <p className="text-[12px] font-bold tracking-[0.28em] text-white">
               ACCURACY  • QUALITY • RELIABILITY
             </p>
 

@@ -166,7 +166,7 @@ export default function Pricing() {
             <div className="flex items-center gap-2 text-[#315c45]">
               <Sparkles size={14} />
 
-              <span className="text-[11px] font-bold uppercase tracking-[0.25em]">
+              <span className="text-[14px] font-bold uppercase tracking-[0.25em]">
                 Simple & Transparent
               </span>
             </div>
@@ -355,7 +355,7 @@ export default function Pricing() {
                       rounded-full
                       bg-[#0e2c1c]
                       text-white
-                      text-[9px]
+                      text-[10px]
                       font-bold
                       uppercase
                       tracking-[0.16em]
@@ -387,7 +387,7 @@ export default function Pricing() {
                 <div className="relative z-10 mb-7">
                   <p
                     className="
-                      text-[11px]
+                      text-[12px]
                       font-bold
                       tracking-[0.18em]
                       text-[#315c45]
@@ -399,7 +399,7 @@ export default function Pricing() {
 
                   <h3
                     className="
-                      text-[15px]
+                      text-[17px]
                       font-extrabold
                       tracking-wide
                       text-[#0e2c1c]
@@ -413,7 +413,7 @@ export default function Pricing() {
                 <div className="relative z-10 mb-2">
                   <div
                     className="
-                      text-[34px]
+                      text-[36px]
                       md:text-[37px]
                       font-black
                       tracking-tight
@@ -428,7 +428,7 @@ export default function Pricing() {
                 {/* Sub */}
                 <div className="min-h-[24px]">
                   {plan.sub && (
-                    <p className="text-sm font-medium text-[#315c45]">
+                    <p className="text-[16px] font-medium text-[#315c45]">
                       {plan.sub}
                     </p>
                   )}
@@ -448,7 +448,7 @@ export default function Pricing() {
                     className="text-[#6c8274]"
                   />
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-[15px] text-gray-500">
                     {plan.note}
                   </p>
                 </div>
@@ -461,7 +461,7 @@ export default function Pricing() {
                       className="
                         flex items-start
                         gap-3
-                        text-[13px]
+                        text-[15px]
                         leading-5
                         text-gray-600
                       "
@@ -501,7 +501,7 @@ export default function Pricing() {
                     rounded-xl
                     bg-[#0e2c1c]
                     text-white
-                    text-[12px]
+                    text-[14px]
                     font-bold
                     tracking-[0.12em]
                     transition-all duration-300
@@ -592,7 +592,7 @@ export default function Pricing() {
             flex items-center justify-center
             gap-2
             mt-10
-            text-[11px]
+            text-[18px]
             text-gray-500
           "
         >

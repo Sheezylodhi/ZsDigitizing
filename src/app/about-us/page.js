@@ -6,221 +6,497 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TopAnnouncementBar from "@/components/TopAnnouncementBar";
 
-
-
 export default function AboutPage() {
   const services = [
-  {
-    id: "embroidery-digitizing",
-    title: "Embroidery Digitizing",
-    description:
-      "Convert logos, artwork, and designs into machine-ready embroidery files (DST, PES, EMB, JEF, EXP) with clean stitch paths and optimized output.",
-  },
-  {
-    id: "rastertovector",
-    title: "Vector Art Conversion",
-    description:
-      "Transform low-quality raster images into high-resolution vector files (AI, EPS, SVG, PDF) suitable for print, branding, and screen printing.",
-  },
-  {
-    id: "custom-patches",
-    title: "Custom Patch Manufacturing",
-    description:
-      "Design and produce premium-quality embroidered, woven, PVC, chenille, sublimation, and leather patches with multiple backing options.",
-  },
-];
+    {
+      id: "embroidery-digitizing",
+      title: "Embroidery Digitizing",
+      description:
+        "Convert logos, artwork, and designs into machine-ready embroidery files (DST, PES, EMB, JEF, EXP) with clean stitch paths and optimized output.",
+    },
+    {
+      id: "rastertovector",
+      title: "Vector Art Conversion",
+      description:
+        "Transform low-quality raster images into high-resolution vector files (AI, EPS, SVG, PDF) suitable for print, branding, and screen printing.",
+    },
+    {
+      id: "custom-patches",
+      title: "Custom Patch Manufacturing",
+      description:
+        "Design and produce premium-quality embroidered, woven, PVC, chenille, sublimation, and leather patches with multiple backing options.",
+    },
+  ];
+
+  const whyChoose = [
+    "Fast Turnaround Time (Same-day delivery available)",
+    "100% Manual Digitizing (No auto-digitizing software)",
+    "Production-Ready Files with clean stitch paths",
+    "Unlimited Revisions for customer satisfaction",
+    "Affordable Pricing for businesses of all sizes",
+    "24/7 Customer Support",
+  ];
+
+  const support = [
+    "Fast response times",
+    "Clear communication",
+    "Expert guidance for embroidery, vectorization, and patch production",
+    "Quick revisions to meet tight deadlines",
+    "Accurate, production-ready files",
+    "Reliable service quality",
+  ];
+
   return (
     <>
       <TopAnnouncementBar />
       <Navbar />
 
-      <main className="pt-[140px] bg-gradient-to-b from-white via-green-50/30 to-white text-gray-700 overflow-hidden">
+      <main className="pt-[140px] overflow-hidden bg-[#f8f7f2] text-gray-700">
 
-        {/* HERO */}
-        <section className="py-28 text-center px-4 relative">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-green-300/20 blur-[120px] rounded-full"></div>
+        {/* =====================================================
+            HERO — LEFT CONTENT / RIGHT VIDEO
+        ===================================================== */}
+        <section className="relative px-6 py-20 sm:py-28">
+          <div className="pointer-events-none absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-[#b8ce9e]/20 blur-[130px]" />
 
-          <motion.h1
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-extrabold text-[#0e2c1c] mb-6 tracking-tight"
-          >
-            About ZS Digitizing
-          </motion.h1>
+          <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
 
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed"
-          >
-            At ZS Digitizing, we go beyond simple design conversion — we transform your ideas into high-quality embroidery digitizing, vector artwork, and custom patches that are fully optimized for real-world production. With over 3 years of hands-on experience, we support apparel brands, embroidery businesses, print shops, and designers in achieving clean stitching, precise detailing, and professional results — without delays or costly errors.
-          </motion.p>
-        </section>
+            {/* LEFT */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+             
 
-        {/* OUR EXPERTISE */}
-        <section className="py-24 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-bold text-[#0e2c1c] mb-6">
-              Our Expertise in Digitizing & Design Services
-            </h2>
+              <h1 className="text-5xl font-extrabold leading-[1.05] tracking-[-0.04em] text-[#0e2c1c] sm:text-6xl">
+                 About 
+                <span className="block text-[#56745e]">
+                   ZS Digitizing
+                </span>
+              </h1>
 
-            <p className="leading-relaxed mb-4 text-gray-600">
-              We provide professional digitizing services that ensure smooth machine performance, accurate stitch formation, and premium output quality.
-            </p>
-          
-          </motion.div>
+              <div className="mt-7 h-px w-20 bg-[#c9a76a]" />
 
-          {/* 3D GLASS CARD */}
-          <motion.div
-            whileHover={{ rotateY: 15, rotateX: 8 }}
-            transition={{ type: "spring", stiffness: 150 }}
-            className="relative group perspective"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-green-600/20 blur-2xl rounded-3xl"></div>
-
-            <div className="relative bg-white/70 backdrop-blur-2xl p-10 rounded-3xl border border-white/40 shadow-[0_20px_60px_rgba(0,0,0,0.1)] flex flex-col items-center gap-4">
-              <p className="text-center text-gray-600 text-lg">
-                Premium Quality Digitizing Experience
+              <p className="mt-7 max-w-xl text-base leading-8 text-gray-600 sm:text-lg">
+             
+ZS Digitizing goes beyond mere conversion. We transform your artwork into embroidery digitizing, vector artwork, and patches ready for actual production. We have worked in the field for more than 10 years and provide our services to clothing manufacturers, embroidery houses, printers, promo firms, and fashion designers that require reliable and ready to go files. The members of our team concentrate on proper stitching, correct details, proper scaling, and machine compatibility to minimize potential production problems and prevent any further corrections and unnecessary delays. We study each particular artwork thoroughly and provide each file with respect to its purpose.
               </p>
 
-              <p className="text-center text-gray-700 mt-4">
+              <div className="mt-9 flex flex-wrap items-center gap-8">
+                <div>
+                  <p className="text-3xl font-extrabold text-[#0e2c1c]">
+                    13K+
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Completed Orders
+                  </p>
+                </div>
+
+                <div className="h-10 w-px bg-[#0e2c1c]/10" />
+
+                <div>
+                  <p className="text-3xl font-extrabold text-[#0e2c1c]">
+                    10+
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Years Experience
+                  </p>
+                </div>
+
+                <div className="h-10 w-px bg-[#0e2c1c]/10" />
+
+                <div>
+                  <p className="text-3xl font-extrabold text-[#0e2c1c]">
+                    4h
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Fast Turnaround
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* RIGHT VIDEO */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9 }}
+              className="relative"
+            >
+              <div className="absolute -inset-5 rounded-[2rem] bg-[#b8ce9e]/20 blur-3xl" />
+
+              <div className="relative overflow-hidden rounded-[2rem] border border-[#0e2c1c]/10 bg-[#0e2c1c] p-2 shadow-[0_30px_80px_rgba(14,44,28,0.18)]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem]">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 h-full w-full object-cover"
+                  >
+                    <source
+                      src="/videos/final-cta.mp4"
+                      type="video/mp4"
+                    />
+                  </video>
+
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0e2c1c]/40 via-transparent to-transparent" />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            OUR EXPERTISE — LEFT TEXT / RIGHT INFO PANEL
+        ===================================================== */}
+        <section className="px-6 py-20 sm:py-28">
+          <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
+
+            {/* LEFT */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <span className="mb-5 inline-block text-xs font-semibold uppercase tracking-[0.25em] text-[#6b806f]">
+                Our Expertise
+              </span>
+
+              <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-[#0e2c1c] sm:text-5xl">
+                Our Expertise in
+                <span className="block text-[#56745e]">
+                  Digitizing & Design Services
+                </span>
+              </h2>
+
+              <div className="mt-7 h-px w-20 bg-[#c9a76a]" />
+
+              <p className="mt-7 max-w-xl text-lg leading-8 text-gray-600">
+               We offer expert embroidery digitizing services that help ensure smooth machine performance, clean stitching, and consistent embroidery quality.
+              </p>
+
+              <p className="mt-8 text-sm text-gray-600">
                 Email:{" "}
-                <a href="mailto:info@zsdigitizing.com" className="font-semibold text-blue-600 hover:underline">
+                <a
+                  href="mailto:info@zsdigitizing.com"
+                  className="font-semibold text-[#0e2c1c] transition hover:text-[#56745e]"
+                >
                   info@zsdigitizing.com
                 </a>
               </p>
-            </div>
-          </motion.div>
-        </section>
-
-         <section className="py-24 px-6 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#0e2c1c] text-center mb-12">
-            Our Services
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <Link key={service.id} href={`/services/${service.id}`} passHref>
-                <motion.div
-                  whileHover={{ y: -10, scale: 1.05 }}
-                  className="relative p-8 rounded-3xl bg-white/70 backdrop-blur-2xl border border-white/40 shadow-lg cursor-pointer flex flex-col justify-between h-full"
-                >
-                  <h3 className="text-2xl font-semibold mb-4 text-[#0e2c1c]">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 flex-1">{service.description}</p>
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-xl font-medium text-center"
-                  >
-                    Learn More
-                  </motion.div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-
-        {/* WHY CHOOSE US */}
-        <section className="py-24 px-6 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#0e2c1c] text-center mb-16">
-            Why Choose ZS Digitizing
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-10">
-            {[
-              "Fast Turnaround Time (Same-day delivery available)",
-              "100% Manual Digitizing (No auto-digitizing software)",
-              "Production-Ready Files with clean stitch paths",
-              "Unlimited Revisions for customer satisfaction",
-              "Affordable Pricing for businesses of all sizes",
-              "24/7 Customer Support",
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -15, scale: 1.05 }}
-                className="relative group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-green-600/20 blur-xl rounded-2xl opacity-0 group-hover:opacity-100 transition"></div>
-
-                <div className="relative p-6 rounded-2xl bg-white/60 backdrop-blur-xl border shadow-lg text-center">
-                  <p className="font-medium text-gray-700">{item}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* MISSION & VISION */}
-        <section className="py-24 px-6 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#0e2c1c] text-center mb-16">
-            Mission & Vision
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}>
-              <h3 className="text-2xl font-semibold mb-4">Our Mission</h3>
-              <p className="text-gray-600 leading-relaxed">
-                To provide reliable, high-quality embroidery digitizing and vector conversion services that help businesses grow with confidence. We aim to become your long-term digitizing partner by delivering consistency, accuracy, and professional support.
-              </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}>
-              <h3 className="text-2xl font-semibold mb-4">Our Vision</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We believe embroidery is more than stitching — it’s a representation of your brand identity. Our vision is to lead the industry through innovation in digital embroidery techniques, precision in stitch file creation, and commitment to customer satisfaction.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* CUSTOMER SUPPORT */}
-        <section className="py-24 px-6 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#0e2c1c] text-center mb-16">
-            Customer Support You Can Trust
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-10">
-            {[
-              "Fast response times",
-              "Clear communication",
-              "Expert guidance for embroidery, vectorization, and patch production",
-              "Quick revisions to meet tight deadlines",
-              "Accurate, production-ready files",
-              "Reliable service quality"
-            ].map((item, i) => (
-              <motion.div key={i} whileHover={{ y: -10, scale: 1.05 }} className="p-6 rounded-2xl bg-white/60 backdrop-blur-xl border shadow-lg text-center">
-                <p className="font-medium text-gray-700">{item}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-24 text-center px-10 relative">
-          <div className="absolute inset-0 opacity-90"></div>
-          <div className="relative text-grey">
-            <h2 className="text-4xl font-bold mb-4">Let’s Build Something Great</h2>
-            <p className="mb-8 text-gray">Start your project with premium digitizing services today.</p>
-
-            <motion.a
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              href="/quote"
-              className="inline-block bg-[#0e2c1c] text-white px-8 py-4 rounded-xl font-semibold shadow-2xl"
+            {/* RIGHT PREMIUM PANEL */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative"
             >
-              Request a Quote
-            </motion.a>
+              <div className="absolute -inset-4 rounded-[2rem] bg-[#b8ce9e]/20 blur-3xl" />
+
+              <div className="relative overflow-hidden rounded-[2rem] bg-[#0e2c1c] p-8 text-white shadow-[0_30px_70px_rgba(14,44,28,0.18)] sm:p-10">
+
+                <div className="mb-10 flex items-start justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b8ce9e]">
+                      Our Standard
+                    </p>
+
+                    <h3 className="mt-3 text-3xl font-bold">
+                      Built for Production
+                    </h3>
+                  </div>
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 font-bold text-[#c9a76a]">
+                    ZS
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+                  <div className="bg-[#0e2c1c] p-6">
+                    <p className="text-3xl font-extrabold text-white">
+                      13K+
+                    </p>
+                    <p className="mt-2 text-sm text-white/55">
+                      Completed Orders
+                    </p>
+                  </div>
+
+                  <div className="bg-[#0e2c1c] p-6">
+                    <p className="text-3xl font-extrabold text-white">
+                      10+
+                    </p>
+                    <p className="mt-2 text-sm text-white/55">
+                      Years Experience
+                    </p>
+                  </div>
+
+                  <div className="bg-[#0e2c1c] p-6">
+                    <p className="text-3xl font-extrabold text-white">
+                      4h
+                    </p>
+                    <p className="mt-2 text-sm text-white/55">
+                      Turnaround
+                    </p>
+                  </div>
+
+                  <div className="bg-[#0e2c1c] p-6">
+                    <p className="text-3xl font-extrabold text-white">
+                      24/7
+                    </p>
+                    <p className="mt-2 text-sm text-white/55">
+                      Support
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 border-t border-white/10 pt-7">
+                  <p className="leading-7 text-white/65">
+                    Premium Quality Digitizing Experience
+                  </p>
+
+                  <div className="mt-5 flex items-center gap-3 text-sm text-[#b8ce9e]">
+                    <span className="h-2 w-2 rounded-full bg-[#c9a76a]" />
+                    Production-ready artwork
+                  </div>
+
+                  <div className="mt-3 flex items-center gap-3 text-sm text-[#b8ce9e]">
+                    <span className="h-2 w-2 rounded-full bg-[#c9a76a]" />
+                    Clean stitch formation
+                  </div>
+
+                  <div className="mt-3 flex items-center gap-3 text-sm text-[#b8ce9e]">
+                    <span className="h-2 w-2 rounded-full bg-[#c9a76a]" />
+                    Professional output quality
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 
-      </main>
+        {/* =====================================================
+            SERVICES
+        ===================================================== */}
+        <section className="border-y border-[#0e2c1c]/5 bg-white px-6 py-24 sm:py-28">
+          <div className="mx-auto max-w-7xl">
+
+            <div className="mx-auto mb-14 max-w-3xl text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#6b806f]">
+                What We Do
+              </span>
+
+              <h2 className="mt-4 text-4xl font-extrabold tracking-tight text-[#0e2c1c] sm:text-5xl">
+                Our Services
+              </h2>
+
+              <p className="mt-5 text-gray-600">
+                Professional artwork and production solutions built around
+                quality, precision, and reliable results.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3">
+              {services.map((service, index) => (
+                <Link
+                  key={service.id}
+                  href={`/services/${service.id}`}
+                  className="group"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -8 }}
+                    className="flex h-full min-h-[330px] flex-col rounded-[1.75rem] border border-[#0e2c1c]/10 bg-[#f8f7f2] p-8 transition-all duration-300 group-hover:border-[#56745e]/40 group-hover:shadow-[0_20px_50px_rgba(14,44,28,0.10)]"
+                  >
+                    <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-full bg-[#0e2c1c] text-sm font-bold text-white">
+                      0{index + 1}
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-[#0e2c1c]">
+                      {service.title}
+                    </h3>
+
+                    <p className="mt-4 flex-1 leading-7 text-gray-600">
+                      {service.description}
+                    </p>
+
+                    <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[#0e2c1c]">
+                      Learn More
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            WHY CHOOSE US
+        ===================================================== */}
+        <section className="px-6 py-24 sm:py-28">
+          <div className="mx-auto max-w-7xl">
+
+            <div className="mx-auto mb-16 max-w-3xl text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#6b806f]">
+                The ZS Difference
+              </span>
+
+              <h2 className="mt-4 text-4xl font-extrabold tracking-tight text-[#0e2c1c] sm:text-5xl">
+                Why Choose ZS Digitizing
+              </h2>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {whyChoose.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="rounded-2xl border border-[#0e2c1c]/10 bg-white p-7 shadow-[0_10px_35px_rgba(14,44,28,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(14,44,28,0.09)]"
+                >
+                  <div className="mb-5 flex h-9 w-9 items-center justify-center rounded-full bg-[#e6eddf] text-sm font-bold text-[#0e2c1c]">
+                    ✓
+                  </div>
+
+                  <p className="font-medium leading-7 text-gray-700">
+                    {item}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            MISSION & VISION
+        ===================================================== */}
+        <section className="bg-[#0e2c1c] px-6 py-24 text-white sm:py-28">
+          <div className="mx-auto max-w-7xl">
+
+            <div className="mb-16 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b8ce9e]">
+                Our Direction
+              </span>
+
+              <h2 className="mt-4 text-4xl font-extrabold sm:text-5xl">
+                Mission & Vision
+              </h2>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2">
+
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-9 backdrop-blur-sm"
+              >
+                <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#c9a76a]">
+                  Our Mission
+                </span>
+
+                <p className="mt-6 leading-8 text-white/70">
+                 Our goal is to provide reliable embroidery digitizing and vector artwork services that businesses can depend on for their everyday production needs. We strive to deliver consistent service and build long term working relationships with our customers.
+                </p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-9 backdrop-blur-sm"
+              >
+                <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#c9a76a]">
+                  Our Vision
+                </span>
+
+                <p className="mt-6 leading-8 text-white/70">
+                We believe embroidery is more than just stitching; it is an important part of how a brand is represented. Our vision is to provide dependable embroidery digitizing and vector artwork services through skilled work, modern techniques, and a strong focus on customer satisfaction. We aim to build lasting relationships with our clients by delivering consistent results and reliable support.
+                </p>
+              </motion.div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            CUSTOMER SUPPORT
+        ===================================================== */}
+        <section className="bg-white px-6 py-24 sm:py-28">
+          <div className="mx-auto max-w-7xl">
+
+            <div className="mx-auto mb-16 max-w-3xl text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#6b806f]">
+                Here When You Need Us
+              </span>
+
+              <h2 className="mt-4 text-4xl font-extrabold tracking-tight text-[#0e2c1c] sm:text-5xl">
+                Customer Support You Can Trust
+              </h2>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {support.map((item, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -5 }}
+                  className="rounded-2xl border border-[#0e2c1c]/10 bg-[#f8f7f2] p-7 transition-all duration-300 hover:shadow-lg"
+                >
+                  <div className="mb-5 h-1 w-10 rounded-full bg-[#c9a76a]" />
+
+                  <p className="font-medium leading-7 text-gray-700">
+                    {item}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            CTA
+        ===================================================== */}
+        <section className="relative overflow-hidden bg-grey px-6 py-24 text-center sm:py-28">
+          <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-[#b8ce9e]/10 blur-[100px]" />
+          <div className="pointer-events-none absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-[#c9a76a]/10 blur-[120px]" />
+
+          <div className="relative mx-auto max-w-3xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#10291d]">
+              Start Your Project
+            </span>
+
+            <h2 className="mt-5 text-4xl font-extrabold tracking-tight text-[#10291d] sm:text-5xl">
+              Let’s Build Something Great
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-white/150">
+              Start your project with premium digitizing services today.
+            </p>
+
+            <motion.div
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              className="mt-9"
+            >
+              <Link
+                href="/quote"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-4 font-semibold text-[#0e2c1c] shadow-xl transition hover:bg-[#f3f1e8]"
+              >
+                Request a Quote
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      </main> 
 
       <Footer />
     </>

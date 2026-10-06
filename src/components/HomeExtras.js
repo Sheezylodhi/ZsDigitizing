@@ -373,7 +373,7 @@ export default function HomeExtras() {
 
               <span className="h-px w-12 bg-[#b4975a]" />
 
-              <span className="text-[10px] font-semibold uppercase tracking-[0.38em] text-[#697169]">
+              <span className="text-[14px] font-semibold uppercase tracking-[0.38em] text-[#697169]">
                 Signature Work
               </span>
 
@@ -403,7 +403,7 @@ export default function HomeExtras() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.16 }}
-              className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#70766f] md:text-[15px]"
+              className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#70766f] md:text-[18px]"
             >
             A collection of embroidery art that reveals the skill and perfection that go into each stitch.
             </motion.p>
@@ -519,7 +519,7 @@ export default function HomeExtras() {
 
             <Link
               href="/quote"
-              className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-[#18372a] px-7 py-3.5 text-[13px] font-medium tracking-wide text-white shadow-[0_12px_35px_rgba(24,55,42,0.15)] transition-all duration-500 hover:bg-[#10291f] hover:shadow-[0_16px_45px_rgba(24,55,42,0.22)]"
+              className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-[#18372a] px-7 py-3.5 text-[15px] font-medium tracking-wide text-white shadow-[0_12px_35px_rgba(24,55,42,0.15)] transition-all duration-500 hover:bg-[#10291f] hover:shadow-[0_16px_45px_rgba(24,55,42,0.22)]"
             >
 
               <span>
@@ -797,7 +797,7 @@ function LuxuryCard({
 
         <div className="absolute left-4 top-4 flex h-8 min-w-8 items-center justify-center rounded-full border border-white/20 bg-black/10 px-2 backdrop-blur-md md:left-5 md:top-5">
 
-          <span className="text-[9px] font-medium tracking-[0.2em] text-white/80">
+          <span className="text-[12px] font-medium tracking-[0.2em] text-white/80">
             {String(index + 1).padStart(2, "0")}
           </span>
 
@@ -819,11 +819,11 @@ function LuxuryCard({
 
           <div className="mb-3 h-px w-8 bg-[#c1a665] transition-all duration-500 group-hover:w-14" />
 
-          <p className="text-[9px] font-medium uppercase tracking-[0.3em] text-[#d2b979]">
+          <p className="text-[12px] font-medium uppercase tracking-[0.3em] text-[#d2b979]">
             {type}
           </p>
 
-          <p className="mt-1.5 text-sm font-medium tracking-wide text-white md:text-[15px]">
+          <p className="mt-1.5 text-sm font-medium tracking-wide text-white md:text-[18px]">
             {type}
           </p>
 
