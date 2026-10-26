@@ -23,6 +23,7 @@ const isMobile =
   const [adminId, setAdminId] = useState(null);
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   
   // Voice Recording States
   const [isRecording, setIsRecording] = useState(false);
@@ -226,28 +227,48 @@ const handleTouchEnd = () => {
     prevMsgLength.current = messages.length;
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() && files.length === 0) return;
-    if (!selectedClient) return;
-    const formData = new FormData();
-    formData.append("clientId", selectedClient.clientId);
-    formData.append("message", newMessage);
-    files.forEach((f) => formData.append("file", f));
-    try {
-      const res = await fetch("/api/chat/sendAdminMessage", {
-        method: "POST",
-        body: formData,
-      });
-      if (!res.ok) throw new Error("Send failed");
-      setNewMessage("");
-      setFiles([]);
-      setPreviewUrls([]); // Clear previews after send
-      fetchMessages();
-      fetchInbox();
-    } catch (err) {
-      console.error("Send message error", err);
+ 
+const sendMessage = async () => {
+  // Duplicate sends ko prevent karo
+  if (isSending) return;
+
+  if (!newMessage.trim() && files.length === 0) return;
+  if (!selectedClient) return;
+
+  setIsSending(true);
+
+  const formData = new FormData();
+  formData.append("clientId", selectedClient.clientId);
+  formData.append("message", newMessage);
+
+  files.forEach((file) => formData.append("file", file));
+
+  try {
+    const res = await fetch("/api/chat/sendAdminMessage", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Message send nahi hua.");
     }
-  };
+
+    setNewMessage("");
+    setFiles([]);
+    setPreviewUrls([]);
+
+    await fetchMessages();
+    await fetchInbox();
+  } catch (err) {
+    console.error("Send message error:", err);
+    alert(err.message || "Message send nahi hua. Dobara try karein.");
+  } finally {
+    setIsSending(false);
+  }
+};
+
 
   return (
     <div>
@@ -610,17 +631,28 @@ const handleTouchEnd = () => {
                               1000
                             );
                           }}
-                          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                          onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    if (!isSending) sendMessage();
+  }
+}}
+disabled={isSending}
                           className="w-full bg-gray-100 border-none rounded-full px-5 py-3 outline-none text-sm"
                         />
                       </div>
                       
-                      <button
-                        onClick={sendMessage}
-                        className="bg-green-600 text-white p-3 rounded-full hover:bg-green-700 shadow-md"
-                      >
-                        <SendIcon />
-                      </button>
+                     <button
+  onClick={sendMessage}
+  disabled={isSending}
+  className="bg-green-600 text-white p-3 rounded-full hover:bg-green-700 shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+>
+  {isSending ? (
+    <span className="block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+  ) : (
+    <SendIcon />
+  )}
+</button>
                     </>
                   )}
                 </div>

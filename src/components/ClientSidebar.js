@@ -73,7 +73,7 @@ export default function ClientSidebar() {
               {/* Header with Logo */}
               <div className="p-5 flex justify-between items-center border-b border-white/20">
                 <Link href="/">
-                  <img src="/logo.png" alt="Logo" className="h-20 object-contain" />
+                  <img src="/logo.webp" alt="Logo" className="h-20 object-contain" />
                 </Link>
                 <button onClick={() => setOpen(false)}>
                   <X />
@@ -125,7 +125,7 @@ export default function ClientSidebar() {
         {/* Logo */}
         <div className=" border-b border-white/20 flex items-center justify-center">
           <Link href="/">
-            <img src="/logo.png" alt="Logo" className="h-25  object-contain" />
+            <img src="/logo.webp" alt="Logo" className="h-25  object-contain" />
           </Link>
         </div>
 

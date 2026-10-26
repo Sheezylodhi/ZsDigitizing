@@ -8,6 +8,8 @@ import NotificationIcon from "@/components/NotificationIcon";
 export default function ClientChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const sendingRef = useRef(false);
   const [clientId, setClientId] = useState(null);
   const [files, setFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false); // New for Drag & Drop
@@ -123,20 +125,44 @@ export default function ClientChat() {
   }, [messages]);
 
   const sendMessage = async () => {
+    // Prevent duplicate sends, including rapid repeated Enter presses.
+    if (sendingRef.current) return;
     if (!newMessage.trim() && files.length === 0) return;
     if (!clientId) return;
+
+    sendingRef.current = true;
+    setIsSending(true);
+
     const formData = new FormData();
     formData.append("clientId", clientId);
     formData.append("message", newMessage);
-    files.forEach(f => formData.append("file", f));
+    files.forEach((file) => formData.append("file", file));
 
     try {
-      const res = await fetch("/api/chat/sendMessage", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Send failed");
+      const res = await fetch("/api/chat/sendMessage", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        let errorMessage = "Message send nahi hua. Dobara try karein.";
+        try {
+          const data = await res.json();
+          if (data?.error) errorMessage = data.error;
+        } catch {}
+        throw new Error(errorMessage);
+      }
+
       setNewMessage("");
       setFiles([]);
-      fetchMessages();
-    } catch (err) { console.error("Send message error:", err); }
+      await fetchMessages();
+    } catch (err) {
+      console.error("Send message error:", err);
+      alert(err.message || "Message send nahi hua. Dobara try karein.");
+    } finally {
+      sendingRef.current = false;
+      setIsSending(false);
+    }
   };
 
   // Recording Logic
@@ -394,8 +420,14 @@ export default function ClientChat() {
                   type="text" placeholder={files.length > 0 ? "Add a caption..." : "Type a message..."}
                   value={newMessage}
                   onChange={e => setNewMessage(e.target.value)}
-                  className="w-full bg-gray-100 rounded-full px-5 py-3 outline-none text-sm focus:ring-1 focus:ring-green-500 transition-all"
-                  onKeyDown={e => e.key === "Enter" && sendMessage()}
+                  className="w-full bg-gray-100 rounded-full px-5 py-3 outline-none text-sm focus:ring-1 focus:ring-green-500 transition-all disabled:opacity-60"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      if (!sendingRef.current) sendMessage();
+                    }
+                  }}
+                  disabled={isSending}
                 />
               </div>
 
@@ -403,10 +435,19 @@ export default function ClientChat() {
              
               <button
                 onClick={sendMessage}
-                disabled={!newMessage.trim() && files.length === 0}
-                className={`p-3 rounded-full shadow-md transition-all active:scale-95 ${(!newMessage.trim() && files.length === 0) ? "bg-gray-300 cursor-not-allowed" : "bg-green-600 text-white hover:bg-green-700"}`}
+                disabled={isSending || (!newMessage.trim() && files.length === 0)}
+                aria-label={isSending ? "Sending message" : "Send message"}
+                className={`p-3 rounded-full shadow-md transition-all active:scale-95 ${
+                  isSending || (!newMessage.trim() && files.length === 0)
+                    ? "bg-gray-300 text-white cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                }`}
               >
-                <Send size={20} />
+                {isSending ? (
+                  <span className="block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Send size={20} />
+                )}
               </button>
             </>
           )}
