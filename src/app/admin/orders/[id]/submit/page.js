@@ -62,65 +62,137 @@ export default function SubmitOrderPage() {
   };
 
   // CLICK EDIT
-  const handleEdit = () => {
-    setIsEditing(true);
-    setFiles([]);
-    setExistingFiles([]);
-  };
+  
+const handleEdit = () => {
+  setIsEditing(true);
+  setFiles([]);
+};
+
 
   // SUBMIT / UPDATE
-  const handleSubmit = async () => {
-    if (files.length === 0 && note.trim() === "" && existingFiles.length === 0) {
-      setMsg("Upload at least one file or add a note");
-      return;
+ 
+const handleSubmit = async () => {
+  if (
+    files.length === 0 &&
+    existingFiles.length === 0 &&
+    note.trim() === ""
+  ) {
+    setMsg("Upload at least one file or add a note.");
+    return;
+  }
+
+  setLoading(true);
+  setMsg("");
+
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("Please log in again.");
     }
 
-    setLoading(true);
-    setMsg("");
+    let finalFiles = existingFiles;
 
-    const formData = new FormData();
-    files.forEach(file => formData.append("files", file));
-    formData.append("note", note);
+    // Upload selected files directly from the browser to Cloudinary.
+    if (files.length > 0) {
+      const uploadedFiles = [];
 
-    
-    try {
-      const res = await fetch(`/api/orders/${id}/submit`, {
-        method: "PATCH",
-        body: formData,
-      });
+      for (const file of files) {
+        setMsg(`Preparing upload: ${file.name}`);
 
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        console.error("SUBMISSION FAILED:", {
-          status: res.status,
-          response: data,
+        const signRes = await fetch("/api/cloudinary/sign", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileName: file.name }),
         });
 
-        setMsg(
-          data.message ||
-          data.error ||
-          `Update failed (${res.status})`
+        const signData = await signRes.json().catch(() => ({}));
+
+        if (!signRes.ok) {
+          throw new Error(
+            signData.message || `Upload authorization failed (${signRes.status}).`
+          );
+        }
+
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        uploadData.append("api_key", signData.apiKey);
+        uploadData.append("timestamp", String(signData.timestamp));
+        uploadData.append("folder", signData.folder);
+        uploadData.append("public_id", signData.publicId);
+        uploadData.append("signature", signData.signature);
+
+        setMsg(`Uploading ${file.name} to Cloudinary...`);
+
+        const uploadRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`,
+          {
+            method: "POST",
+            body: uploadData,
+          }
         );
-        return;
+
+        const uploadResult = await uploadRes.json().catch(() => ({}));
+
+        if (!uploadRes.ok || !uploadResult.secure_url) {
+          console.error("CLOUDINARY UPLOAD ERROR:", uploadResult);
+
+          throw new Error(
+            uploadResult.error?.message ||
+            `Cloudinary upload failed (${uploadRes.status}).`
+          );
+        }
+
+        uploadedFiles.push({
+          fileName: file.name,
+          fileUrl: uploadResult.secure_url,
+        });
       }
 
-      setMsg("Order Updated ✅");
-      setFiles([]);
-      setNote(data.note || "");
-      setExistingFiles(data.files || []);
-      setIsEditing(false);
-      setSubmittedSerial(data.serialNumber || order?.serialNumber || "");
-      setShowPopup(true);
-
-    } catch (err) {
-      console.error("SUBMISSION NETWORK ERROR:", err);
-      setMsg(err.message || "Network error. Please try again.");
-    } finally {
-      setLoading(false);
+      // New files replace the old submission files.
+      finalFiles = uploadedFiles;
     }
 
-  };
+    setMsg("Saving submission...");
+
+    const res = await fetch(`/api/orders/${id}/submit`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        files: finalFiles,
+        note,
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || `Submission failed (${res.status}).`
+      );
+    }
+
+    setMsg("Order Updated ✅");
+    setFiles([]);
+    setNote(data.note || "");
+    setExistingFiles(data.files || []);
+    setIsEditing(false);
+    setSubmittedSerial(data.serialNumber || order?.serialNumber || "");
+    setShowPopup(true);
+  } catch (err) {
+    console.error("SUBMISSION ERROR:", err);
+    setMsg(err.message || "Submission failed. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (!order) return <p className="p-10">Loading...</p>;
 

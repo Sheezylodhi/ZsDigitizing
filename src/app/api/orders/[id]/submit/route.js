@@ -1,90 +1,136 @@
+
 import connectDB from "@/lib/db";
 import Order from "@/lib/models/Order";
 import notifyClient from "@/utils/notifyClient";
 import { NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
+export const runtime = "nodejs";
+
+function verifyAdmin(req) {
+  const header = req.headers.get("authorization");
+  const token = header?.startsWith("Bearer ")
+    ? header.slice(7)
+    : null;
+
+  if (!token || !process.env.JWT_SECRET) return false;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    return (
+      typeof decoded !== "string" &&
+      decoded.userId &&
+      String(decoded.role).toLowerCase() === "admin"
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function PATCH(req, context) {
   try {
+    if (!verifyAdmin(req)) {
+      return NextResponse.json(
+        { message: "Unauthorized. Please log in again." },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
+
     const { id } = await context.params;
 
-    const formData = await req.formData();
-    const files = formData.getAll("files");
-    const note = formData.get("note");
-
-    if (!files.length) {
-      return NextResponse.json({ message: "No files uploaded" }, { status: 400 });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { message: "Invalid order ID." },
+        { status: 400 }
+      );
     }
 
-    const savedFiles = [];
+    const body = await req.json();
+    const { files, note } = body;
 
-    for (const file of files) {
-      if (!file?.name) continue;
+    if (!Array.isArray(files) || files.length === 0) {
+      return NextResponse.json(
+        { message: "At least one uploaded file is required." },
+        { status: 400 }
+      );
+    }
 
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+    const safeFiles = files.map((file) => {
+      if (
+        !file ||
+        typeof file.fileName !== "string" ||
+        typeof file.fileUrl !== "string"
+      ) {
+        throw new Error("Invalid uploaded file data.");
+      }
 
-      // 1. Extension nikalein (e.g., ".pptx", ".pdf", ".dst")
-      const lastDotIndex = file.name.lastIndexOf('.');
-      const extension = lastDotIndex !== -1 ? file.name.substring(lastDotIndex) : "";
-      const nameWithoutExtension = lastDotIndex !== -1 ? file.name.substring(0, lastDotIndex) : file.name;
-      
-      // 2. Special characters clean karein aur aakhir mein EXTENSION wapas jorrein!
-      // ✅ Yeh step Windows icons aur extensions ke liye sab se zaroori hai
-      const cleanPublicId = nameWithoutExtension.replace(/[^a-zA-Z0-9-_]/g, "_") + extension;
+      const url = new URL(file.fileUrl);
 
-      const result = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          {
-            resource_type: "auto", // Automatically detects images or raw docs
-            folder: "orders/submissions",
-            public_id: cleanPublicId, // ✅ Saved with extension on Cloudinary
-            use_filename: true,
-            unique_filename: false, 
-            overwrite: true
-          },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        ).end(buffer);
-      });
+      if (
+        url.protocol !== "https:" ||
+        url.hostname !== "res.cloudinary.com"
+      ) {
+        throw new Error("Invalid Cloudinary file URL.");
+      }
 
-      // Agar asset raw hai toh result.secure_url perfect extension ke sath banega
-      savedFiles.push({
-        fileName: file.name, // Original name for DB
-        fileUrl: result.secure_url, // Sahi extension wala url (e.g., .../submissions/file.pptx)
+      return {
+        fileName: file.fileName,
+        fileUrl: file.fileUrl,
         uploadedAt: new Date(),
-      });
-    }
+      };
+    });
 
     const updated = await Order.findByIdAndUpdate(
       id,
       {
-        files: savedFiles,
-        note: note || "",
+        files: safeFiles,
+        note: typeof note === "string" ? note : "",
         status: "Completed",
         submittedAt: new Date(),
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
-    if (!updated) return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    if (!updated) {
+      return NextResponse.json(
+        { message: "Order not found." },
+        { status: 404 }
+      );
+    }
 
     try {
-      await notifyClient(updated.clientId.toString(), "order_submitted", updated._id.toString());
-    } catch (e) { console.error("Notify failed:", e); }
+      await notifyClient(
+        updated.clientId.toString(),
+        "order_submitted",
+        updated._id.toString()
+      );
+    } catch (err) {
+      console.error("CLIENT NOTIFICATION FAILED:", err);
+    }
 
-    return NextResponse.json(updated);
+    return NextResponse.json({
+      message: "Submission updated successfully.",
+      serialNumber: updated.serialNumber,
+      note: updated.note,
+      status: updated.status,
+      submittedAt: updated.submittedAt,
+      files: updated.files || [],
+    });
   } catch (err) {
-    console.error("SUBMIT ERROR:", err);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    console.error("SUBMIT API ERROR:", err);
+
+    const message =
+      err instanceof SyntaxError
+        ? "Invalid request data."
+        : err.message || "Server error.";
+
+    return NextResponse.json(
+      { message },
+      { status: 500 }
+    );
   }
 }
