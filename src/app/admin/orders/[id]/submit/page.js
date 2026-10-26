@@ -82,29 +82,44 @@ export default function SubmitOrderPage() {
     files.forEach(file => formData.append("files", file));
     formData.append("note", note);
 
+    
     try {
       const res = await fetch(`/api/orders/${id}/submit`, {
         method: "PATCH",
         body: formData,
       });
 
-      if (res.ok) {
-        const updated = await res.json();
-        setMsg("Order Updated ✅");
-        setFiles([]);
-        setNote(updated.note || "");
-        setExistingFiles(updated.files || []);
-        setIsEditing(false);
-        setSubmittedSerial(updated.serialNumber || order.serialNumber); // ✅ save serial
-        setShowPopup(true); // ✅ show popup
-      } else {
-        setMsg("Update failed ❌");
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        console.error("SUBMISSION FAILED:", {
+          status: res.status,
+          response: data,
+        });
+
+        setMsg(
+          data.message ||
+          data.error ||
+          `Update failed (${res.status})`
+        );
+        return;
       }
+
+      setMsg("Order Updated ✅");
+      setFiles([]);
+      setNote(data.note || "");
+      setExistingFiles(data.files || []);
+      setIsEditing(false);
+      setSubmittedSerial(data.serialNumber || order?.serialNumber || "");
+      setShowPopup(true);
+
     } catch (err) {
-      setMsg("Update failed ❌");
+      console.error("SUBMISSION NETWORK ERROR:", err);
+      setMsg(err.message || "Network error. Please try again.");
     } finally {
       setLoading(false);
     }
+
   };
 
   if (!order) return <p className="p-10">Loading...</p>;
